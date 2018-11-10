@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.clalit.org.il/TranslationPatientNames/1.0" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.clalit.org.il/TranslationPatientNames/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.clalit.org.il/TranslationPatientNames/1.0">
+      <s:element name="TranslationPatientNamesRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MessageInfo" type="tns:TranslationPatientNames.MessageInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="Parameters" type="tns:TranslationPatientNames.Parameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TranslationPatientNames.MessageInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RequestID" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="RequestDatetime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="RequestingApplication" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ServingApplication" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RequestingSite" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ServingSite" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TranslationPatientNames.Parameters">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PatientID" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TranslationPatientNamesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="StatusCode" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="StatusDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MessageInfo" type="tns:TranslationPatientNames.MessageInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="DataSources" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="Results" type="tns:TranslationPatientNames.Results" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DataSource" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TranslationPatientNames.Results">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PatientID" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastNameEng" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastNameEng_TranslationType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstNameEng" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstNameEng_TranslationType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FatherName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FatherNameEng" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FatherNameEng_TranslationType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="MotherName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MotherNameEng" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MotherNameEng_TranslationType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PreviousFamilyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GenderID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BirthDate" type="s:date" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TranslationPatientNamesQuerySoapIn">
+    <wsdl:part name="request" element="tns:TranslationPatientNamesRequest" />
+  </wsdl:message>
+  <wsdl:message name="TranslationPatientNamesQuerySoapOut">
+    <wsdl:part name="TranslationPatientNamesQueryResult" element="tns:TranslationPatientNamesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="TranslationPatientNamesService">
+    <wsdl:operation name="TranslationPatientNamesQuery">
+      <wsdl:input message="tns:TranslationPatientNamesQuerySoapIn" />
+      <wsdl:output message="tns:TranslationPatientNamesQuerySoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TranslationPatientNamesService" type="tns:TranslationPatientNamesService">
+    <wsdl:documentation>
+      <wsi:Claim conformsTo="http://ws-i.org/profiles/basic/1.1" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" />
+    </wsdl:documentation>
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TranslationPatientNamesQuery">
+      <soap:operation soapAction="http://www.clalit.org.il/TranslationPatientNames/1.0/TranslationPatientNamesQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TranslationPatientNamesService">
+    <wsdl:port name="TranslationPatientNamesService" binding="tns:TranslationPatientNamesService">
+      <soap:address location="http://emekonline.emek.clalit.org.il:8326/Clalit.TranslationPatientNames/TranslationPatientNamesService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

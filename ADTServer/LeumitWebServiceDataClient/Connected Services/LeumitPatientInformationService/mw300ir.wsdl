@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.mw300ir.org/mw300ir/" xmlns:swh="http://www.shellWiz.com/shellWizHeader/v1.0" name="mw300ir" targetNamespace="http://www.mw300ir.org/mw300ir/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsdl:types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.mw300ir.org/mw300ir/">
+      <xsd:element name="mw300irMessageRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="PRMGLOBAL" type="tns:PRMGLOBAL" />
+            <xsd:element name="MW300D" type="tns:MW300D" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="mw300irMessageResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="wsrc" type="xsd:int" />
+            <xsd:element name="wsrcmsg" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="PRMGLOBAL" type="tns:PRMGLOBAL" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="MW300D" type="tns:MW300D" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="PRMGLOBAL">
+        <xsd:sequence>
+          <xsd:element name="PGL_ORIGIN" type="xsd:string" />
+          <xsd:element name="PGL_OPCODE" type="xsd:string" />
+          <xsd:element name="PGL_RC" type="xsd:decimal" />
+          <xsd:element name="PGL_MESSAGE" type="xsd:string" />
+          <xsd:element name="PGL_SEVERITY" type="xsd:decimal" />
+          <xsd:element name="PGL_PGM_CLASS" type="xsd:string" />
+          <xsd:element name="PGL_MDL_MTHD" type="xsd:string" />
+          <xsd:element name="PGL_USER" type="xsd:string" />
+          <xsd:element name="PGL_GROUP" type="xsd:string" />
+          <xsd:element name="PGL_IPADDR" type="xsd:string" />
+          <xsd:element name="PGL_ENCUSR" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="MW300D">
+        <xsd:sequence>
+          <xsd:element name="SUGID" type="xsd:decimal" />
+          <xsd:element name="NUMBID" type="xsd:decimal" />
+          <xsd:element name="STATUS" type="xsd:decimal" />
+          <xsd:element name="BTDATE" type="xsd:decimal" />
+          <xsd:element name="FNAME" type="xsd:string" />
+          <xsd:element name="SNAME" type="xsd:string" />
+          <xsd:element name="AGE" type="xsd:decimal" />
+          <xsd:element name="GENDER" type="xsd:string" />
+          <xsd:element name="TYPEINSUR" type="xsd:decimal" />
+          <xsd:element name="NAMEINSUR" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.shellWiz.com/shellWizHeader/v1.0">
+      <xsd:element name="ShellWizHeader">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" name="env" type="xsd:string" />
+            <xsd:element minOccurs="0" name="ind" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="mw300irMessageRequest">
+    <wsdl:part name="SWHeaderPart" element="swh:ShellWizHeader" />
+    <wsdl:part name="parameters" element="tns:mw300irMessageRequest" />
+  </wsdl:message>
+  <wsdl:message name="mw300irMessageResponse">
+    <wsdl:part name="parameters" element="tns:mw300irMessageResponse" />
+  </wsdl:message>
+  <wsdl:portType name="mw300irPortType">
+    <wsdl:operation name="mw300irOperation">
+      <wsdl:input message="tns:mw300irMessageRequest" />
+      <wsdl:output message="tns:mw300irMessageResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="mw300irBinding" type="tns:mw300irPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="mw300irOperation">
+      <soap:operation soapAction="MW300IR" />
+      <wsdl:input>
+        <soap:header message="tns:mw300irMessageRequest" part="SWHeaderPart" use="literal" />
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="mw300ir">
+    <wsdl:port name="mw300ir" binding="tns:mw300irBinding">
+      <soap:address location="http://LEUMITDV:80/wsdv/RUNWSGNR.pgm" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

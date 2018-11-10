@@ -1,0 +1,1873 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:ns10="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerDiagnosisUpsert.xsd" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:ns2="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CreatePetitionInCRMUpsert.xsd" xmlns:ns12="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CustomerPopulationList.xsd" xmlns:ns8="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/DisplayCustomerMeasurementResultsGet.xsd" xmlns:ns6="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetAllTravelInsurancePolicies.xsd" xmlns:ns17="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" xmlns:soap1="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns14="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerInfoForDatOs.xsd" xmlns:ns3="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetVisitFile.xsd" xmlns:ns15="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/OnlineReferencesGet.xsd" xmlns:tns="http://xmlns.example.com/1432803667951" xmlns:ns9="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpsertCustomerCase.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/TravelInsurance.Upsert.xsd" xmlns:ns7="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerCaseList.xsd" xmlns:ns13="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpdateReferenceStatusInCRM.xsd" xmlns:ns16="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns5="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerHospitalizationsListGet.xsd" xmlns:ns4="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/getCustomerPreferences.xsd" xmlns:ns11="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/getCustomerInfo.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" xmlns:ns1="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerNewHospitalizationUpsert.xsd" name="Untitled" targetNamespace="http://xmlns.example.com/1432803667951" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="statusReply">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status" type="xs:string" />
+            <xs:element minOccurs="0" name="description" type="xs:string" />
+            <xs:element minOccurs="0" name="errorCode" type="xs:string" />
+            <xs:element minOccurs="0" name="errorSource" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns16:user" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="user">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element minOccurs="0" name="value" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerHospitalizationsListGet.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerHospitalizationsListGet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerHospitalizationsListGet_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerHospitalizationsListGet_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="HospitalizationsList">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="SupplierCode" type="xs:string" />
+                  <xs:element minOccurs="0" name="SupplierName" type="xs:string" />
+                  <xs:element minOccurs="0" name="ObligationNum" type="xs:string" />
+                  <xs:element minOccurs="0" name="HospitalizitonDate" type="xs:date" />
+                  <xs:element minOccurs="0" name="LastEventDate" type="xs:date" />
+                  <xs:element minOccurs="0" name="LastEventCode" type="xs:string" />
+                  <xs:element minOccurs="0" name="LastEventDesc" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetAllTravelInsurancePolicies.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetAllTravelInsurancePolicies.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="GetAllTravelInsurancePolicies_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:enumeration value="1" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="CustInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CustIdType">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:byte">
+                        <xs:enumeration value="1" />
+                        <xs:enumeration value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="CustId">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:minLength value="9" />
+                        <xs:maxLength value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetAllTravelInsurancePolicies_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="InsurancePolicies">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="PolicyNumber" type="xs:int" />
+                  <xs:element name="StartDate" type="xs:date" />
+                  <xs:element name="EndDate" type="xs:date" />
+                  <xs:element name="PolicyType" type="xs:int" />
+                  <xs:element name="Prices">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="Luggage" type="xs:decimal" />
+                        <xs:element name="MedicalFlight" type="xs:decimal" />
+                        <xs:element name="Earthquake" type="xs:decimal" />
+                        <xs:element name="TotalCostInShekels" type="xs:decimal" />
+                        <xs:element name="TotalCostInDollars" type="xs:decimal" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="InsuredCustomers">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="CustIdType" type="xs:byte" />
+                        <xs:element name="CustId" type="xs:string" />
+                        <xs:element name="FirstName" type="xs:string" />
+                        <xs:element name="LastName" type="xs:string" />
+                        <xs:element name="Gender" type="xs:byte" />
+                        <xs:element name="Age" type="xs:int" />
+                        <xs:element name="Prices">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="Pregnancy" type="xs:decimal" />
+                              <xs:element name="LegalConsultation" type="xs:decimal" />
+                              <xs:element name="SearchAndRescue" type="xs:decimal" />
+                              <xs:element name="WinterSports" type="xs:decimal" />
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Resultsets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ResultSet1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Record1">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="POLICY_NUMBER" type="xs:int" />
+                        <xs:element name="START_DATE" type="xs:int" />
+                        <xs:element name="END_DATE" type="xs:int" />
+                        <xs:element name="SUG_POLISA" type="xs:int" />
+                        <xs:element name="LUGGAGE_PRICE" type="xs:decimal" />
+                        <xs:element name="MEDICAL_FLIGHT_PRICE" type="xs:decimal" />
+                        <xs:element name="EARTHQUAKE_PRICE" type="xs:decimal" />
+                        <xs:element name="SUM_PAY_SHEKELS" type="xs:decimal" />
+                        <xs:element name="SUM_PAY_DOLLARS" type="xs:decimal" />
+                        <xs:element name="IDS" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ResultSet2">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Record2">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="POLICY_NUMBER" type="xs:int" />
+                        <xs:element name="IDENTITY" type="xs:int" />
+                        <xs:element name="FIRST_NAME" type="xs:string" />
+                        <xs:element name="LAST_NAME" type="xs:string" />
+                        <xs:element name="GENDER" type="xs:byte" />
+                        <xs:element name="AGE" type="xs:int" />
+                        <xs:element name="PREGNANCY_PRICE" type="xs:decimal" />
+                        <xs:element name="LEGAL_COUNSEL_PRICE" type="xs:decimal" />
+                        <xs:element name="SEARCH_RESCUE_PRICE" type="xs:decimal" />
+                        <xs:element name="WINTER_SPORT_PRICE" type="xs:decimal" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/getCustomerPreferences.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/getCustomerPreferences.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerPreference">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Code" type="xs:byte" />
+            <xs:element name="Value" type="xs:boolean" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerPreferences">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns4:CustomerPreference" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerPreferencesFor">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="LabResults_1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Queues_2">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Alerts_3">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Insurances_4">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Payments_5">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Magazine_6">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="VariousTopics_7">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Certifications_8">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="PreventiveMedicine_9">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Administrative_10">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="ns4:CustomerPreferences" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCustomerPreferences_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CustIdType" type="xs:byte" />
+            <xs:element name="CustId" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCustomerPreferences_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="ns4:CustomerPreferencesFor" />
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetVisitFile.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetVisitFile.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="GetVisitFile_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element minOccurs="0" name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:enumeration value="2" />
+                  <xs:enumeration value="1" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="Site" type="xs:string" />
+            <xs:element minOccurs="0" name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:length value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="Date" type="xs:date" />
+            <xs:element minOccurs="0" name="Time" type="xs:time" />
+            <xs:element minOccurs="0" name="DoctorId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:length value="10" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="FormId" type="xs:string" />
+            <xs:element minOccurs="0" name="DoctorSpec" type="xs:int" />
+            <xs:element minOccurs="0" name="Owner" type="xs:int" />
+            <xs:element minOccurs="0" name="CrmId" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetVisitFile_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="VistFile">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Filename" type="xs:string" />
+                  <xs:element name="Content" type="xs:base64Binary" />
+                  <xs:element name="FileExtension" type="xs:string" />
+                  <xs:element name="ContentType" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpdateReferenceStatusInCRM.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpdateReferenceStatusInCRM.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="UpdateReferenceStatusInCRM_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CaseNum" type="xs:int" />
+            <xs:element name="CaseStatus" type="xs:int" />
+            <xs:element name="VisitDate" type="xs:dateTime" />
+            <xs:element name="IsUpdate" type="xs:int" />
+            <xs:element minOccurs="0" name="DoctorNotesCode" type="xs:int" />
+            <xs:element minOccurs="0" name="DoctorNotes" type="xs:string" />
+            <xs:element minOccurs="0" name="DetailedDoctorNotes" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpdateReferenceStatusInCRM_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/TravelInsurance.Upsert.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/TravelInsurance.Upsert.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="POLICY_XML">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="RECORD">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CustId">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:length value="10" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="isIncPregnancy" type="xs:string" />
+                  <xs:element name="isIncLegalConsultation" type="xs:string" />
+                  <xs:element name="isIncSearchAndRescue" type="xs:string" />
+                  <xs:element name="WinterSportsStartDate">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:int">
+                        <xs:totalDigits value="8" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="WinterSportsEndDate">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:int">
+                        <xs:totalDigits value="8" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="TravelInsurance.Upsert_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:totalDigits value="2" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="PolicyType">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:totalDigits value="1" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="StartDate" type="xs:date" />
+            <xs:element name="EndDate" type="xs:date" />
+            <xs:element name="IncludeBaggage" type="xs:boolean" />
+            <xs:element name="IncludeEarthquake" type="xs:boolean" />
+            <xs:element name="IncludeMedTransport" type="xs:boolean" />
+            <xs:element minOccurs="0" name="CreditCardInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CCToken">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="16" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Year" type="xs:int" />
+                  <xs:element name="Month" type="xs:int" />
+                  <xs:element name="Payments" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="CustomerInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CustIdType">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:byte">
+                        <xs:enumeration value="1" />
+                        <xs:enumeration value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="CustId">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:length value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="IncludePregnancy" type="xs:boolean" />
+                  <xs:element name="IncludeLegalAdvice" type="xs:boolean" />
+                  <xs:element name="IncludeSearchRescue" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="SkiStartDate" type="xs:date" />
+                  <xs:element minOccurs="0" name="SkiEndDate" type="xs:date" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="TravelInsurance.Upsert_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="PolicyInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="PolicyNumber" type="xs:int" />
+                  <xs:element name="BaggageNIS" type="xs:decimal" />
+                  <xs:element name="EarthquakeNIS" type="xs:decimal" />
+                  <xs:element name="MedTransportNIS" type="xs:decimal" />
+                  <xs:element name="BaggageUSD" type="xs:decimal" />
+                  <xs:element name="EarthquakeUSD" type="xs:decimal" />
+                  <xs:element name="MedTransportUSD" type="xs:decimal" />
+                  <xs:element name="PriceNIS" type="xs:decimal" />
+                  <xs:element name="PriceUSD" type="xs:decimal" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="esbData">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="request_id" type="xs:string" />
+            <xs:element name="sourceSystem" type="xs:string" />
+            <xs:element minOccurs="0" name="targetSystem" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerCaseList.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerCaseList.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="ADUserNameWithDomain" type="xs:string" />
+      <xs:element name="ActionCode" type="xs:string" />
+      <xs:element name="Case">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns7:CaseNum" />
+            <xs:element minOccurs="0" ref="ns7:Title" />
+            <xs:element minOccurs="0" ref="ns7:CaseType" />
+            <xs:element minOccurs="0" ref="ns7:CaseSource" />
+            <xs:element minOccurs="0" ref="ns7:CaseUrgency" />
+            <xs:element minOccurs="0" ref="ns7:CaseSla" />
+            <xs:element minOccurs="0" ref="ns7:CaseStatusCode" />
+            <xs:element minOccurs="0" ref="ns7:CaseStatus" />
+            <xs:element minOccurs="0" ref="ns7:CaseCreateOn" />
+            <xs:element minOccurs="0" ref="ns7:CaseLastModify" />
+            <xs:element minOccurs="0" ref="ns7:CreatorUserName" />
+            <xs:element minOccurs="0" ref="ns7:CaseCreatedById" />
+            <xs:element minOccurs="0" ref="ns7:CaseCreatedByLicenseNum" />
+            <xs:element minOccurs="0" ref="ns7:CreatedByBranchNum" />
+            <xs:element minOccurs="0" ref="ns7:MedicalAreaNum" />
+            <xs:element minOccurs="0" ref="ns7:CustFullName" />
+            <xs:element minOccurs="0" ref="ns7:CustId" />
+            <xs:element minOccurs="0" ref="ns7:CustIdType" />
+            <xs:element minOccurs="0" ref="ns7:CustBranch" />
+            <xs:element minOccurs="0" ref="ns7:CaseOwner" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CaseCreateOn" type="xs:dateTime" />
+      <xs:element name="CaseCreatedById" type="xs:string" />
+      <xs:element name="CaseCreatedByLicenseNum" type="xs:string" />
+      <xs:element name="CaseLastModify" type="xs:dateTime" />
+      <xs:element name="CaseList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="ns7:Case" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CaseNum" type="xs:integer" />
+      <xs:element name="CaseOwner" type="xs:string" />
+      <xs:element name="CaseSla" type="xs:dateTime" />
+      <xs:element name="CaseSource" type="xs:integer" />
+      <xs:element name="CaseStatus" type="xs:boolean" />
+      <xs:element name="CaseStatusCode" type="xs:integer" />
+      <xs:element name="CaseType" type="xs:integer" />
+      <xs:element name="CaseUrgency" type="xs:integer" />
+      <xs:element name="CreatedByBranchNum" type="xs:integer" />
+      <xs:element name="CreatorUserName" type="xs:string" />
+      <xs:element name="CustBranch" type="xs:string" />
+      <xs:element name="CustFullName" type="xs:string" />
+      <xs:element name="CustId" type="xs:string" />
+      <xs:element name="CustIdType" type="xs:integer" />
+      <xs:element name="GetCustomerCaseList_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element ref="ns7:ActionCode" />
+            <xs:element ref="ns7:ADUserNameWithDomain" />
+            <xs:element minOccurs="0" ref="ns7:CaseType" />
+            <xs:element minOccurs="0" ref="ns7:CaseStatus" />
+            <xs:element minOccurs="0" ref="ns7:CaseNum" />
+            <xs:element minOccurs="0" ref="ns7:CustId" />
+            <xs:element minOccurs="0" ref="ns7:CustIdType" />
+            <xs:element minOccurs="0" ref="ns7:CustBranch" />
+            <xs:element minOccurs="0" ref="ns7:CaseSource" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCustomerCaseList_Respopnse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+            <xs:element minOccurs="0" ref="ns7:Summaries" />
+            <xs:element minOccurs="0" ref="ns7:CaseList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="IncidentSumWaitForOtherRegular" type="xs:string" />
+      <xs:element name="IncidentSumWaitForOtherUrgent" type="xs:string" />
+      <xs:element name="IncidentSumWaitForUserRegular" type="xs:string" />
+      <xs:element name="IncidentSumWaitForUserUrgent" type="xs:string" />
+      <xs:element name="IncidentSumWaitOnline" type="xs:integer" />
+      <xs:element name="MedicalAreaNum" type="xs:integer" />
+      <xs:element name="Summaries">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns7:IncidentSumWaitForUserUrgent" />
+            <xs:element ref="ns7:IncidentSumWaitForUserRegular" />
+            <xs:element ref="ns7:IncidentSumWaitForOtherUrgent" />
+            <xs:element ref="ns7:IncidentSumWaitForOtherRegular" />
+            <xs:element ref="ns7:IncidentSumWaitOnline" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Title" type="xs:string" />
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CreatePetitionInCRMUpsert.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CreatePetitionInCRMUpsert.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CreatePetitionInCRMUpsert_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:totalDigits value="2" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CaseNumber" type="xs:int" />
+            <xs:element minOccurs="0" name="DoctorInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="doctorNameWithDomain" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CustInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CustId" type="xs:string" />
+                  <xs:element name="CustIdType" type="xs:int" />
+                  <xs:element name="LoginCustId" type="xs:string" />
+                  <xs:element name="LoginCustIdType" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CustClosedPetitionIndication">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="MailNotification" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="CustMail" type="xs:string" />
+                  <xs:element name="SmsNotification" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="CustPhone" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="PetitionInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Approvals">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="ApprovalIllnessType" type="xs:int" />
+                        <xs:element name="ApprovalIllnessReason" type="xs:string" />
+                        <xs:element minOccurs="0" name="ApprovalIllnessFromDate" type="xs:dateTime" />
+                        <xs:element minOccurs="0" name="ApprovalIllnessToDate" type="xs:dateTime" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="RenewedPrescription">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="MedicationCaseDetails">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="MedicationId" type="xs:string" />
+                              <xs:element name="MedicationDescription" type="xs:string" />
+                              <xs:element name="IsPermanentMedication" type="xs:boolean" />
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element minOccurs="0" name="MedicationCase" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="Referrals">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element minOccurs="0" name="RefferalCase" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Attachments">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="DocName" type="xs:string" />
+                        <xs:element name="Document" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CreatePetitionInCRMUpsert_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+            <xs:element minOccurs="0" name="CaseNum" type="xs:long" />
+            <xs:element minOccurs="0" name="CaseURL" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerDiagnosisUpsert.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerDiagnosisUpsert.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerDiagnosisUpsert_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="ObligationNum">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ControllerIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ControllerId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="DiagnosisCode" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerDiagnosisUpsert_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="DiagnosisUpdatedFlag" type="xs:boolean" />
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerInfoForDatOs.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/GetCustomerInfoForDatOs.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="CustId" type="xs:base64Binary" />
+            <xs:element name="FirstName" type="xs:string" />
+            <xs:element name="LastName" type="xs:string" />
+            <xs:element name="Age" type="xs:byte" />
+            <xs:element name="Gender" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCustomerInfoForDatOs_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="2" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="Id" type="xs:base64Binary" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCustomerInfoForDatOs_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns14:CustomerInfo" />
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpsertCustomerCase.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/UpsertCustomerCase.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="ADUserNameWithDomain" type="xs:string" />
+      <xs:element name="Attach">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns9:LocationInd" />
+            <xs:element minOccurs="0" ref="ns9:AttachName" />
+            <xs:element minOccurs="0" ref="ns9:AttachType" />
+            <xs:element minOccurs="0" ref="ns9:AttachContent" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns9:SelectParams" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AttachContent" type="xs:base64Binary" />
+      <xs:element name="AttachName" type="xs:string" />
+      <xs:element name="AttachType" type="xs:string" />
+      <xs:element name="CaseNum" type="xs:string" />
+      <xs:element name="CaseUrl" type="xs:string" />
+      <xs:element name="CreatorUserName" type="xs:string" />
+      <xs:element name="CustBranch" type="xs:int" />
+      <xs:element name="CustId" type="xs:string" />
+      <xs:element name="CustIdType" type="xs:string" />
+      <xs:element name="Field" type="xs:string" />
+      <xs:element name="LocationInd" type="xs:string" />
+      <xs:element name="MedicalAreaNum" type="xs:string" />
+      <xs:element name="SelectParams">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns9:Field" />
+            <xs:element ref="ns9:value" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpsertCustomerCase_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element ref="ns9:ADUserNameWithDomain" />
+            <xs:element ref="ns9:MedicalAreaNum" />
+            <xs:element ref="ns9:CustId" />
+            <xs:element ref="ns9:CustIdType" />
+            <xs:element minOccurs="0" ref="ns9:CustBranch" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns9:Attach" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpsertCustomerCase_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+            <xs:element minOccurs="0" ref="ns9:CaseNum" />
+            <xs:element minOccurs="0" ref="ns9:CaseUrl" />
+            <xs:element minOccurs="0" ref="ns9:CustId" />
+            <xs:element ref="ns9:CustIdType" />
+            <xs:element minOccurs="0" ref="ns9:CreatorUserName" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="value" type="xs:string" />
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" xmlns:DisplayCustomerMeasurementResultsGet="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/DisplayCustomerMeasurementResultsGet.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/DisplayCustomerMeasurementResultsGet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="DisplayCustomerMeasurementResultsGet_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="2" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="DoctorIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="DoctorId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="DisplayCustomerMeasurementResultsGet_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="URL" type="xs:string" />
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/OnlineReferencesGet.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/OnlineReferencesGet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="Cases">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="PetitionInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="CaseNum" type="xs:int" />
+                  <xs:element minOccurs="0" name="CaseState" type="xs:int" />
+                  <xs:element minOccurs="0" name="CaseStatus" type="xs:int" />
+                  <xs:element minOccurs="0" name="CaseStatusDesc" type="xs:string" />
+                  <xs:element minOccurs="0" name="CaseStatusDescCustomer" type="xs:string" />
+                  <xs:element minOccurs="0" name="CaseUrgency" type="xs:int" />
+                  <xs:element minOccurs="0" name="CreatedOn" type="xs:dateTime" />
+                  <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
+                  <xs:element minOccurs="0" name="CloseDate" type="xs:dateTime" />
+                  <xs:element minOccurs="0" name="EZmedVisitDate" type="xs:dateTime" />
+                  <xs:element minOccurs="0" name="IsVisitUpdated" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="UrlCase" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CustInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="LoginCustIName" type="xs:string" />
+                  <xs:element minOccurs="0" name="LoginCustId" type="xs:string" />
+                  <xs:element minOccurs="0" name="LoginCustIdType" type="xs:int" />
+                  <xs:element minOccurs="0" name="CustName" type="xs:string" />
+                  <xs:element minOccurs="0" name="CustIdType" type="xs:int" />
+                  <xs:element minOccurs="0" name="CustId" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="DoctorInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="DoctorNameWithDomain" type="xs:string" />
+                  <xs:element minOccurs="0" name="DoctorFirstName" type="xs:string" />
+                  <xs:element minOccurs="0" name="DoctorLastName" type="xs:string" />
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="MedicalAreaNum">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="MedicalAreaCode" type="xs:int" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="DoctorGender" type="xs:int" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="Prescription">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="MedicationCaseDetails">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element minOccurs="0" name="MedicationId" type="xs:string" />
+                        <xs:element minOccurs="0" name="MedicationDescription" type="xs:string" />
+                        <xs:element minOccurs="0" name="IsPermanentMedication" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="MedicationCase" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Approvals">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="ApprovalIllnessType" type="xs:int" />
+                  <xs:element name="ApprovalIllnessReason" type="xs:string" />
+                  <xs:element minOccurs="0" name="ApprovalIllnessFromDate" type="xs:dateTime" />
+                  <xs:element minOccurs="0" name="ApprovalIllnessToDate" type="xs:dateTime" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="References">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="RefferalCase" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="CustIndicationInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="MailNotification" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="CustMail" type="xs:string" />
+                  <xs:element minOccurs="0" name="SmsNotification" type="xs:boolean" />
+                  <xs:element minOccurs="0" name="CustPhone" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Attachments">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="DocName" type="xs:string" />
+                  <xs:element name="Document" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="InvocationHandling">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="DoctorNotesCode" type="xs:int" />
+                  <xs:element minOccurs="0" name="DoctorNotes" type="xs:string" />
+                  <xs:element minOccurs="0" name="DetailedDoctorNotes" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="DoctorFiles">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Site" type="xs:int" />
+                  <xs:element name="CustIdType" type="xs:int" />
+                  <xs:element name="CustId" type="xs:string" />
+                  <xs:element name="Date" type="xs:dateTime" />
+                  <xs:element name="Time" type="xs:time" />
+                  <xs:element name="DoctorId" type="xs:string" />
+                  <xs:element name="FromId" type="xs:string" />
+                  <xs:element name="DoctorSpec" type="xs:int" />
+                  <xs:element name="Owner" type="xs:int" />
+                  <xs:element name="CrmId" type="xs:int" />
+                  <xs:element name="UniqueId" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="OnlineReferencesGet_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode" type="xs:string" />
+            <xs:element minOccurs="0" name="CaseState" type="xs:int" />
+            <xs:element minOccurs="0" name="CaseStatus" type="xs:int" />
+            <xs:element minOccurs="0" name="CaseNum" type="xs:int" />
+            <xs:element name="Range" type="xs:int" />
+            <xs:element minOccurs="0" name="CustInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="CustId">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="9" />
+                        <xs:minLength value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="CustIdType">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:int">
+                        <xs:enumeration value="1" />
+                        <xs:enumeration value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="LoginCustId">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:minLength value="9" />
+                        <xs:maxLength value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="LoginCustIdType">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:int">
+                        <xs:enumeration value="1" />
+                        <xs:enumeration value="9" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="DoctorInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="doctorNameWithDomain" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="OnlineReferencesGet_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns15:Cases" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CustomerPopulationList.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/CustomerPopulationList.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerPopulationList_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerPopulationList_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns1:statusReply" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="PopulationList">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="PopulationCode" type="xs:string" />
+                  <xs:element minOccurs="0" name="PopulationName" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/getCustomerInfo.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Customers/getCustomerInfo.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustGenderDesc" type="xs:string" />
+      <xs:element name="HeadOfFamilyRelativeCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="HeadOfFamilyRelativeDesc" type="xs:string" />
+      <xs:element name="PopulationType">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="getCustomerInfo_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="ActionCode" type="xs:int" />
+            <xs:element name="CustIdType" type="xs:byte" />
+            <xs:element name="CustId" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCustomerInfo_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="CustomerInfo">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="CustFirstName" type="xs:string" />
+                  <xs:element name="CustSecName" type="xs:string" />
+                  <xs:element name="CustFatherName" type="xs:string" />
+                  <xs:element name="CustGender" type="xs:string" />
+                  <xs:element ref="ns11:CustGenderDesc" />
+                  <xs:element name="CustCityName" type="xs:string" />
+                  <xs:element name="CityCode" type="xs:string" />
+                  <xs:element name="CustStreetName" type="xs:string" />
+                  <xs:element name="StreetCode" type="xs:string" />
+                  <xs:element name="CustHouseNum" type="xs:int" />
+                  <xs:element name="CustHouseEntrance" type="xs:string" />
+                  <xs:element name="CustZipCode" type="xs:int" />
+                  <xs:element name="CustPob" type="xs:int" />
+                  <xs:element name="DistributionCode" type="xs:int" />
+                  <xs:element name="CustBranch" type="xs:int" />
+                  <xs:element name="Branch" type="xs:string" />
+                  <xs:element name="CustRegion" type="xs:int" />
+                  <xs:element name="Region" type="xs:string" />
+                  <xs:element name="CustDistrict" type="xs:int" />
+                  <xs:element name="District" type="xs:string" />
+                  <xs:element name="CustPhoneAreaCode" type="xs:int" />
+                  <xs:element name="CustPhoneNum" type="xs:int" />
+                  <xs:element name="CustMobileAreaCode" type="xs:int" />
+                  <xs:element name="CustMobileNum" type="xs:int" />
+                  <xs:element minOccurs="0" name="CustAddrUpdDate" type="xs:date" />
+                  <xs:element minOccurs="0" name="CustBirthDate" type="xs:date" />
+                  <xs:element name="CustEMail" type="xs:string" />
+                  <xs:element name="BankPayInd" type="xs:boolean" />
+                  <xs:element name="PersonalInd" type="xs:boolean" />
+                  <xs:element name="PersonalFamilyInd" type="xs:boolean" />
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="CustInsuranceList">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="CustInsuranceCode" type="xs:byte" />
+                        <xs:element name="CustInsuranceDesc" type="xs:string" />
+                        <xs:element minOccurs="0" name="CustActivationDate" type="xs:date" />
+                        <xs:element name="CustInsuranceStatus" type="xs:boolean" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="CustStatus" type="xs:string" />
+                  <xs:element name="CustStatusDesc" type="xs:string" />
+                  <xs:element name="CustDtlStatus" type="xs:string" />
+                  <xs:element name="CustDtlStatusDesc" type="xs:string" />
+                  <xs:element minOccurs="0" name="CustStatusDate" type="xs:date" />
+                  <xs:element minOccurs="0" name="CustJoiningDate" type="xs:date" />
+                  <xs:element ref="ns11:HeadOfFamilyRelativeCode" />
+                  <xs:element ref="ns11:HeadOfFamilyRelativeDesc" />
+                  <xs:element ref="ns11:PopulationType" />
+                  <xs:element minOccurs="0" name="CountryOfBirthCode" type="xs:string" />
+                  <xs:element minOccurs="0" name="CountryOfBirth" type="xs:string" />
+                  <xs:element minOccurs="0" name="ImmigrationDate" type="xs:date" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerNewHospitalizationUpsert.xsd" xmlns:ns1="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" xmlns:ns0="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.meuhedet.co.il/schemas/GenericWS/Shared/XSD/Commitments/CustomerNewHospitalizationUpsert.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/esbData.xsd" />
+      <xs:import namespace="http://www.meuhedet.co.il/schemas/GATEWAY/Shared/XSD/statusReply.xsd" />
+      <xs:element name="CustomerNewHospitalizationUpsert_Request">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="ns0:esbData" />
+            <xs:element name="CustIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="CustId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="9" />
+                  <xs:maxLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="HospitalCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="8" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="HospitalizitonDate" type="xs:date" />
+            <xs:element name="ReceptionDepartmentCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:totalDigits value="5" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="ObligationNum">
+              <xs:simpleType>
+                <xs:restriction base="xs:int">
+                  <xs:totalDigits value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ControllerIdType">
+              <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ControllerId">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="9" />
+                  <xs:minLength value="9" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="Remarks">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="2048" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CustomerNewHospitalizationUpsert_Response">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="Status" type="xs:boolean" />
+            <xs:element ref="ns1:statusReply" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="root">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Remarks">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Remark" type="xs:string" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="TravelInsurance.Upsert.Input">
+    <wsdl:part name="input" element="ns0:TravelInsurance.Upsert_Request" />
+  </wsdl:message>
+  <wsdl:message name="TravelInsurance.Upsert.Output">
+    <wsdl:part name="output" element="ns0:TravelInsurance.Upsert_Response" />
+  </wsdl:message>
+  <wsdl:message name="CustomerNewHospitalization.Upsert.Input">
+    <wsdl:part name="Input" element="ns1:CustomerNewHospitalizationUpsert_Request" />
+  </wsdl:message>
+  <wsdl:message name="CustomerNewHospitalization.Upsert.Output">
+    <wsdl:part name="Output" element="ns1:CustomerNewHospitalizationUpsert_Response" />
+  </wsdl:message>
+  <wsdl:message name="CreatePetitionInCRM.Upsert.Input">
+    <wsdl:part name="Input" element="ns2:CreatePetitionInCRMUpsert_Request" />
+  </wsdl:message>
+  <wsdl:message name="CreatePetitionInCRM.Upsert.Output">
+    <wsdl:part name="Output" element="ns2:CreatePetitionInCRMUpsert_Response" />
+  </wsdl:message>
+  <wsdl:message name="GetVisitFile.Input">
+    <wsdl:part name="input" element="ns3:GetVisitFile_Request" />
+  </wsdl:message>
+  <wsdl:message name="GetVisitFile.Output">
+    <wsdl:part name="output" element="ns3:GetVisitFile_Response" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerPreferences.Input">
+    <wsdl:part name="input" element="ns4:getCustomerPreferences_Request" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerPreferences.Output">
+    <wsdl:part name="output" element="ns4:getCustomerPreferences_Response" />
+  </wsdl:message>
+  <wsdl:message name="CustomerHospitalizationsList.Get.Input">
+    <wsdl:part name="Input" element="ns5:CustomerHospitalizationsListGet_Request" />
+  </wsdl:message>
+  <wsdl:message name="CustomerHospitalizationsList.Get.Output">
+    <wsdl:part name="Output" element="ns5:CustomerHospitalizationsListGet_Response" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTravelInsurancePolicies.Input">
+    <wsdl:part name="input" element="ns6:GetAllTravelInsurancePolicies_Request" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTravelInsurancePolicies.Output">
+    <wsdl:part name="output" element="ns6:GetAllTravelInsurancePolicies_Response" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerCaseList.Input">
+    <wsdl:part name="input" element="ns7:GetCustomerCaseList_Request" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerCaseList.Output">
+    <wsdl:part name="output" element="ns7:GetCustomerCaseList_Respopnse" />
+  </wsdl:message>
+  <wsdl:message name="DisplayCustomerMeasurementResults.Get.Input">
+    <wsdl:part name="Input" element="ns8:DisplayCustomerMeasurementResultsGet_Request" />
+  </wsdl:message>
+  <wsdl:message name="DisplayCustomerMeasurementResults.Get.Output">
+    <wsdl:part name="Output" element="ns8:DisplayCustomerMeasurementResultsGet_Response" />
+  </wsdl:message>
+  <wsdl:message name="UpsertCustomerCase.Input">
+    <wsdl:part name="input" element="ns9:UpsertCustomerCase_Request" />
+  </wsdl:message>
+  <wsdl:message name="UpsertCustomerCase.Output">
+    <wsdl:part name="output" element="ns9:UpsertCustomerCase_Response" />
+  </wsdl:message>
+  <wsdl:message name="CustomerDiagnosis.Upsert.Input">
+    <wsdl:part name="Input" element="ns10:CustomerDiagnosisUpsert_Request" />
+  </wsdl:message>
+  <wsdl:message name="CustomerDiagnosis.Upsert.Output">
+    <wsdl:part name="Output" element="ns10:CustomerDiagnosisUpsert_Response" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerInfo.Input">
+    <wsdl:part name="input" element="ns11:getCustomerInfo_Request" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerInfo.Output">
+    <wsdl:part name="output" element="ns11:getCustomerInfo_Response" />
+  </wsdl:message>
+  <wsdl:message name="CustomerPopulationList.Input">
+    <wsdl:part name="Input" element="ns12:CustomerPopulationList_Request" />
+  </wsdl:message>
+  <wsdl:message name="CustomerPopulationList.Output">
+    <wsdl:part name="Output" element="ns12:CustomerPopulationList_Response" />
+  </wsdl:message>
+  <wsdl:message name="UpdateReferenceStatusInCRM.Input">
+    <wsdl:part name="Input" element="ns13:UpdateReferenceStatusInCRM_Request" />
+  </wsdl:message>
+  <wsdl:message name="UpdateReferenceStatusInCRM.Output">
+    <wsdl:part name="Output" element="ns13:UpdateReferenceStatusInCRM_Response" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerInfoForDatOs.Input">
+    <wsdl:part name="input" element="ns14:GetCustomerInfoForDatOs_Request" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerInfoForDatOs.Output">
+    <wsdl:part name="output" element="ns14:GetCustomerInfoForDatOs_Response" />
+  </wsdl:message>
+  <wsdl:message name="OnlineReferences.Get.Input">
+    <wsdl:part name="Input" element="ns15:OnlineReferencesGet_Request" />
+  </wsdl:message>
+  <wsdl:message name="OnlineReferences.Get.Output">
+    <wsdl:part name="Output" element="ns15:OnlineReferencesGet_Response" />
+  </wsdl:message>
+  <wsdl:portType name="Customers">
+    <wsdl:operation name="TravelInsurance.Upsert">
+      <wsdl:input message="tns:TravelInsurance.Upsert.Input" />
+      <wsdl:output message="tns:TravelInsurance.Upsert.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerNewHospitalization.Upsert">
+      <wsdl:input message="tns:CustomerNewHospitalization.Upsert.Input" />
+      <wsdl:output message="tns:CustomerNewHospitalization.Upsert.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePetitionInCRM.Upsert">
+      <wsdl:input message="tns:CreatePetitionInCRM.Upsert.Input" />
+      <wsdl:output message="tns:CreatePetitionInCRM.Upsert.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVisitFile">
+      <wsdl:input message="tns:GetVisitFile.Input" />
+      <wsdl:output message="tns:GetVisitFile.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerPreferences">
+      <wsdl:input message="tns:getCustomerPreferences.Input" />
+      <wsdl:output message="tns:getCustomerPreferences.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerHospitalizationsList.Get">
+      <wsdl:input message="tns:CustomerHospitalizationsList.Get.Input" />
+      <wsdl:output message="tns:CustomerHospitalizationsList.Get.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTravelInsurancePolicies">
+      <wsdl:input message="tns:GetAllTravelInsurancePolicies.Input" />
+      <wsdl:output message="tns:GetAllTravelInsurancePolicies.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerCaseList">
+      <wsdl:input message="tns:GetCustomerCaseList.Input" />
+      <wsdl:output message="tns:GetCustomerCaseList.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayCustomerMeasurementResults.Get">
+      <wsdl:input message="tns:DisplayCustomerMeasurementResults.Get.Input" />
+      <wsdl:output message="tns:DisplayCustomerMeasurementResults.Get.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="UpsertCustomerCase">
+      <wsdl:input message="tns:UpsertCustomerCase.Input" />
+      <wsdl:output message="tns:UpsertCustomerCase.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerDiagnosis.Upsert">
+      <wsdl:input message="tns:CustomerDiagnosis.Upsert.Input" />
+      <wsdl:output message="tns:CustomerDiagnosis.Upsert.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerInfo">
+      <wsdl:input message="tns:getCustomerInfo.Input" />
+      <wsdl:output message="tns:getCustomerInfo.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerPopulationList">
+      <wsdl:input message="tns:CustomerPopulationList.Input" />
+      <wsdl:output message="tns:CustomerPopulationList.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReferenceStatusInCRM">
+      <wsdl:input message="tns:UpdateReferenceStatusInCRM.Input" />
+      <wsdl:output message="tns:UpdateReferenceStatusInCRM.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerInfoForDatOs">
+      <wsdl:input message="tns:GetCustomerInfoForDatOs.Input" />
+      <wsdl:output message="tns:GetCustomerInfoForDatOs.Output" />
+    </wsdl:operation>
+    <wsdl:operation name="OnlineReferences.Get">
+      <wsdl:input message="tns:OnlineReferences.Get.Input" />
+      <wsdl:output message="tns:OnlineReferences.Get.Output" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PortType.CustomersEndpoint1JMSBinding" type="tns:Customers">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <jms:binding messageFormat="Text" />
+    <wsdl:operation name="TravelInsurance.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//TravelInsurance.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerNewHospitalization.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerNewHospitalization.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePetitionInCRM.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CreatePetitionInCRM.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVisitFile">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetVisitFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerPreferences">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//getCustomerPreferences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerHospitalizationsList.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerHospitalizationsList.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTravelInsurancePolicies">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetAllTravelInsurancePolicies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerCaseList">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetCustomerCaseList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayCustomerMeasurementResults.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//DisplayCustomerMeasurementResults.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpsertCustomerCase">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//UpsertCustomerCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerDiagnosis.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerDiagnosis.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerInfo">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//getCustomerInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerPopulationList">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerPopulationList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReferenceStatusInCRM">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//UpdateReferenceStatusInCRM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerInfoForDatOs">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetCustomerInfoForDatOs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnlineReferences.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//OnlineReferences.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PortType.CustomersEndpoint1Binding" type="tns:Customers">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TravelInsurance.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//TravelInsurance.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerNewHospitalization.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerNewHospitalization.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePetitionInCRM.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CreatePetitionInCRM.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVisitFile">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetVisitFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerPreferences">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//getCustomerPreferences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerHospitalizationsList.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerHospitalizationsList.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTravelInsurancePolicies">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetAllTravelInsurancePolicies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerCaseList">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetCustomerCaseList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayCustomerMeasurementResults.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//DisplayCustomerMeasurementResults.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpsertCustomerCase">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//UpsertCustomerCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerDiagnosis.Upsert">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerDiagnosis.Upsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerInfo">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//getCustomerInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerPopulationList">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//CustomerPopulationList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReferenceStatusInCRM">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//UpdateReferenceStatusInCRM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerInfoForDatOs">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//GetCustomerInfoForDatOs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="output" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnlineReferences.Get">
+      <soap:operation soapAction="/Interfaces/WebServices/Customers.service.serviceagent//OnlineReferences.Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="Input" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="Output" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Customers.service.serviceagent">
+    <wsdl:port name="PortType.CustomersEndpoint1JMS" binding="tns:PortType.CustomersEndpoint1JMSBinding">
+      <soap:address location="" />
+      <jms:connectionFactory>QueueConnectionFactory</jms:connectionFactory>
+      <jms:targetAddress destination="queue">esb_qa.Test./Interfaces/WebServices/Customers.service.serviceagent/PortType.CustomersEndpoint1</jms:targetAddress>
+    </wsdl:port>
+    <wsdl:port name="PortType.CustomersEndpoint1" binding="tns:PortType.CustomersEndpoint1Binding">
+      <soap:address location="http://esbqa/Interfaces/WebServices/Customers.service.serviceagent/PortType.CustomersEndpoint1" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
