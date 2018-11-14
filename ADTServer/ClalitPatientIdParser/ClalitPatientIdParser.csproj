@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C1B73E5-6FBD-40AD-9D37-B25F75E5CB0C}</ProjectGuid>
+    <ProjectGuid>{E5C8E650-6B82-48FF-8ED5-A92259BB7995}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IsraeliIdTools</RootNamespace>
-    <AssemblyName>IsraeliIdTools</AssemblyName>
+    <RootNamespace>ClalitPatientIdParser</RootNamespace>
+    <AssemblyName>ClalitPatientIdParser</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,8 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDTools.cs" />
+    <Compile Include="ClalitPidParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdtSvrCmn\AdtSvrCmn.csproj">
+      <Project>{96aeaf90-dc8b-4f0c-ad48-b49b3db90d33}</Project>
+      <Name>AdtSvrCmn</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

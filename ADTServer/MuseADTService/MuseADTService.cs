@@ -1,5 +1,4 @@
-﻿
-#define MEUHEDET  
+﻿#define CLALIT  
 
 using System;
 using System.Runtime.InteropServices;
@@ -132,6 +131,16 @@ namespace MuseADTService
                 logger.Debug("Loading Meuhedet Web service client...");
                 pInfoSource = new MeuhedetWebServiceDataClient.MeuhedetPatientDataRequester(configuration);
                 logger.Debug("Web service client loaded");
+#elif CLALIT || DEBUG && CLALIT
+
+                logger.Debug("Loading Clalit Patient Id Parser...");
+                pidParser = new ClalitPatientIdParser.ClalitPidParser();
+                logger.Debug("Patient Id Parser loaded");
+
+                logger.Debug("Loading Clalit Web service client...");
+                pInfoSource = new ClalitWebServiceDataClient.ClalitPatientInfoSource();
+                logger.Debug("Web service client loaded");
+
 #endif
 
 

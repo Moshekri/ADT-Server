@@ -16,6 +16,8 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Linq;
 
+
+
 namespace ADTServ
 {
     /// <summary>
@@ -78,7 +80,11 @@ namespace ADTServ
                     Logger = ologger,
                     NameNormalyzer = normalizer
                 };
-                tManager = TranslationManagerFactory.GetTranslationManager(tMgrData);
+                if (_config.MustGetTranslation)
+                {
+                    tManager = TranslationManagerFactory.GetTranslationManager(tMgrData);
+
+                }
                 Tokensource = new CancellationTokenSource();
                 Server = new Server(_config, Tokensource.Token);
             }
@@ -273,16 +279,20 @@ namespace ADTServ
                         $"Success ! Got patient info for patient id {patientInformation.PatientId} ");
                     logger.Info($"Data  :  First name : {patientInformation.FirstName} , last name : {patientInformation.LastName} ,pid {originalPID}", source);
 
-                    logger.Info($"Trying to translate to english ... {patientInformation.FirstName} , {patientInformation.LastName}", source);
+                    if (_config.MustGetTranslation)
+                    {
+                        logger.Info($"Trying to translate to english ... {patientInformation.FirstName} , {patientInformation.LastName}", source);
 
-                    var patientNamesData = tManager.GetEnglishName(patientInformation.FirstName, patientInformation.LastName);
+                        var patientNamesData = tManager.GetEnglishName(patientInformation.FirstName, patientInformation.LastName);
 
-                    patientInformation.FirstName = patientNamesData.EnglishFirstName ?? " ";
-                    patientInformation.LastName = patientNamesData.EnglishLastName ?? " ";
+                        patientInformation.FirstName = patientNamesData.EnglishFirstName ?? " ";
+                        patientInformation.LastName = patientNamesData.EnglishLastName ?? " ";
 
 
-                    logger.Info($"English Name : {patientInformation.FirstName} , {patientInformation.LastName}  ", source);
-                    logger.Info($"Date Of birtn  : (Year only) {patientInformation.DOB}", source);
+                        logger.Info($"English Name : {patientInformation.FirstName} , {patientInformation.LastName}  ", source);
+                    }
+                    
+                    logger.Info($"Date Of birtn  :  {patientInformation.DOB}", source);
                     string age = Helper.CalculateAge(patientInformation);
                     logger.Info($"Age : {age}", source);
 
@@ -332,6 +342,8 @@ namespace ADTServ
                     $"Getting patient information for  patient id {parsedIds[0].ID} type {parsedIds[0].SugId} and checksum digit {parsedIds[0].SifratBikuret} ");
                 }
                 // get patient information from web service
+
+                //todo: entry point to get patient informatoion from webservice
                 IsraeliCustomer = WebServiceClient.GetPatientInfo(parsedIds[0]);
                     if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
                     {
