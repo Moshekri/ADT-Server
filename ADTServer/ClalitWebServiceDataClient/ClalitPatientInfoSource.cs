@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
-
+using System.ServiceModel;
 
 namespace ClalitWebServiceDataClient
 {
@@ -28,8 +28,13 @@ namespace ClalitWebServiceDataClient
 
             using (var client = new TranslationPatientNamesServiceClient("TranslationPatientNamesService"))
             {
+                ClalitPatientNameService.TranslationPatientNamesMessageInfo mi = new TranslationPatientNamesMessageInfo();
+            
+                
+
                 TranslationPatientNamesRequest request = new TranslationPatientNamesRequest();
                 TranslationPatientNamesResponse response;
+                
                 request.MessageInfo = new TranslationPatientNamesMessageInfo();
 
                 request.MessageInfo.RequestDatetime = DateTime.Now;
@@ -43,7 +48,10 @@ namespace ClalitWebServiceDataClient
 
                 request.MessageInfo.ServingApplication = 10;
 
-                request.MessageInfo.ServingSite = 14;
+                request.MessageInfo.ServingSite = 120;
+                request.MessageInfo.RequestingSite = 120;
+
+
 
                 request.Parameters = new TranslationPatientNamesParameters();
 
@@ -65,6 +73,7 @@ namespace ClalitWebServiceDataClient
                 try
                 {
                     logger.Debug("Sending request...");
+           
                      response = client.TranslationPatientNamesQuery(request);
                 }
                 catch (Exception)
