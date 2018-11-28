@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HebrewNameNormalizer">
-      <HintPath>..\..\..\NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\obj\Debug\HebrewNameNormalizer.dll</HintPath>
-    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -87,6 +84,10 @@
     <ProjectReference Include="..\MuseHl7MessageComposer\MuseHl7MessageComposer.csproj">
       <Project>{5045ddd3-05f8-4e84-befe-448d14f4b73e}</Project>
       <Name>MuseHl7MessageComposer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj">
+      <Project>{06ccd9be-5a2f-47b9-89f6-22f6fc33ec94}</Project>
+      <Name>HebrewNameNormalizer</Name>
     </ProjectReference>
     <ProjectReference Include="..\TcpServer\TcpServer.csproj">
       <Project>{bacf16dc-ad6d-4644-94d3-f5830ddce188}</Project>

@@ -117,8 +117,8 @@ namespace TranslationManager
             var q1 = LevenshteinDistance.Compute(googleEnglishFirstName, phoneticEnglishFirstName);
             var q2 = LevenshteinDistance.Compute(googleEnglishLastName, phoneticEnglishLastName);
 
-            bool googleFirstName = false;
-            bool googleLastName = false;
+           //bool googleFirstName = false;
+          //  bool googleLastName = false;
 
             if (googleFirstNameTranslationQuality < 50 || (googleEnglishFirstName.Length > 8 ? q1 >= 6 : q1 > 4))
             {
