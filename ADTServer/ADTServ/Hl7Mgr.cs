@@ -15,7 +15,7 @@ using NLog;
 using System.Text;
 using System.Net.NetworkInformation;
 using System.Linq;
-
+using HebrewNameNormalizer;
 
 
 namespace ADTServ

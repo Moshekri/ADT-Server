@@ -1,4 +1,4 @@
-﻿#define CLALIT  
+﻿#define SHEBA  
 
 using System;
 using System.Runtime.InteropServices;
@@ -139,6 +139,15 @@ namespace MuseADTService
 
                 logger.Debug("Loading Clalit Web service client...");
                 pInfoSource = new ClalitWebServiceDataClient.ClalitPatientInfoSource();
+                logger.Debug("Web service client loaded");
+#elif SHEBA || DEBUG && SHEBA
+
+                logger.Debug("Loading Clalit Patient Id Parser...");
+                pidParser = new ShebaPidParser.ShebaParserPID(); 
+                logger.Debug("Patient Id Parser loaded");
+
+                logger.Debug("Loading Clalit Web service client...");
+                pInfoSource = new ShebaPatientInfoSource.ShebaInfoSource();
                 logger.Debug("Web service client loaded");
 
 #endif

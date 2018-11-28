@@ -177,6 +177,14 @@
       <Project>{33cdf9b1-e067-470d-a363-e4e1f722d791}</Project>
       <Name>PlugInManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShebaPatientInfoSource\ShebaPatientInfoSource.csproj">
+      <Project>{1eb12c6d-4fc3-4c90-a319-6e7f81364539}</Project>
+      <Name>ShebaPatientInfoSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShebaPidParser\ShebaPidParser.csproj">
+      <Project>{df97d36e-99a6-4985-9ef1-4dbb3b47ebfa}</Project>
+      <Name>ShebaPidParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MuseADTService.resx">
