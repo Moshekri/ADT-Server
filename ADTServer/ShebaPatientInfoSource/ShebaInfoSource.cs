@@ -25,17 +25,37 @@ namespace ShebaPatientInfoSource
                 try
                 {
                     long id = long.Parse(CustumerId);
-                    client.GetPatientDetails("ECG", DataSource.MF, QueryType.ImutNames, id, "", "", "", "EldaUser");
-                                      
+                    var respone = client.GetPatientDetails("ECG", DataSource.MF, QueryType.ImutID, id, "", "", "", "EldaUser");
+                    var datestring = respone.PatDetails.birthdate.ToString();
+                    datestring = datestring.Insert(4, "-");
+                    datestring = datestring.Insert(7, "-");
+                  
+
+                    var age =DateTime.Now.Year - DateTime.Parse(datestring).Year;
+                    completePatientInformation.Age = respone.PatDetails.birthdate.ToString();
+                    completePatientInformation.LastName = respone.PatDetails.engfname;
+                    completePatientInformation.FirstName = respone.PatDetails.engpname;
+                    completePatientInformation.Gender = respone.PatDetails.sex;
+                    if (completePatientInformation.Gender == "ז")
+                    {
+                        completePatientInformation.Gender = "M";
+                    }
+                    else
+                    {
+                        completePatientInformation.Gender = "F";
+                    }
+                    completePatientInformation.ResponseStatus = "0";
+                    completePatientInformation.DOB = datestring;
+                    return completePatientInformation;
 
                 }
-                catch (Exception ex )
+                catch (Exception ex)
                 {
                     return null;
                 }
-               
+
             }
-            return completePatientInformation;
+            
         }
 
         [Obsolete("Use GetPatientInfo(PatientId patientId) instead")]
