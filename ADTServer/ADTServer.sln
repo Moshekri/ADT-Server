@@ -52,8 +52,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientIdParsingTests", "Pa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlugInManager", "PlugInManager\PlugInManager.csproj", "{33CDF9B1-E067-470D-A363-E4E1F722D791}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HebrewNameNormalizer", "..\..\NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj", "{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rd Party dll", "3rd Party dll", "{16B020CE-26ED-46C0-AF74-C6F00C4E4276}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plug-Ins", "Plug-Ins", "{78C3AEE8-7709-4DE6-A26A-9BDCAB24A1A8}"
@@ -78,6 +76,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShebaPidParser", "ShebaPidParser\ShebaPidParser.csproj", "{DF97D36E-99A6-4985-9EF1-4DBB3B47EBFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShebaPatientInfoSource", "ShebaPatientInfoSource\ShebaPatientInfoSource.csproj", "{1EB12C6D-4FC3-4C90-A319-6E7F81364539}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HebrewNameNormalizer", "NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj", "{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,10 +173,6 @@ Global
 		{33CDF9B1-E067-470D-A363-E4E1F722D791}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33CDF9B1-E067-470D-A363-E4E1F722D791}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33CDF9B1-E067-470D-A363-E4E1F722D791}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C7511EE8-C6BE-4CCC-AFE9-0960766D0701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7511EE8-C6BE-4CCC-AFE9-0960766D0701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7511EE8-C6BE-4CCC-AFE9-0960766D0701}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -207,6 +203,10 @@ Global
 		{1EB12C6D-4FC3-4C90-A319-6E7F81364539}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EB12C6D-4FC3-4C90-A319-6E7F81364539}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EB12C6D-4FC3-4C90-A319-6E7F81364539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

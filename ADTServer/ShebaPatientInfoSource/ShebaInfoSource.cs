@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AdtSvrCmn.Interfaces;
 using AdtSvrCmn.Objects;
-using Microsoft.Web.Services2.Security.Tokens;
 using ShebaPatientInfoSource.ShebaDemographicsProxy;
 
 
