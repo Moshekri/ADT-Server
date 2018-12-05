@@ -65,13 +65,13 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ClalitPatientNameService\1.wsdl" />
     <None Include="Connected Services\ClalitPatientNameService\ClalitWebServiceDataClient.ClalitPatientNameService.TranslationPatientNamesQueryResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ClalitPatientNameService\ClalitWebServiceDataClient.ClalitPatientNameService.TranslationPatientNamesResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ClalitPatientNameService\TranslationPatientNamesService.wsdl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

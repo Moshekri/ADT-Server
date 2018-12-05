@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NLog;
 using System.ServiceModel;
+using System.Net;
 
 namespace ClalitWebServiceDataClient
 {
@@ -25,13 +26,21 @@ namespace ClalitWebServiceDataClient
         {
             logger.Debug("Loading Clalit webService Client");
             CompletePatientInformation patientInformation = new CompletePatientInformation();
+            
+       
 
             using (var client = new TranslationPatientNamesServiceClient("TranslationPatientNamesService"))
             {
-                ClalitPatientNameService.TranslationPatientNamesMessageInfo mi = new TranslationPatientNamesMessageInfo();
-            
-                
+                ICredentials credentials = CredentialCache.DefaultCredentials;
 
+                TranslationPatientNamesMessageInfo mi = new TranslationPatientNamesMessageInfo();
+                System.Net.NetworkCredential  c = new System.Net.NetworkCredential();
+            
+                    
+                var creds = client.ClientCredentials.Windows;
+
+
+                
                 TranslationPatientNamesRequest request = new TranslationPatientNamesRequest();
                 TranslationPatientNamesResponse response;
                 
@@ -73,10 +82,10 @@ namespace ClalitWebServiceDataClient
                 try
                 {
                     logger.Debug("Sending request...");
-           
+         
                      response = client.TranslationPatientNamesQuery(request);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                     throw;
@@ -111,4 +120,8 @@ namespace ClalitWebServiceDataClient
          return   GetPatientInfo(patientId.ID);
         }
     }
+
+
+    
+
 }

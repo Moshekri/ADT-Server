@@ -92,7 +92,7 @@
   </wsdl:binding>
   <wsdl:service name="TranslationPatientNamesService">
     <wsdl:port name="TranslationPatientNamesService" binding="tns:TranslationPatientNamesService">
-      <soap:address location="http://emekonline.emek.clalit.org.il:8326/Clalit.TranslationPatientNames/TranslationPatientNamesService.asmx" />
+      <soap:address location="http://beilinsononline.beilinson.clalit.org.il:8326/Clalit.TranslationPatientNames/TranslationPatientNamesService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
