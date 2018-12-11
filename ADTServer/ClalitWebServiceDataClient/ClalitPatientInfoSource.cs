@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NLog;
 using System.ServiceModel;
 using System.Net;
+using System.Configuration;
 
 namespace ClalitWebServiceDataClient
 {
@@ -31,16 +32,29 @@ namespace ClalitWebServiceDataClient
 
             using (var client = new TranslationPatientNamesServiceClient("TranslationPatientNamesService"))
             {
-                ICredentials credentials = CredentialCache.DefaultCredentials;
 
-                TranslationPatientNamesMessageInfo mi = new TranslationPatientNamesMessageInfo();
-                System.Net.NetworkCredential  c = new System.Net.NetworkCredential();
-            
-                    
-                var creds = client.ClientCredentials.Windows;
+                string username = ConfigurationManager.AppSettings["user"];
+                string password = ConfigurationManager.AppSettings["password"];
+                string domain = ConfigurationManager.AppSettings["domain"];
+
+                client.ClientCredentials.UserName.UserName = username;
+                client.ClientCredentials.UserName.Password = password;
+                client.ClientCredentials.Windows.ClientCredential.UserName = username;
+                client.ClientCredentials.Windows.AllowNtlm = true;
+                client.ClientCredentials.Windows.ClientCredential.Domain = domain;
+                client.ClientCredentials.Windows.ClientCredential.Password = password;
+                var s = new System.Security.SecureString();
+                foreach (var item in password)
+                {
+                    s.AppendChar(item);
+                }
+                client.ClientCredentials.Windows.ClientCredential.SecurePassword = s;
 
 
-                
+
+
+
+
                 TranslationPatientNamesRequest request = new TranslationPatientNamesRequest();
                 TranslationPatientNamesResponse response;
                 
@@ -84,6 +98,7 @@ namespace ClalitWebServiceDataClient
                     logger.Debug("Sending request...");
          
                      response = client.TranslationPatientNamesQuery(request);
+                   
                 }
                 catch (Exception ex)
                 {
