@@ -49,12 +49,7 @@ namespace ClalitWebServiceDataClient
                     s.AppendChar(item);
                 }
                 client.ClientCredentials.Windows.ClientCredential.SecurePassword = s;
-
-
-
-
-
-
+                
                 TranslationPatientNamesRequest request = new TranslationPatientNamesRequest();
                 TranslationPatientNamesResponse response;
                 
@@ -102,8 +97,14 @@ namespace ClalitWebServiceDataClient
                 }
                 catch (Exception ex)
                 {
+                    logger.Error(ex.Message);
+                    while (ex.InnerException!=null)
+                    {
+                        ex = ex.InnerException;
+                        logger.Error(ex.Message);
 
-                    throw;
+                    }
+                    return null;
                 }
 
                 logger.Debug("Recived response : " +
@@ -127,12 +128,12 @@ namespace ClalitWebServiceDataClient
 
         public CompletePatientInformation GetPatientInfo(string CustumerId, string pidType)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public CompletePatientInformation GetPatientInfo(PatientId patientId)
         {
-         return   GetPatientInfo(patientId.ID);
+            return   GetPatientInfo(patientId.ID);
         }
     }
 
