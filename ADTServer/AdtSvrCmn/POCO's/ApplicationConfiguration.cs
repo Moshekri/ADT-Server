@@ -32,6 +32,7 @@ namespace AdtSvrCmn.Objects
         public string RegularPidType { get; set; }
         public string GoodSoapResponseErrorCode { get; set; }
         public string BadSoapResponseCode { get; set; }
+        
 
         public ApplicationConfiguration()
         {
@@ -46,7 +47,7 @@ namespace AdtSvrCmn.Objects
             GoogleCredentialFilePath = @"c:\programData\KriSoftware\ADTServer\cred";
             SourceSystem = "45";
             WebTimeOut = "5000";
-            SoapRequestTarget = "http://LEUMITTS:50/WS/RUNWSGNR.pgm";
+            SoapRequestTarget = "";
             MustGetTranslation = true;
             UseLocalDb = true;
             PassportPidType = "9";

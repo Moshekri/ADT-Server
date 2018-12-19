@@ -59,8 +59,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="ManualSoapPatientInfoSource.cs" />
     <Compile Include="ShebaInfoSource.cs" />
+    <Compile Include="ShebaInfoSourceBad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

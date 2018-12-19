@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using AdtSvrCmn.Interfaces;
-using AdtSvrCmn.Objects;
-using ShebaPatientInfoSource.ShebaDemographicsProxy;
 using NLog;
-using System.Xml.Serialization;
-using System.IO;
+using AdtSvrCmn.Interfaces;
+using AdtSvrCmn;
+using AdtSvrCmn.Objects;
 using System.Net;
+using System.IO;
+using AdtSvrCmn.EventArguments;
 using System.Configuration;
+using System.Xml.Serialization;
 
 namespace ShebaPatientInfoSource
 {
     public class ShebaInfoSource : IPatientInfoSoapSource
     {
-        public event EventHandler ErrorGettingPatientInfo;
-        public event EventHandler RecevingPatientInfo;
-        public event EventHandler RequestingPatientInfo;
         Logger logger;
         ApplicationConfiguration _config;
 
@@ -31,139 +28,269 @@ namespace ShebaPatientInfoSource
         public ShebaInfoSource(ApplicationConfiguration config)
         {
             _config = config;
+            logger = LogManager.GetCurrentClassLogger();
         }
-        public CompletePatientInformation GetPatientInfo(string CustumerId)
+
+        public event EventHandler RequestingPatientInfo;
+        public event EventHandler RecevingPatientInfo;
+        public event EventHandler ErrorGettingPatientInfo;
+
+
+        public CompletePatientInformation GetPatientInfo(string patientId, string pidType)
+        {
+            logger.Trace("Inside GetPatientInfo");
+            // prepare objects
+            CompletePatientInformation patientInfo = new CompletePatientInformation();
+            byte[] buffer = new byte[100000];
+            string responseMessage = string.Empty;
+
+            // Create request
+            string requestMessage = BuildRequestMessage(patientId);
+            WebRequest request = GetWebRequest(_config.SoapRequestTarget, requestMessage.Length);
+            logger.Info($"Sending request for patient Data :  patient id {pidType}{patientId}");
+            logger.Debug(requestMessage);
+
+
+            //Send Request to web service
+            try
+            {
+                logger.Debug("Sending Request....");
+                var requestStream = request.GetRequestStream();
+                StreamWriter sw = new StreamWriter(requestStream);
+                sw.Write(requestMessage);
+                sw.Flush();
+                logger.Debug("Request Sent...");
+            }
+            catch (Exception ex)
+            {
+                logger.Debug("Cannot sent request to ewb Service");
+                NlogHelper.CreateLogEntry(ex.Message, "100", LogLevel.Error, logger);
+                return null;
+            }
+
+            //Get response from web service
+
+            try
+            {
+                logger.Debug("Trying to get response...");
+                using (var response = request.GetResponse())
+                {
+
+                    var st = response.GetResponseStream();
+                    st.Read(buffer, 0, buffer.Length);
+                    responseMessage = Encoding.UTF8.GetString(buffer).TrimEnd('\0');
+
+                    RecevingPatientInfo?.Invoke(this, new PatientInfoEventArgs() { Message = responseMessage });
+                    logger.Debug("Successfully got response !");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Debug("Error getting the response from ws!");
+                ErrorGettingPatientInfo?.Invoke(this, new PatientInfoEventArgs() { Message = ex.Message });
+                NlogHelper.CreateLogEntry(ex.Message, "200", LogLevel.Error, logger);
+                return null;
+            }
+           
+            patientInfo = ParseResponse(responseMessage);
+            return patientInfo;
+        }
+        public CompletePatientInformation GetPatientInfo(PatientId patientId)
         {
             logger = LogManager.GetCurrentClassLogger();
-            logger.Debug("inside get patient info");
-            logger.Debug($"Getting information for {CustumerId}");
-            CompletePatientInformation completePatientInformation = new CompletePatientInformation();
-            using (var client = new ShebaDemographicsProxy.ShebaCoreInterfacesWSDemogBothServiceSoapClient("Sheba.CoreInterfaces.WS.DemogBoth.ServiceSoap"))
+            logger.Info("entered GetPatientInfo(PatientId patientId) ");
+            if (patientId != null)
             {
-                client.ClientCredentials.Windows.ClientCredential.UserName = "EldanUser";
-                client.ClientCredentials.Windows.ClientCredential.Password = "ELDAN951";
-                var name  = client.ClientCredentials.UserName;
-                name.UserName = "EldanUser";
-                name.Password = "ELDAN951";
-                logger.Debug($"Client Details : Address : {client.Endpoint.Address}" +
-                             $"Binding Name : {client.Endpoint.Binding.Name}" +
-                             $"Listen Uri : {client.Endpoint.ListenUri}" +
-                             $"Connection State : {client.State.ToString()}" +
-                             $"User Name : {client.ClientCredentials.UserName.UserName}" +
-                             $"Password {client.ClientCredentials.UserName.Password}");
-                    //$"{client.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Impersonation}");
+                return GetPatientInfo(patientId.ID, patientId.SugId);
+            }
+            return null;
 
-                try
-                {
-                    long id = long.Parse(CustumerId);
+        }
 
-                    logger.Debug("building request");
-                    GetPatientDetailsRequest req = new GetPatientDetailsRequest();
-                    req.Body = new GetPatientDetailsRequestBody();
-                    req.Body.AppUserName = "Museadmin";
-                    req.Body.DataSource = DataSource.MF;
-                    req.Body.PatientID = id;
-                    req.Body.QueryType = QueryType.ImutID;
-                    req.Body.SendingApp = "ECG";
+        #region Helpers
+        private CompletePatientInformation ParseResponse(string responseMessage)
+        {
+            CompletePatientInformation patientInfo = new CompletePatientInformation();
 
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(GetPatientDetailsRequest));
-                    using (StringWriter textWriter = new StringWriter())
-                    {
-                        xmlSerializer.Serialize(textWriter, req);
-                        logger.Debug($"XML Message to send : {textWriter.ToString()}");
-                    }
-
-                    logger.Debug("Sending req via factory");
-                    var res = client.ChannelFactory.CreateChannel().GetPatientDetails(req);
-
-                    client.Open();
-                    Output respone = client.GetPatientDetails("ECG", DataSource.MF, QueryType.ImutID, id, "", "", "", "MuseAdmin");
-                    logger.Debug("Got Response");
-                    logger.Debug($"{ res.Body.GetPatientDetailsResult.PatDetails.engpname},{ res.Body.GetPatientDetailsResult.ErrMessage}");
-                    logger.Debug($"{respone.PatDetails.engfname} , {respone.PatDetails.engpname}");
-                    var datestring = respone.PatDetails.birthdate.ToString();
-                    datestring = datestring.Insert(4, "-");
-                    datestring = datestring.Insert(7, "-");
+   
 
 
-                    var age = DateTime.Now.Year - DateTime.Parse(datestring).Year;
-                    completePatientInformation.Age = respone.PatDetails.birthdate.ToString();
-                    completePatientInformation.LastName = respone.PatDetails.engfname;
-                    completePatientInformation.FirstName = respone.PatDetails.engpname;
-                    completePatientInformation.Gender = respone.PatDetails.sex;
-                    if (completePatientInformation.Gender == "ז")
-                    {
-                        completePatientInformation.Gender = "M";
-                    }
-                    else
-                    {
-                        completePatientInformation.Gender = "F";
-                    }
-                    completePatientInformation.ResponseStatus = respone.Status;
-                    completePatientInformation.ResponseStatusMessage = respone.ErrMessage;
-                    completePatientInformation.DOB = datestring;
-                    logger.Debug($"{completePatientInformation.Age}," +
-                        $"{completePatientInformation.CompleteResponseStatusMessage}," +
-                        $"{completePatientInformation.DOB}," +
-                        $"{completePatientInformation.FirstName}," +
-                        $"{completePatientInformation.Gender}," +
-                        $"{completePatientInformation.GenderDesc}," +
-                        $"{completePatientInformation.Height}," +
-                        $"{completePatientInformation.LastName}," +
-                        $"{completePatientInformation.PatientId}," +
-                        $"Response ststus code : {completePatientInformation.ResponseStatus}," +
-                        $"{completePatientInformation.ResponseStatusMessage}");
+            XmlSerializer xs = new XmlSerializer(typeof(ShebaDemographicsProxy.GetPatientDetailsResponse));
+            StringReader sr = new StringReader(responseMessage);
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            xs.UnknownElement += Xs_UnknownElement;
+            xs.UnknownAttribute += Xs_UnknownAttribute;
+            xs.UnknownNode += Xs_UnknownNode;
+            xs.Serialize(sw, new ShebaDemographicsProxy.GetPatientDetailsResponse());
+           
+            var obj = xs.Deserialize(sr) as ShebaDemographicsProxy.GetPatientDetailsResponse;
 
-                    return completePatientInformation;
 
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.Message);
-                    while (ex.InnerException != null)
-                    {
-                        ex = ex.InnerException;
-                        logger.Error(ex.Message);
-                    }
-                    client.Close();
-                    return null;
-                }
+            var statusMessage = GetDataFromMW300D(responseMessage, "Errstatus");
+            var severity = GetDataFromMW300D(responseMessage, "Errstatus");
 
+            var status = GetDataFromMW300D(responseMessage, "Errstatus");
+            var firstName = GetDataFromMW300D(responseMessage, "Engpname").TrimEnd(' ').TrimStart(' ');
+            var lastName = GetDataFromMW300D(responseMessage, "Engfname").TrimEnd(' ').TrimStart(' ');
+            var gender = GetDataFromMW300D(responseMessage, "Sex");
+            var patientId = GetDataFromMW300D(responseMessage, "Patientid");
+            var weight = "";
+            var height = "";
+
+            switch (gender)
+            {
+                case "ז":
+                    gender = "M";
+                    break;
+                case "נ":
+                    gender = "F";
+                    break;
+                default:
+                    gender = "";
+                    break;
+            }
+            var dateOfBirth = GetDataFromMW300D(responseMessage, "Birthdate");
+
+            var birthYear =int.Parse( dateOfBirth.Substring(0, 4));
+            var birthMonth= int.Parse( dateOfBirth.Substring(4, 2));
+            var birthDay = int.Parse(dateOfBirth.Substring(6, 2));
+
+            DateTime dob = new DateTime(birthYear, birthMonth, birthDay);
+
+
+
+            patientInfo.Age = (DateTime.Now.Year - dob.Year).ToString();
+            int ageNumber = int.Parse(patientInfo.Age);
+            patientInfo.ResponseStatusMessage = statusMessage;
+            patientInfo.Severity = severity.Trim();
+            patientInfo.FirstName = firstName;
+            patientInfo.LastName = lastName;
+            patientInfo.Gender = gender;
+            patientInfo.GenderDesc = gender == "M" ? "Male" : "Female";
+            patientInfo.PatientId = patientId;
+            patientInfo.ResponseStatus = status;
+            patientInfo.Height = height;
+            patientInfo.Weight = weight;
+            patientInfo.DOB = (new DateTime(birthYear,birthMonth,birthDay)).ToString();
+
+            if (patientInfo.ResponseStatus != "500")
+            {
+                logger.Error(patientInfo.ResponseStatus);
+            }
+
+
+
+            return patientInfo;
+        }
+
+        private void Xs_UnknownNode(object sender, XmlNodeEventArgs e)
+        {
+            var el = e.Name;
+        }
+
+        private void Xs_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+        {
+            var el = e.Attr; ;
+        }
+
+        private void Xs_UnknownElement(object sender, XmlElementEventArgs e)
+        {
+            var el = e.Element;
+        }
+
+        private WebRequest GetWebRequest(string target, int contentLength)
+        {
+            var request = WebRequest.Create(_config.SoapRequestTarget);
+            request.Method = "POST";
+            request.ContentType = "text/xml; charset=utf-8";
+            request.ContentLength = contentLength;
+            request.Headers.Add("SOAPAction: \"GetPatientDetails\"");
+            return request;
+        }
+
+        private string GetDataFromMW300D(string message, string itemToFind)
+        {
+            logger.Debug($"getting item {itemToFind} from response");
+            itemToFind = itemToFind.ToLower();
+            int start = message.IndexOf($"<{itemToFind}>") + $"<{itemToFind}>".Length;
+            int end = message.IndexOf($"</{itemToFind}>");
+            if (start != -1 && end != -1)
+            {
+                string data = message.Substring(start, end - start);
+                logger.Debug($"Got data for item {itemToFind} : {data}");
+                return data;
+            }
+            else
+            {
+                logger.Debug($"Error getting daya for item {itemToFind}");
+                return string.Empty;
             }
 
         }
 
-        [Obsolete("Use GetPatientInfo(PatientId patientId) instead")]
-        public CompletePatientInformation GetPatientInfo(string CustumerId, string pidType)
+        public string BuildRequestMessage(string pid)
+        {
+            string userName = ConfigurationManager.AppSettings["UserName"];
+            string password = ConfigurationManager.AppSettings["Password"];
+            string sendingApp = ConfigurationManager.AppSettings["SendingApp"];
+            string runningUserName = ConfigurationManager.AppSettings["RunningUserName"];
+
+
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
+
+            sb.Append("<s:Header>");
+
+            sb.Append("<Security xmlns=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">");
+            sb.Append("<UsernameToken>");
+            sb.Append($"<Username>{userName}</Username>");
+            sb.Append($"<Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{password}</Password>");
+            sb.Append("</UsernameToken>");
+            sb.Append("</Security>");
+
+            sb.Append("</s:Header>");
+
+            sb.Append($"<s:Body>");
+            sb.Append("<GetPatientDetails xmlns=\"http://tempuri.org\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">");
+            sb.Append($"<SendingApp>{sendingApp}</SendingApp>");
+            sb.Append("<DataSource>MF</DataSource>");
+            sb.Append("<QueryType>ImutID</QueryType>");
+            sb.Append($"<PatientID>{pid}</PatientID>");
+            sb.Append("<BirthDate>18081965</BirthDate>");
+            sb.Append($"<AppUserName>{runningUserName}</AppUserName>");
+            sb.Append("</GetPatientDetails>");
+            sb.Append("</s:Body>");
+            sb.Append("</s:Envelope>");
+
+
+
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CustumerId"></param>
+        /// <returns></returns>
+        [Obsolete("Do Not Use - Will Throw An Exception when used")]
+        public CompletePatientInformation GetPatientInfo(string CustumerId)
         {
             throw new NotImplementedException();
         }
 
-        
-
-
-
-        public CompletePatientInformation GetPatientInfo(PatientId patientId)
+        private void LogEvent(LogLevel level, int eventId, string message)
         {
-            return GetPatientInfo(patientId.ID);
+            LogEventInfo logEventInfo = new LogEventInfo();
+            logEventInfo.Level = level;
+            logEventInfo.Properties.Add("EventID", eventId);
+            logEventInfo.Message = message;
+            logger.Log(logEventInfo);
+
         }
-       
+        #endregion
     }
 }
-
-
-//http://ensembleprodsrv/csp/sheba/Sheba.CoreInterfaces.BS.Demog.InputSecure.cls
-
-
-//שם משתמש EldanUser
-//b.סיסמא ELDAN951
-//c.      SendingApp = ECG
-//c.DataSource = MF
-//d.QueryType ו- BirthDate (לא רלוונטי כשפונים ל-MF)
-//e.PatientID - ספרות בלבד, כולל ס.ב.באורך מקסימלי של 9.  שדה חובה בכל פניה למרשם או למחשב מרכזי.
-//f.FirstName – שדה חובה בכל פניה מסוג ImutNames. (לא רלוונטי כאשר פונים רק למחשב המרכזי)
-//g.LastName– שדה חובה בכל פניה מסוג ImutNames. (לא רלוונטי כאשר פונים רק למחשב המרכזי)
-//h.BirthDate – תאריך לידה בפורמט DD/MM/YYYY.שדה חובה בכל פניה מסוג ImutDOB.  (לא רלוונטי כאשר DataSource = MF)
-//i.AppUserName – שם המשתמש שהפעיל את השאילתא.חד ערכי במערכת ששולחת את הבקשה ושממנו ניתן להגיע בצורה חד ערכית למשתמש שהפעיל את השאילתא.
-
-

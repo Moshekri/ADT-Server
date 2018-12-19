@@ -10,6 +10,8 @@ using NLog;
 using System.ServiceModel;
 using System.Net;
 using System.Configuration;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace ClalitWebServiceDataClient
 {
@@ -41,6 +43,7 @@ namespace ClalitWebServiceDataClient
                 client.ClientCredentials.UserName.Password = password;
                 client.ClientCredentials.Windows.ClientCredential.UserName = username;
                 client.ClientCredentials.Windows.AllowNtlm = true;
+
                 client.ClientCredentials.Windows.ClientCredential.Domain = domain;
                 client.ClientCredentials.Windows.ClientCredential.Password = password;
                 var s = new System.Security.SecureString();
@@ -49,9 +52,10 @@ namespace ClalitWebServiceDataClient
                     s.AppendChar(item);
                 }
                 client.ClientCredentials.Windows.ClientCredential.SecurePassword = s;
-                
+
                 TranslationPatientNamesRequest request = new TranslationPatientNamesRequest();
                 TranslationPatientNamesResponse response;
+
                 
                 request.MessageInfo = new TranslationPatientNamesMessageInfo();
 
@@ -64,7 +68,7 @@ namespace ClalitWebServiceDataClient
                 request.MessageInfo.RequestingApplication = 670;
                 logger.Debug($"Requesting application : {request.MessageInfo.RequestingApplication}");
 
-                request.MessageInfo.ServingApplication = 10;
+                request.MessageInfo.ServingApplication = 358;
 
                 request.MessageInfo.ServingSite = 120;
                 request.MessageInfo.RequestingSite = 120;
@@ -87,11 +91,18 @@ namespace ClalitWebServiceDataClient
                     throw new ArgumentException($"Patient ID Not in currect Format (was {CustumerId})");
                 }
 
-               
+                XmlSerializer xs = new XmlSerializer(typeof(TranslationPatientNamesRequest));
+                using (StringWriter sw = new StringWriter())
+                {
+                    xs.Serialize(sw, request);
+                    logger.Debug("sending message :");
+                    logger.Debug(sw.ToString());
+                }
                 try
                 {
                     logger.Debug("Sending request...");
-         
+
+                    
                      response = client.TranslationPatientNamesQuery(request);
                    
                 }

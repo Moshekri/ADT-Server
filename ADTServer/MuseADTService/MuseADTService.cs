@@ -154,7 +154,7 @@ namespace MuseADTService
                 }
                 if (useType =="2")
                 {
-                    pInfoSource = new ShebaPatientInfoSource.ManualSoapPatientInfoSource(configuration);
+                    pInfoSource = new ShebaPatientInfoSource.ShebaInfoSource(configuration);
                 }
                 logger.Debug("Web service client loaded");
 
