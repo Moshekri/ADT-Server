@@ -1,4 +1,4 @@
-﻿#define SHEBA  
+﻿
 
 using System;
 using System.Runtime.InteropServices;
@@ -118,11 +118,11 @@ namespace MuseADTService
                 
                 logger.Debug("Loading Leumit Patient Id Parser...");
                 pidParser = new LeumitPatientIdParser.PidParser();
-                logger.Debug("Patient Id Parser loaded");
+                logger.Debug("Leumit Patient Id Parser loaded");
 
                 logger.Debug("Loading Leumit Web service client...");
                 pInfoSource = new LeumitWebServiceDataClient.LeumitPatientInfoClient(configuration);
-                logger.Debug("Web service client loaded");
+                logger.Debug("Leumit Web service client loaded");
 #elif MEUHEDET || DEBUG && MEUHEDET
                 logger.Debug("Loading Meuhedet Patient Id Parser...");
                 pidParser = new MeuhedetPatientIdParser.MeuhedetIdParser();
