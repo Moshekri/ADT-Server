@@ -30,9 +30,7 @@ namespace LeumitPatientIdParser
             logger = LogManager.GetCurrentClassLogger();
         }
 
-        // return array [0] - pataient id of israeli
-        // return array
-
+       
 
         /// <summary>
         /// Will Parse the input string and returns an array of PatientId

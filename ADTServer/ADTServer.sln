@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShebaPatientInfoSource", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HebrewNameNormalizer", "NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj", "{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeumitADTTests", "LeumitADTTests\LeumitADTTests.csproj", "{3426B32E-B9CD-419D-9D9B-8955163D5DA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,10 @@ Global
 		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +227,7 @@ Global
 		{73B4B348-F940-4CAB-B424-C8AC02628F6D} = {6CD0BC36-1C1F-4DCC-81A3-E06D8ACA47E1}
 		{78C3AEE8-7709-4DE6-A26A-9BDCAB24A1A8} = {16B020CE-26ED-46C0-AF74-C6F00C4E4276}
 		{7CD224D0-F9A1-468F-B3DB-A62A3A6E274C} = {6CD0BC36-1C1F-4DCC-81A3-E06D8ACA47E1}
+		{3426B32E-B9CD-419D-9D9B-8955163D5DA6} = {6CD0BC36-1C1F-4DCC-81A3-E06D8ACA47E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B23E86DA-6791-407A-80B1-A41992D06816}
