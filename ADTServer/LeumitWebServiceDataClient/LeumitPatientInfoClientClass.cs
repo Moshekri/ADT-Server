@@ -170,7 +170,8 @@ namespace LeumitWebServiceDataClient
             patientInfo.ResponseStatus = status;
             patientInfo.Height = height;
             patientInfo.Weight = weight;
-            patientInfo.DOB = (new DateTime(DateTime.Now.Year - ageNumber, 01, 01)).ToString();
+            patientInfo.DOB = GetPatientDateOfBirth(age);
+         // patientInfo.DOB = (new DateTime(DateTime.Now.Year - ageNumber, 01, 01)).ToString();
 
             // web service returned an error
             if (patientInfo.Severity != "0" || patientInfo.ResponseStatus != _config.GoodSoapResponseErrorCode)
@@ -185,6 +186,21 @@ namespace LeumitWebServiceDataClient
 
 
             return patientInfo;
+        }
+
+        private string GetPatientDateOfBirth(string age)
+        {
+            var ageElements = age.Split('.');
+            var years = int.Parse(ageElements[0].TrimStart('0'));
+            var months = int.Parse(ageElements[1].TrimStart('0'));
+
+            var yearOfBirth = DateTime.Now.Year - years;
+            if (DateTime.Now.Month < months)
+            {
+                yearOfBirth -= 1;
+            }
+            int monthsCorrected = 12 - (months - DateTime.Now.Month);
+            return new DateTime(yearOfBirth, monthsCorrected, 01).ToString();
         }
 
         private WebRequest GetWebRequest(string target, int contentLength)
