@@ -133,14 +133,15 @@ namespace LeumitWebServiceDataClient
             var statusMessage = GetDataFromMW300D(responseMessage, "PGL_MESSAGE");
             var severity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
 
-            var status = GetDataFromMW300D(responseMessage, "STATUS");
-            var firstName = GetDataFromMW300D(responseMessage, "FNAME").TrimEnd(' ').TrimStart(' ');
-            var lastName = GetDataFromMW300D(responseMessage, "SNAME").TrimEnd(' ').TrimStart(' ');
-            var gender = GetDataFromMW300D(responseMessage, "GENDER");
-            var patientId = GetDataFromMW300D(responseMessage, "NUMBID");
-            var weight = GetDataFromMW300D(responseMessage, "WEIGHT");
-            var height = GetDataFromMW300D(responseMessage, "HEIGHT");
-
+            string status = GetDataFromMW300D(responseMessage, "STATUS");
+            string firstName = GetDataFromMW300D(responseMessage, "FNAME").TrimEnd(' ').TrimStart(' ');
+            string lastName = GetDataFromMW300D(responseMessage, "SNAME").TrimEnd(' ').TrimStart(' ');
+            string gender = GetDataFromMW300D(responseMessage, "GENDER");
+            string patientId = GetDataFromMW300D(responseMessage, "NUMBID");
+            string weight = GetDataFromMW300D(responseMessage, "WEIGHT");
+            string height = GetDataFromMW300D(responseMessage, "HEIGHT");
+            string dateOfBirth = GetDataFromMW300D(responseMessage, "BDATE");
+            dateOfBirth = FormatDateOfBirth(dateOfBirth);
             switch (gender)
             {
                 case "ז":
@@ -154,7 +155,7 @@ namespace LeumitWebServiceDataClient
                     break;
             }
             var age = GetDataFromMW300D(responseMessage, "AGE");
-            //var pidType = GetDataFromMW300D(completeMessage, "SUGID");
+           
 
             //TODO : get the full respons message and add it to the object for logging
 
@@ -170,6 +171,9 @@ namespace LeumitWebServiceDataClient
             patientInfo.ResponseStatus = status;
             patientInfo.Height = height;
             patientInfo.Weight = weight;
+
+
+
             patientInfo.DOB = GetPatientDateOfBirth(age);
          // patientInfo.DOB = (new DateTime(DateTime.Now.Year - ageNumber, 01, 01)).ToString();
 
@@ -186,6 +190,18 @@ namespace LeumitWebServiceDataClient
 
 
             return patientInfo;
+        }
+
+        private string FormatDateOfBirth(string dateOfBirth)
+        {
+            if (dateOfBirth == string.Empty)
+            {
+                return "-1";
+            }
+            int year = int.Parse(dateOfBirth.Substring(0, 4));
+            int month = int.Parse(dateOfBirth.Substring(3, 2));
+            int day = int.Parse(dateOfBirth.Substring(6, 2));
+            return new DateTime(year, month, day).ToString();
         }
 
         private string GetPatientDateOfBirth(string age)
