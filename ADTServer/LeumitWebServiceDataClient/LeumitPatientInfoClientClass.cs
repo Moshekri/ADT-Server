@@ -140,7 +140,6 @@ namespace LeumitWebServiceDataClient
             string patientId = GetDataFromMW300D(responseMessage, "NUMBID");
             string weight = GetDataFromMW300D(responseMessage, "WEIGHT");
             string height = GetDataFromMW300D(responseMessage, "HEIGHT");
-            string dateOfBirth = GetDataFromMW300D(responseMessage, "BDATE");
             
             switch (gender)
             {
@@ -154,17 +153,31 @@ namespace LeumitWebServiceDataClient
                     gender = "";
                     break;
             }
-            dateOfBirth = FormatDateOfBirth(dateOfBirth);
+
+
+            // date of birth
+            string dateOfBirth = GetDataFromMW300D(responseMessage, "BTDATE");
+
+            try
+            {
+                dateOfBirth = FormatDateOfBirth(dateOfBirth);
+            }
+            catch (Exception ex)
+            {
+
+                logger.Debug($"Error parsing date of birth {dateOfBirth} , exception message : {ex.Message}");
+                dateOfBirth = "-1";
+            }
+            
             var age = GetDataFromMW300D(responseMessage, "AGE");
             if (dateOfBirth == "-1")
             {
                 patientInfo.DOB = GetPatientDateOfBirth(age);
             }else
             {
-                patientInfo.DOB = FormatDateOfBirth(dateOfBirth);
+                patientInfo.DOB = dateOfBirth;
             }
 
-            //TODO : get the full respons message and add it to the object for logging
 
             patientInfo.Age = Convert.ToInt32(Convert.ToDecimal(age)).ToString();
             int ageNumber = int.Parse(patientInfo.Age);
@@ -201,12 +214,12 @@ namespace LeumitWebServiceDataClient
 
         private string FormatDateOfBirth(string dateOfBirth)
         {
-            if (dateOfBirth == string.Empty)
+            if (dateOfBirth == string.Empty || dateOfBirth == "0")
             {
                 return "-1";
             }
             int year = int.Parse(dateOfBirth.Substring(0, 4));
-            int month = int.Parse(dateOfBirth.Substring(3, 2));
+            int month = int.Parse(dateOfBirth.Substring(4, 2));
             int day = int.Parse(dateOfBirth.Substring(6, 2));
             return new DateTime(year, month, day).ToString();
         }
