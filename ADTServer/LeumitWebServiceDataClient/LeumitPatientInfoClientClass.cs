@@ -141,7 +141,7 @@ namespace LeumitWebServiceDataClient
             string weight = GetDataFromMW300D(responseMessage, "WEIGHT");
             string height = GetDataFromMW300D(responseMessage, "HEIGHT");
             string dateOfBirth = GetDataFromMW300D(responseMessage, "BDATE");
-            dateOfBirth = FormatDateOfBirth(dateOfBirth);
+            
             switch (gender)
             {
                 case "ז":
@@ -154,8 +154,15 @@ namespace LeumitWebServiceDataClient
                     gender = "";
                     break;
             }
+            dateOfBirth = FormatDateOfBirth(dateOfBirth);
             var age = GetDataFromMW300D(responseMessage, "AGE");
-           
+            if (dateOfBirth == "-1")
+            {
+                patientInfo.DOB = GetPatientDateOfBirth(age);
+            }else
+            {
+                patientInfo.DOB = FormatDateOfBirth(dateOfBirth);
+            }
 
             //TODO : get the full respons message and add it to the object for logging
 
@@ -173,8 +180,8 @@ namespace LeumitWebServiceDataClient
             patientInfo.Weight = weight;
 
 
-
-            patientInfo.DOB = GetPatientDateOfBirth(age);
+           
+            
          // patientInfo.DOB = (new DateTime(DateTime.Now.Year - ageNumber, 01, 01)).ToString();
 
             // web service returned an error
