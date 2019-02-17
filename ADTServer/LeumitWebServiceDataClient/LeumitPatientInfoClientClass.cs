@@ -134,8 +134,8 @@ namespace LeumitWebServiceDataClient
             var severity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
 
             string status = GetDataFromMW300D(responseMessage, "STATUS");
-            string firstName = GetDataFromMW300D(responseMessage, "FNAME").TrimEnd(' ').TrimStart(' ');
-            string lastName = GetDataFromMW300D(responseMessage, "SNAME").TrimEnd(' ').TrimStart(' ');
+            string lastName = GetDataFromMW300D(responseMessage, "FNAME").TrimEnd(' ').TrimStart(' ');
+            string firstName = GetDataFromMW300D(responseMessage, "SNAME").TrimEnd(' ').TrimStart(' ');
             string gender = GetDataFromMW300D(responseMessage, "GENDER");
             string patientId = GetDataFromMW300D(responseMessage, "NUMBID");
             string weight = GetDataFromMW300D(responseMessage, "WEIGHT");

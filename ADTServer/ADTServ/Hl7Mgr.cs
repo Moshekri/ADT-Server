@@ -276,11 +276,12 @@ namespace ADTServ
                 if (null != patientInformation)
                 {
                     logger.Info(
-                        $"Success ! Got patient info for patient id {patientInformation.PatientId} ");
+                        $"Success ! Got patient info from web service for patient id {patientInformation.PatientId} ");
                     logger.Info($"Data  :  First name : {patientInformation.FirstName} , last name : {patientInformation.LastName} ,pid {originalPID}", source);
 
                     if (_config.MustGetTranslation)
                     {
+                        
                         logger.Info($"Trying to translate to english ... {patientInformation.FirstName} , {patientInformation.LastName}", source);
 
                         var patientNamesData = tManager.GetEnglishName(patientInformation.FirstName, patientInformation.LastName);
@@ -288,9 +289,23 @@ namespace ADTServ
                         patientInformation.FirstName = patientNamesData.EnglishFirstName ?? " ";
                         patientInformation.LastName = patientNamesData.EnglishLastName ?? " ";
 
+                        if (patientNamesData.EnglishFirstName == patientNamesData.EnglishLastName && patientNamesData.EnglishLastName == string.Empty)
+                        {
+                           if( IsEnglishName(patientNamesData.HebrewFirstName))
+                            {
+                                patientInformation.FirstName = patientNamesData.HebrewFirstName;
+                            }
+                            if (IsEnglishName(patientNamesData.HebrewLastName))
+                            {
+                                patientInformation.LastName = patientNamesData.HebrewLastName;
+                            }
+
+                        }
 
                         logger.Info($"English Name : {patientInformation.FirstName} , {patientInformation.LastName}  ", source);
                     }
+
+                    
                     
                     logger.Info($"Date Of birtn  :  {patientInformation.DOB}", source);
                     string age = Helper.CalculateAge(patientInformation);
@@ -330,6 +345,25 @@ namespace ADTServ
 
         }
 
+        private bool IsEnglishName(string data)
+        {
+            int counter = 0;
+            string englishLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            foreach (var letter in data)
+            {
+                if (englishLetters.Contains(letter))
+                {
+                    counter++;
+                    if (counter > 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
+
         private CompletePatientInformation GetPatientDemographicInformation(PatientId[] parsedIds)
         {
             CompletePatientInformation IsraeliCustomer;
@@ -345,6 +379,7 @@ namespace ADTServ
 
                 //todo: entry point to get patient informatoion from webservice
                 IsraeliCustomer = WebServiceClient.GetPatientInfo(parsedIds[0]);
+                
                     if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
                     {
                         IsraeliCustomer = null;
