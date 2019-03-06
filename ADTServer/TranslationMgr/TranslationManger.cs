@@ -131,7 +131,7 @@ namespace TranslationManager
             if (googleLastNameTranslationQuality < 50 || (googleEnglishLastName.Length > 8 ? q2 >= 6 : q2 > 4))
             {
                 finalEnglishLastName = phoneticEnglishLastName;
-               
+            
             }
             else
             {
