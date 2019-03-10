@@ -34,7 +34,7 @@ namespace ADTServ
             message.Append( @"PV1||||||||||||||||||1|1|1|||||||||||||||||||||||||||||||||");
             message.Append('\r');
 
-            message.Append($"OBX|1||||^{height}| ");
+            message.Append($"OBX|1||||^{height}|");
             message.Append('\r');
 
             message.Append($"OBX|2||||^{weight}|");

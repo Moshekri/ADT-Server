@@ -1,0 +1,11 @@
+﻿200 communication related errors
+300 AS400 exception message
+400 "Patient does not exist on file"
+500 "Patient is not eligible to recieve treatment"
+600 unknown DVL related errors  see error message for more details
+
+
+700 error parsing BDATE from message
+701 error parsing height
+702 error parsing weight
+703 error parsing age field

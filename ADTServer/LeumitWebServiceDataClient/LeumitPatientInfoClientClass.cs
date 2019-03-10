@@ -37,7 +37,6 @@ namespace LeumitWebServiceDataClient
             logger.Trace("Inside GetPatientInfo");
             // prepare objects
             CompletePatientInformation patientInfo = new CompletePatientInformation();
-            byte[] buffer = new byte[10000];
             string responseMessage = string.Empty;
 
             // Create request
@@ -46,7 +45,48 @@ namespace LeumitWebServiceDataClient
             logger.Info($"Sending request for patient Data :  patient id {pidType}{patientId}");
             logger.Debug(requestMessage);
 
+            responseMessage = GetDataFromWebService(request, requestMessage);
 
+            var sevirity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
+            if (sevirity != "0")
+            {
+                LogAS400Erorrs(sevirity, responseMessage, pidType, patientId);
+                return null;
+            }
+
+            patientInfo = ParseResponse(responseMessage);
+            return patientInfo;
+        }
+
+        private void LogAS400Erorrs(string sevirity, string responseMessage, string pidType, string patientId)
+        {
+            var errorMessage = GetDataFromMW300D(responseMessage, "wsrcmsg");
+            if (errorMessage.ToLower().Contains("exception") || errorMessage.ToLower().Contains("error"))
+            {
+                NlogHelper.CreateLogEntry(pidType + patientId + ":" + errorMessage, "300", LogLevel.Error, logger);
+
+            }
+            string errMsg = GetDataFromMW300D(responseMessage, "PGL_MESSAGE");
+            if (errMsg.ToUpper().Contains("DVL0011"))
+            {
+                LogEvent(LogLevel.Error, 400, pidType + patientId + ":" + "Patient does not exist on file" + Environment.NewLine + "המבוטח אינו קיים בקובץ מבוטחים");
+
+            }
+            else if (errMsg.ToUpper().Contains("DVL0012"))
+            {
+                LogEvent(LogLevel.Error, 500, pidType + patientId + ":" + "Patient is not eligible to recieve treatment" + Environment.NewLine + "מבוטח לא זכאי לטיפול");
+
+            }
+            else if (errMsg.ToUpper().Contains("DVL"))
+            {
+                LogEvent(LogLevel.Error, 600, pidType + patientId + ":" + errMsg);
+            }
+        }
+
+        private string GetDataFromWebService(WebRequest request, string requestMessage)
+        {
+            string responseMessage;
+            byte[] buffer = new byte[10000];
             //Send Request to web service
             try
             {
@@ -57,7 +97,7 @@ namespace LeumitWebServiceDataClient
             }
             catch (Exception ex)
             {
-                NlogHelper.CreateLogEntry( ex.Message,"100", LogLevel.Error, logger);
+                NlogHelper.CreateLogEntry(ex.Message, "100", LogLevel.Error, logger);
                 return null;
             }
 
@@ -67,53 +107,21 @@ namespace LeumitWebServiceDataClient
             {
                 using (var response = request.GetResponse())
                 {
-
                     var st = response.GetResponseStream();
                     st.Read(buffer, 0, buffer.Length);
                     responseMessage = Encoding.UTF8.GetString(buffer).TrimEnd('\0');
-
                     RecevingPatientInfo?.Invoke(this, new PatientInfoEventArgs() { Message = responseMessage });
                 }
             }
             catch (Exception ex)
             {
                 ErrorGettingPatientInfo?.Invoke(this, new PatientInfoEventArgs() { Message = ex.Message });
-                NlogHelper.CreateLogEntry(ex.Message,"200", LogLevel.Error, logger);
+                NlogHelper.CreateLogEntry(ex.Message, "200", LogLevel.Error, logger);
                 return null;
             }
-            var sevirity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
-            if (sevirity != "0")
-            {
-                var errorMessage = GetDataFromMW300D(responseMessage, "wsrcmsg");
-                if (errorMessage.ToLower().Contains("exception") || errorMessage.ToLower().Contains("error"))
-                {
-                    NlogHelper.CreateLogEntry(pidType + patientId + ":" + errorMessage ,"300",LogLevel.Error, logger );
-                    return null;
-                }
-                string errMsg = GetDataFromMW300D(responseMessage, "PGL_MESSAGE");
-                if (errMsg.ToUpper().Contains("DVL0011"))
-                {
-                    LogEvent(LogLevel.Error, 400, pidType + patientId + ":" + "Patient does not exist on file" + Environment.NewLine + "המבוטח אינו קיים בקובץ מבוטחים");
-                    return null;
-                }
-                else if (errMsg.ToUpper().Contains("DVL0012"))
-                {
-                    LogEvent(LogLevel.Error, 500, pidType + patientId + ":" + "Patient is not eligible to recieve treatment" + Environment.NewLine + "מבוטח לא זכאי לטיפול");
-                    return null;
-                }
-                else if (errMsg.ToUpper().Contains("DVL"))
-                {
-                    LogEvent(LogLevel.Error, 600, pidType + patientId + ":" + errMsg);
-                    return null;
-                }
-                //Construct CompletePatientInformation object
-            }
-
-            patientInfo = ParseResponse(responseMessage);
-
-
-            return patientInfo;
+            return responseMessage;
         }
+
         public CompletePatientInformation GetPatientInfo(PatientId patientId)
         {
             logger.Info("entered GetPatientInfo(PatientId patientId) ");
@@ -140,7 +148,7 @@ namespace LeumitWebServiceDataClient
             string patientId = GetDataFromMW300D(responseMessage, "NUMBID");
             string weight = GetDataFromMW300D(responseMessage, "WEIGHT");
             string height = GetDataFromMW300D(responseMessage, "HEIGHT");
-            
+
             switch (gender)
             {
                 case "ז":
@@ -164,23 +172,32 @@ namespace LeumitWebServiceDataClient
             }
             catch (Exception ex)
             {
-
-                logger.Debug($"Error parsing date of birth {dateOfBirth} , exception message : {ex.Message}");
+                LogEvent(LogLevel.Error, 700, $"Error parsing date of birth from \'BDATE\' field  {Environment.NewLine}{ex.Message}");
+                logger.Debug($"Error parsing date of birth {dateOfBirth} , exception message : {Environment.NewLine}{ex.Message}");
                 dateOfBirth = "-1";
             }
-            
+
             var age = GetDataFromMW300D(responseMessage, "AGE");
             if (dateOfBirth == "-1")
             {
                 patientInfo.DOB = GetPatientDateOfBirth(age);
-            }else
+            }
+            else
             {
                 patientInfo.DOB = dateOfBirth;
             }
 
-
-            patientInfo.Age = Convert.ToInt32(Convert.ToDecimal(age)).ToString();
-            int ageNumber = int.Parse(patientInfo.Age);
+            try
+            {
+                patientInfo.Age = Convert.ToInt32(Convert.ToDecimal(age)).ToString();
+            }
+            catch (Exception)
+            {
+                NlogHelper.CreateLogEntry($"Error parsing age , input was {age}", "703", LogLevel.Error, logger);
+                patientInfo.Age = "0";
+            }
+            
+            //int ageNumber = int.Parse(patientInfo.Age);
             patientInfo.ResponseStatusMessage = statusMessage;
             patientInfo.Severity = severity.Trim();
             patientInfo.FirstName = firstName;
@@ -189,13 +206,35 @@ namespace LeumitWebServiceDataClient
             patientInfo.GenderDesc = gender == "M" ? "Male" : "Female";
             patientInfo.PatientId = patientId;
             patientInfo.ResponseStatus = status;
+
+            // fix issue with heigt and weight when they are decimals
+            try
+            {
+                height = ((int)(double.Parse(height))).ToString();
+            }
+            catch (Exception ex)
+            {
+                LogEvent(LogLevel.Error, 701, $"Error parsing height :{Environment.NewLine}{ex.Message}");
+                height = "0";
+            }
+
+            try
+            {
+
+                weight = ((int)(double.Parse(weight))).ToString();
+            }
+            catch (Exception ex)
+            {
+                LogEvent(LogLevel.Error, 702, $"Error parsing weight {Environment.NewLine}{ex.Message}");
+                weight = "0";
+            }
+
             patientInfo.Height = height;
             patientInfo.Weight = weight;
 
 
-           
-            
-         // patientInfo.DOB = (new DateTime(DateTime.Now.Year - ageNumber, 01, 01)).ToString();
+
+
 
             // web service returned an error
             if (patientInfo.Severity != "0" || patientInfo.ResponseStatus != _config.GoodSoapResponseErrorCode)
@@ -204,7 +243,7 @@ namespace LeumitWebServiceDataClient
                     $"{Environment.NewLine}Status Code : {patientInfo.ResponseStatus}" +
                     $"{Environment.NewLine}Severity : {patientInfo.Severity}" +
                     $"{Environment.NewLine}Response Message : {patientInfo.ResponseStatusMessage}";
-                NlogHelper.CreateLogEntry(errorMsg,"200",LogLevel.Error,logger);
+                NlogHelper.CreateLogEntry(errorMsg, "200", LogLevel.Error, logger);
             }
 
 
@@ -235,7 +274,7 @@ namespace LeumitWebServiceDataClient
             {
                 yearOfBirth -= 1;
             }
-            int monthsCorrected = 12 - (months - DateTime.Now.Month);
+            int monthsCorrected = 12 - (Math.Abs(months - DateTime.Now.Month));
             return new DateTime(yearOfBirth, monthsCorrected, 01).ToString();
         }
 

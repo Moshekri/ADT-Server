@@ -239,7 +239,7 @@ namespace ADTServ
 
             logger.Debug("************************************************************");
             logger.Debug($"HL7 Message Recieved from {e.SourceClient.Client.RemoteEndPoint.ToString()}");
-            logger.Debug($"inside hl7mgr.Server_MessageRecieved connection state {GetConnectionState(e.SourceClient)}");
+            logger.Trace($"inside hl7mgr.Server_MessageRecieved connection state {GetConnectionState(e.SourceClient)}");
             logger.Debug($"{ Environment.NewLine}{e.Message}");
             lock (locker)
             {
@@ -256,6 +256,7 @@ namespace ADTServ
                 // we can only handle  QRY^Q01 messages 
                 if (messageType.ToUpper() != "QRY^Q01")
                 {
+                    NlogHelper.CreateLogEntry("Message recieved was not QRY^Q01 ! ", "800", LogLevel.Error, logger);
                     ResponseMessage = MessageComposer.GetApplicationErrorMessage(SiteId, MessageControlId);
                     return;
                 }
@@ -330,6 +331,7 @@ namespace ADTServ
                 // no patient information on the server not an israeli one nor a non israeli one
                 else
                 {
+                    NlogHelper.CreateLogEntry($"No patient info was found for patient id {originalPID} ", "900", LogLevel.Error, logger);
                     ResponseMessage = MessageComposer.GetApplicationErrorMessage(SiteId, MessageControlId);
                 }
                 lock (locker)
