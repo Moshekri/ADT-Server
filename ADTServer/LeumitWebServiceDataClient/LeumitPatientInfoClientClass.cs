@@ -35,17 +35,11 @@ namespace LeumitWebServiceDataClient
         public CompletePatientInformation GetPatientInfo(string patientId, string pidType)
         {
             logger.Trace("Inside GetPatientInfo");
-            // prepare objects
+         
             CompletePatientInformation patientInfo = new CompletePatientInformation();
             string responseMessage = string.Empty;
-
-            // Create request
-            string requestMessage = BuildRequestMessage(patientId, pidType);
-            WebRequest request = GetWebRequest(_config.SoapRequestTarget, requestMessage.Length);
-            logger.Info($"Sending request for patient Data :  patient id {pidType}{patientId}");
-            logger.Debug(requestMessage);
-
-            responseMessage = GetDataFromWebService(request, requestMessage);
+          
+            responseMessage = GetDataFromWebService(patientId, pidType);
 
             var sevirity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
             if (sevirity != "0")
@@ -83,9 +77,13 @@ namespace LeumitWebServiceDataClient
             }
         }
 
-        private string GetDataFromWebService(WebRequest request, string requestMessage)
+        private string GetDataFromWebService(string patientId,string pidType)
         {
             string responseMessage;
+            string requestMessage = BuildRequestMessage(patientId, pidType);
+            WebRequest request = GetWebRequest(_config.SoapRequestTarget, requestMessage.Length);
+            logger.Info($"Sending request for patient Data :  patient id {pidType}{patientId}");
+            logger.Debug(requestMessage);
             byte[] buffer = new byte[10000];
             //Send Request to web service
             try
@@ -138,9 +136,8 @@ namespace LeumitWebServiceDataClient
         {
             CompletePatientInformation patientInfo = new CompletePatientInformation();
 
-            var statusMessage = GetDataFromMW300D(responseMessage, "PGL_MESSAGE");
-            var severity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
-
+            string statusMessage = GetDataFromMW300D(responseMessage, "PGL_MESSAGE");
+            string severity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
             string status = GetDataFromMW300D(responseMessage, "STATUS");
             string lastName = GetDataFromMW300D(responseMessage, "FNAME").TrimEnd(' ').TrimStart(' ');
             string firstName = GetDataFromMW300D(responseMessage, "SNAME").TrimEnd(' ').TrimStart(' ');
@@ -149,55 +146,11 @@ namespace LeumitWebServiceDataClient
             string weight = GetDataFromMW300D(responseMessage, "WEIGHT");
             string height = GetDataFromMW300D(responseMessage, "HEIGHT");
 
-            switch (gender)
-            {
-                case "ז":
-                    gender = "M";
-                    break;
-                case "נ":
-                    gender = "F";
-                    break;
-                default:
-                    gender = "";
-                    break;
-            }
-
-
-            // date of birth
-            string dateOfBirth = GetDataFromMW300D(responseMessage, "BTDATE");
-
-            try
-            {
-                dateOfBirth = FormatDateOfBirth(dateOfBirth);
-            }
-            catch (Exception ex)
-            {
-                LogEvent(LogLevel.Error, 700, $"Error parsing date of birth from \'BDATE\' field  {Environment.NewLine}{ex.Message}");
-                logger.Debug($"Error parsing date of birth {dateOfBirth} , exception message : {Environment.NewLine}{ex.Message}");
-                dateOfBirth = "-1";
-            }
-
-            var age = GetDataFromMW300D(responseMessage, "AGE");
-            if (dateOfBirth == "-1")
-            {
-                patientInfo.DOB = GetPatientDateOfBirth(age);
-            }
-            else
-            {
-                patientInfo.DOB = dateOfBirth;
-            }
-
-            try
-            {
-                patientInfo.Age = Convert.ToInt32(Convert.ToDecimal(age)).ToString();
-            }
-            catch (Exception)
-            {
-                NlogHelper.CreateLogEntry($"Error parsing age , input was {age}", "703", LogLevel.Error, logger);
-                patientInfo.Age = "0";
-            }
-            
-            //int ageNumber = int.Parse(patientInfo.Age);
+            SetGender(gender, patientInfo);
+            SetPatientDateOfBirth(responseMessage, patientInfo);
+            SetAge(responseMessage, patientInfo);
+            SetHeight(height, patientInfo);
+            SetWeight(weight, patientInfo);
             patientInfo.ResponseStatusMessage = statusMessage;
             patientInfo.Severity = severity.Trim();
             patientInfo.FirstName = firstName;
@@ -207,35 +160,7 @@ namespace LeumitWebServiceDataClient
             patientInfo.PatientId = patientId;
             patientInfo.ResponseStatus = status;
 
-            // fix issue with heigt and weight when they are decimals
-            try
-            {
-                height = ((int)(double.Parse(height))).ToString();
-            }
-            catch (Exception ex)
-            {
-                LogEvent(LogLevel.Error, 701, $"Error parsing height :{Environment.NewLine}{ex.Message}");
-                height = "0";
-            }
-
-            try
-            {
-
-                weight = ((int)(double.Parse(weight))).ToString();
-            }
-            catch (Exception ex)
-            {
-                LogEvent(LogLevel.Error, 702, $"Error parsing weight {Environment.NewLine}{ex.Message}");
-                weight = "0";
-            }
-
-            patientInfo.Height = height;
-            patientInfo.Weight = weight;
-
-
-
-
-
+           
             // web service returned an error
             if (patientInfo.Severity != "0" || patientInfo.ResponseStatus != _config.GoodSoapResponseErrorCode)
             {
@@ -251,6 +176,90 @@ namespace LeumitWebServiceDataClient
             return patientInfo;
         }
 
+        private void SetWeight(string weight, CompletePatientInformation patientInfo)
+        {
+            try
+            {
+
+                weight = ((int)(double.Parse(weight))).ToString();
+            }
+            catch (Exception ex)
+            {
+                LogEvent(LogLevel.Error, 702, $"Error parsing weight {Environment.NewLine}{ex.Message}");
+                weight = "0";
+            }
+            patientInfo.Weight = weight;
+        }
+
+        private void SetHeight(string height, CompletePatientInformation patientInfo)
+        {
+            try
+            {
+                height = ((int)(double.Parse(height))).ToString();
+            }
+            catch (Exception ex)
+            {
+                LogEvent(LogLevel.Error, 701, $"Error parsing height :{Environment.NewLine}{ex.Message}");
+                height = "0";
+            }
+            patientInfo.Height = height;
+        }
+
+        private void SetGender(string gender, CompletePatientInformation patientInfo)
+        {
+            switch (gender)
+            {
+                case "ז":
+                    patientInfo.Gender = "M";
+                    break;
+                case "נ":
+                    patientInfo.Gender = "F";
+                    break;
+                default:
+                    patientInfo.Gender = "";
+                    break;
+            }
+        }
+
+        private void SetAge(string responseMessage, CompletePatientInformation patientInfo)
+        {
+            var age = GetDataFromMW300D(responseMessage, "AGE");
+            try
+            {
+                patientInfo.Age = Convert.ToInt32(Convert.ToDecimal(age)).ToString();
+            }
+            catch (Exception)
+            {
+                NlogHelper.CreateLogEntry($"Error parsing age , input was {age}", "703", LogLevel.Error, logger);
+                patientInfo.Age = "0";
+            }
+        }
+
+        private void SetPatientDateOfBirth(string responseMessage, CompletePatientInformation patientInfo)
+        {
+            string fullDateOfBirth = GetDataFromMW300D(responseMessage, "BTDATE");
+            try
+            {
+                fullDateOfBirth = FormatDateOfBirth(fullDateOfBirth);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(LogLevel.Error, 700, $"Error parsing date of birth from \'BDATE\' field  {Environment.NewLine}{ex.Message}");
+                logger.Debug($"Error parsing date of birth {fullDateOfBirth} , exception message : {Environment.NewLine}{ex.Message}");
+                fullDateOfBirth = "-1";
+            }
+
+            var age = GetDataFromMW300D(responseMessage, "AGE");
+            if (fullDateOfBirth == "-1")
+            {
+                patientInfo.DOB = GetPatientDateOfBirth(age);
+            }
+            else
+            {
+                patientInfo.DOB = fullDateOfBirth;
+            }
+        }
+
         private string FormatDateOfBirth(string dateOfBirth)
         {
             if (dateOfBirth == string.Empty || dateOfBirth == "0")
@@ -258,24 +267,62 @@ namespace LeumitWebServiceDataClient
                 return "-1";
             }
             int year = int.Parse(dateOfBirth.Substring(0, 4));
+            if (year > DateTime.Now.Year || year < DateTime.Now.Year - 120)
+            {
+                return "-1";
+            }
             int month = int.Parse(dateOfBirth.Substring(4, 2));
+            if (month > 12 || month <= 0)
+            {
+                return "-1";
+            }
             int day = int.Parse(dateOfBirth.Substring(6, 2));
+            if (day > 31 || day <= 0)
+            {
+                return "-1";
+            }
             return new DateTime(year, month, day).ToString();
         }
 
         private string GetPatientDateOfBirth(string age)
         {
-            var ageElements = age.Split('.');
-            var years = int.Parse(ageElements[0].TrimStart('0'));
-            var months = int.Parse(ageElements[1].TrimStart('0'));
+            var today = DateTime.Now;
+            decimal ageNumber = decimal.Parse(age);
+            int years = (int)ageNumber;
+            int months = (int)((ageNumber - years) * 100);
+            today = today.AddYears(-years);
+            today = today.AddMonths(-months);
+            today = today.AddDays(-1 * today.Day + 1);
 
-            var yearOfBirth = DateTime.Now.Year - years;
-            if (DateTime.Now.Month < months)
-            {
-                yearOfBirth -= 1;
-            }
-            int monthsCorrected = 12 - (Math.Abs(months - DateTime.Now.Month));
-            return new DateTime(yearOfBirth, monthsCorrected, 01).ToString();
+            return today.ToString();
+
+
+
+
+
+
+
+            //int months = 0;
+            //var ageElements = age.Split('.');
+            //var years = int.Parse(ageElements[0].TrimStart('0'));
+            //if (ageElements.Length > 1 )
+            //{
+            //    ageElements[1] = ageElements[1].TrimStart('0');
+            //    if (ageElements[1]!= string.Empty)
+            //    {
+            //        months = int.Parse(ageElements[1].TrimStart('0'));
+            //    }
+
+            //}
+
+            //var yearOfBirth = DateTime.Now.Year - years;
+            //if (DateTime.Now.Month < months)
+            //{
+            //    yearOfBirth -= 1;
+            //}
+
+            //int monthsCorrected = DateTime.Now.Month  - months;
+            //return new DateTime(yearOfBirth, monthsCorrected, 01).ToString();
         }
 
         private WebRequest GetWebRequest(string target, int contentLength)

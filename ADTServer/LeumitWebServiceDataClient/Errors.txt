@@ -2,8 +2,8 @@
 300 AS400 exception message
 400 "Patient does not exist on file"
 500 "Patient is not eligible to recieve treatment"
-600 unknown DVL related errors  see error message for more details
-
+600 unknown DVL related errors , see error message for more details
+900 AS400 returned with error , severity was not 0
 
 700 error parsing BDATE from message
 701 error parsing height

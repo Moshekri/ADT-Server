@@ -72,7 +72,7 @@ namespace ADTServ
                 port = int.Parse(_config.ServerListeningPort);
                 logger.Debug($"Parameters set : port = {_config.ServerListeningPort}");
                 ologger = Log.GetInstance(_config.LogFilePath, _config.LogFileName);
-                HebrewNameNormalizer.Normalizer normalizer = new HebrewNameNormalizer.Normalizer();
+                Normalizer normalizer = new Normalizer();
 
                 TranslationManagerData tMgrData = new TranslationManagerData()
                 {
@@ -83,7 +83,6 @@ namespace ADTServ
                 if (_config.MustGetTranslation)
                 {
                     tManager = TranslationManagerFactory.GetTranslationManager(tMgrData);
-
                 }
                 Tokensource = new CancellationTokenSource();
                 Server = new Server(_config, Tokensource.Token);
@@ -202,7 +201,7 @@ namespace ADTServ
 
         private void WebServiceClient_ErrorGettingPatientInfo(object sender, EventArgs e)
         {
-             logger.Debug("Exception occured while getting patient information from web service");
+            logger.Debug("Exception occured while getting patient information from web service");
         }
         #endregion
 
@@ -238,7 +237,7 @@ namespace ADTServ
             var messageType = hl7MessageParser.GetMessageType(e.Message);
 
             logger.Debug("************************************************************");
-            logger.Debug($"HL7 Message Recieved from {e.SourceClient.Client.RemoteEndPoint.ToString()}");
+            logger.Debug($"HL7 Query Message Recieved from {e.SourceClient.Client.RemoteEndPoint.ToString()}");
             logger.Trace($"inside hl7mgr.Server_MessageRecieved connection state {GetConnectionState(e.SourceClient)}");
             logger.Debug($"{ Environment.NewLine}{e.Message}");
             lock (locker)
@@ -248,10 +247,10 @@ namespace ADTServ
                 var MessageControlId = hl7MessageParser.GetMessageControlId(e.Message);
                 logger.Info($"Message control id = {MessageControlId}");
 
-               //TODO : add support to handle other messages ?
+                //TODO : add support to handle other messages ?
 
 
-               
+
 
                 // we can only handle  QRY^Q01 messages 
                 if (messageType.ToUpper() != "QRY^Q01")
@@ -265,7 +264,7 @@ namespace ADTServ
                 string PID = hl7MessageParser.GetPatientId(e.Message);
                 string originalPID = PID;
 
-                
+
                 var parsedIds = _data.PidHandler.ParseID(PID);
 
                 e.PID = PID;
@@ -282,7 +281,7 @@ namespace ADTServ
 
                     if (_config.MustGetTranslation)
                     {
-                        
+
                         logger.Info($"Trying to translate to english ... {patientInformation.FirstName} , {patientInformation.LastName}", source);
 
                         var patientNamesData = tManager.GetEnglishName(patientInformation.FirstName, patientInformation.LastName);
@@ -292,7 +291,7 @@ namespace ADTServ
 
                         if (patientNamesData.EnglishFirstName == patientNamesData.EnglishLastName && patientNamesData.EnglishLastName == string.Empty)
                         {
-                           if( IsEnglishName(patientNamesData.HebrewFirstName))
+                            if (IsEnglishName(patientNamesData.HebrewFirstName))
                             {
                                 patientInformation.FirstName = patientNamesData.HebrewFirstName;
                             }
@@ -300,17 +299,11 @@ namespace ADTServ
                             {
                                 patientInformation.LastName = patientNamesData.HebrewLastName;
                             }
-
                         }
-
                         logger.Info($"English Name : {patientInformation.FirstName} , {patientInformation.LastName}  ", source);
                     }
 
-                    
-                    
-                    logger.Info($"Date Of birtn  :  {patientInformation.DOB}", source);
-                    string age = Helper.CalculateAge(patientInformation);
-                    logger.Info($"Age : {age}", source);
+                    logger.Info($"Date Of birtn  :  {patientInformation.DOB}");
 
                     //compose a good response message ( hl7)
                     ResponseMessage = MessageComposer.GetA019Message
@@ -331,7 +324,7 @@ namespace ADTServ
                 // no patient information on the server not an israeli one nor a non israeli one
                 else
                 {
-                    NlogHelper.CreateLogEntry($"No patient info was found for patient id {originalPID} ", "900", LogLevel.Error, logger);
+                    NlogHelper.CreateLogEntry($"Web Service Returned an error when trying to get data for patient id : {originalPID} ", "900", LogLevel.Error, logger);
                     ResponseMessage = MessageComposer.GetApplicationErrorMessage(SiteId, MessageControlId);
                 }
                 lock (locker)
@@ -343,7 +336,7 @@ namespace ADTServ
 
                 logger.Trace("left Server_MessageRecieved");
             }
-            
+
 
         }
 
@@ -381,35 +374,35 @@ namespace ADTServ
 
                 //todo: entry point to get patient informatoion from webservice
                 IsraeliCustomer = WebServiceClient.GetPatientInfo(parsedIds[0]);
-                
-                    if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
+
+                if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
+                {
+                    IsraeliCustomer = null;
+                    if (parsedIds[1] != null)
                     {
-                        IsraeliCustomer = null;
-                        if (parsedIds[1] != null)
+                        logger.Info(
+                    $"Getting patient information for  patient id {parsedIds[1].ID} type {parsedIds[1].SugId} and checksum digit {parsedIds[1].SifratBikuret} ");
+                        // get patient information from web service
+                        forigenCustomer = WebServiceClient.GetPatientInfo(parsedIds[1]);
+                        if (null == forigenCustomer || forigenCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode)
                         {
-                            logger.Info(
-                        $"Getting patient information for  patient id {parsedIds[1].ID} type {parsedIds[1].SugId} and checksum digit {parsedIds[1].SifratBikuret} ");
-                            // get patient information from web service
-                            forigenCustomer = WebServiceClient.GetPatientInfo(parsedIds[1]);
-                            if (null == forigenCustomer || forigenCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode)
-                            {
-                                return null;
-                            }
-                            else
-                            {
-                            
-                                return forigenCustomer;
-                            }
+                            return null;
                         }
-                        
+                        else
+                        {
+
+                            return forigenCustomer;
+                        }
                     }
-                    else
-                    {
-                        return IsraeliCustomer;
-                    }
-                
+
+                }
+                else
+                {
+                    return IsraeliCustomer;
+                }
+
                 return null;
-                
+
             }
             catch (Exception ex)
             {
