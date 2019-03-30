@@ -15,5 +15,9 @@ namespace DbLayer
             Db db = new Db(configuration);
             return db;
         }
+        //public static IDbConnector GetSqlServerConnector(string connectionString)
+        //{
+
+        //}
     }
 }

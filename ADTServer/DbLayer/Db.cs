@@ -16,8 +16,8 @@ namespace DbLayer
         private const string Source = "Database Connector";
         private ApplicationConfiguration _config;
         private static object locker;
-       
-        
+
+
         public Db(ApplicationConfiguration configuration)
         {
             _dbFilePath = Path.Combine(configuration.DataBaseFolder, configuration.DataBaseFileName);
@@ -37,7 +37,7 @@ namespace DbLayer
             try
             {
                 var fs = File.OpenRead(_dbFilePath);
-                
+
                 var data = bf.Deserialize(fs) as Dictionary<string, string>;
                 fs.Close();
                 return data;
@@ -46,7 +46,7 @@ namespace DbLayer
             {
                 throw;
             }
-            
+
 
 
         }
@@ -71,6 +71,7 @@ namespace DbLayer
             }
 
         }
+
         public bool SaveData(Dictionary<string, string> data)
         {
 
@@ -158,7 +159,7 @@ namespace DbLayer
                 }
                 return true;
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return false;
             }
@@ -186,6 +187,7 @@ namespace DbLayer
             return true;
 
         }
+
         private void AddDirectorySecurity(string FileName, string Account, FileSystemRights Rights, AccessControlType ControlType)
         {
             // Create a new DirectoryInfo object.
