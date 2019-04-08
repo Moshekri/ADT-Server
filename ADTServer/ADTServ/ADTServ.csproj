@@ -30,10 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
@@ -88,6 +95,10 @@
     <ProjectReference Include="..\NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj">
       <Project>{06ccd9be-5a2f-47b9-89f6-22f6fc33ec94}</Project>
       <Name>HebrewNameNormalizer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlConnector\SqlConnector.csproj">
+      <Project>{62a33ebb-8ef8-44bd-815e-82aa1f8abd06}</Project>
+      <Name>SqlConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\TcpServer\TcpServer.csproj">
       <Project>{bacf16dc-ad6d-4644-94d3-f5830ddce188}</Project>

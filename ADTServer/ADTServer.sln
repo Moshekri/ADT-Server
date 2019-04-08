@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HebrewNameNormalizer", "Nam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeumitADTTests", "LeumitADTTests\LeumitADTTests.csproj", "{3426B32E-B9CD-419D-9D9B-8955163D5DA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlConnector", "SqlConnector\SqlConnector.csproj", "{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,10 @@ Global
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

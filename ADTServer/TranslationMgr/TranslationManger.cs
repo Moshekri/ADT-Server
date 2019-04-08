@@ -6,7 +6,8 @@ using AdtSvrCmn.Objects;
 using Google.Cloud.Translation.V2;
 using AdtSvrCmn.Interfaces;
 using NLog;
-
+using SqlConnector;
+using System.Configuration;
 
 namespace TranslationManager
 {
@@ -26,7 +27,7 @@ namespace TranslationManager
         GoogleTranslator googleTranslator;
         Logger logger;
         #endregion
-
+        NamesManager man;
 
 
         internal TranslationManger(TranslationManagerData translationSetupdata)
@@ -40,8 +41,21 @@ namespace TranslationManager
             {
                 cerdFilePath = Path.Combine(_config.GoogleCredentialFilePath, _config.GoogleCredentialFileName);
                 dbFilePath = Path.Combine(_config.DataBaseFolder, _config.DataBaseFileName);
-                dbCon = DbFactory.GetDbConnector(_config);
+
+
+                if(ConfigurationManager.AppSettings["UseSql"] == "true")
+                {
+                    dbCon = DbFactory.GetSqlConnector();
+                }
+                else
+                {
+                    dbCon = DbFactory.GetDbConnector(_config);
+                }
+
+
                 data = dbCon.GetData();
+
+                //data = dbCon.GetData();
                 googleTranslator = new GoogleTranslator(cerdFilePath, logger, _config);
             }
             catch (Exception ex)
@@ -126,6 +140,7 @@ namespace TranslationManager
             {
                 finalEnglishFirstName = googleEnglishFirstName;
                 pat.IsEnglishFirstNameByGoogle = true;
+                UpdateNamesData(pat.HebrewFirstName, finalEnglishFirstName);
                 //todo: find and update the entry in the local database
             }
             if (googleLastNameTranslationQuality < 50 || (googleEnglishLastName.Length > 8 ? q2 >= 6 : q2 > 4))
@@ -137,6 +152,7 @@ namespace TranslationManager
             {
                 finalEnglishLastName = googleEnglishLastName;
                 pat.IsEnglishLastNameByGoogle = true;
+                UpdateNamesData(pat.HebrewLastName, finalEnglishLastName);
                 //todo: find and update the entry in the local database
             }
 
@@ -145,7 +161,7 @@ namespace TranslationManager
             pat.EnglishLastName = finalEnglishLastName;
 
             string translatedText = res.TranslatedText;
-
+            //man.SaveData(data);
             AddTranslationsToDictionay(pat, translatedText);
             SaveData(data);
 
@@ -155,6 +171,24 @@ namespace TranslationManager
             logger.Debug($"Hebrew First Name : {pat.HebrewLastName} , Google : {googleEnglishLastName} Phonetic : {phoneticEnglishLastName}");
 
             return pat;
+
+        }
+
+        private void UpdateNamesData(string HebrewName, string finalEnglishName)
+        {
+            string value;
+            if (data.ContainsKey(HebrewName))
+            {
+               var result =  data.TryGetValue(HebrewName, out value);
+                if (result && value != finalEnglishName)
+                {
+                    data[HebrewName] = finalEnglishName;
+                }
+            }
+            else
+            {
+                data.Add(HebrewName, finalEnglishName);
+            }
 
         }
 
