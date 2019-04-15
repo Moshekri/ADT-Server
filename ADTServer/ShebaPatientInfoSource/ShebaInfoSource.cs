@@ -104,25 +104,58 @@ namespace ShebaPatientInfoSource
                 return data;
             }
 
-            return (CompletePatientInformation)null;
+            return null;
         }
 
         private void SaveDataToSql(CompletePatientInformation data)
         {
             NamesModel db = new NamesModel();
-            var ent =  db.MyNamesEntities.Find(data.HebrewFirstName);
+            var ent = db.MyNamesEntities.Find(data.HebrewFirstName);
             if (ent == null)
             {
+                data.FirstName = CapitilizeFirstLetter(data.FirstName);
+
                 db.MyNamesEntities.Add(new Names() { EnglishName = data.FirstName, HebrewName = data.HebrewFirstName });
             }
             var en1t = db.MyNamesEntities.Find(data.HebrewLastName);
             if (en1t == null)
             {
+                data.LastName = CapitilizeFirstLetter(data.LastName);
                 db.MyNamesEntities.Add(new Names() { EnglishName = data.LastName, HebrewName = data.HebrewLastName });
             }
             db.SaveChanges();
 
 
+        }
+
+        private string CapitilizeFirstLetter(string data)
+        {
+            char lastChar = data[0];
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (i == 0)
+                {
+                    lastChar = data[i];
+                    sb.Append(data[i].ToString().ToUpper());
+                }
+                else
+                {
+                    if (lastChar == ' ' || lastChar == '-')
+                    {
+                        sb.Append(data[i].ToString().ToUpper());
+                    }
+                    else
+                    {
+                        sb.Append(data[i].ToString().ToLower());
+                    }
+                    lastChar = data[i];
+                }
+
+            }
+
+            return sb.ToString();
         }
 
         private CompletePatientInformation ParseResponse(string responseMessage)
@@ -131,8 +164,8 @@ namespace ShebaPatientInfoSource
             string dataFromMw300D1 = this.GetDataFromMW300D(responseMessage, "Errstatus");
             string dataFromMw300D2 = this.GetDataFromMW300D(responseMessage, "Errstatus");
             string dataFromMw300D3 = this.GetDataFromMW300D(responseMessage, "Errstatus");
-            string str1 = this.GetDataFromMW300D(responseMessage, "Engpname").TrimEnd(' ').TrimStart(' ');
-            string str2 = this.GetDataFromMW300D(responseMessage, "Engfname").TrimEnd(' ').TrimStart(' ');
+            string englishFirstName = this.GetDataFromMW300D(responseMessage, "Engpname").TrimEnd(' ').TrimStart(' ');
+            string englishFamilyName = this.GetDataFromMW300D(responseMessage, "Engfname").TrimEnd(' ').TrimStart(' ');
             string dataFromMw300D4 = this.GetDataFromMW300D(responseMessage, "Sex");
             string dataFromMw300D5 = this.GetDataFromMW300D(responseMessage, "Patientid");
             string str3 = "";
@@ -146,10 +179,10 @@ namespace ShebaPatientInfoSource
             int.Parse(patientInformation.Age);
             patientInformation.ResponseStatusMessage = (dataFromMw300D1);
             patientInformation.Severity = (dataFromMw300D2.Trim());
-            patientInformation.FirstName = (str1);
-            patientInformation.LastName = (str2);
-            patientInformation.HebrewFirstName = GetDataFromMW300D(responseMessage, "familyname");
-            patientInformation.HebrewLastName = GetDataFromMW300D(responseMessage, "firstname");
+            patientInformation.FirstName = (englishFirstName);
+            patientInformation.LastName = (englishFamilyName);
+            patientInformation.HebrewLastName = GetDataFromMW300D(responseMessage, "familyname");
+            patientInformation.HebrewFirstName = GetDataFromMW300D(responseMessage, "firstname");
             patientInformation.Gender = (str5);
             patientInformation.GenderDesc = (str5 == "M" ? "Male" : "Female");
             patientInformation.PatientId = (dataFromMw300D5);
