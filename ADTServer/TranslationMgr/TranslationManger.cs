@@ -27,9 +27,8 @@ namespace TranslationManager
         GoogleTranslator googleTranslator;
         Logger logger;
         #endregion
-        NamesManager man;
 
-
+        #region Constructor
         internal TranslationManger(TranslationManagerData translationSetupdata)
         {
             this.normalizer = translationSetupdata.NameNormalyzer;
@@ -43,14 +42,14 @@ namespace TranslationManager
                 dbFilePath = Path.Combine(_config.DataBaseFolder, _config.DataBaseFileName);
 
 
-                if(ConfigurationManager.AppSettings["UseSql"] == "true")
-                {
-                    dbCon = DbFactory.GetSqlConnector();
-                }
-                else
-                {
+                //if (ConfigurationManager.AppSettings["UseSql"] == "true")
+                //{
+                //    dbCon = DbFactory.GetSqlConnector();
+                //}
+                //else
+                //{
                     dbCon = DbFactory.GetDbConnector(_config);
-                }
+                //}
 
 
                 data = dbCon.GetData();
@@ -66,112 +65,13 @@ namespace TranslationManager
 
 
         }
+        #endregion
 
+        #region Private Methods
         // load new data from local database at specific interval 3600000 msec = 60 minutes
         private void LoadDataTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             data = dbCon.GetData();
-        }
-
-        public PatientTranslationObject GetEnglishName(string firstName, string lastName)
-        {
-            firstName = normalizer.Normalize(firstName);
-            lastName = normalizer.Normalize(lastName);
-            string googleEnglishFirstName = string.Empty;
-            string googleEnglishLastName = string.Empty;
-            double googleFirstNameTranslationQuality = 0;
-            double googleLastNameTranslationQuality = 0;
-
-            string finalEnglishFirstName = string.Empty;
-            string finalEnglishLastName = string.Empty;
-
-            string textToTranslate = firstName + " " + lastName;
-
-            PatientTranslationObject pat = new PatientTranslationObject()
-            {
-                HebrewFirstName = firstName,
-                HebrewLastName = lastName
-            };
-
-
-            // Do we go to local Db for the names ??
-            if (_config.UseLocalDb)
-            {
-                pat = GetNamesFromLocalDb(textToTranslate);
-                if (pat.EnglishFirstName != string.Empty && pat.EnglishLastName != string.Empty &&
-                    pat.EnglishFirstName != null && pat.EnglishLastName != null)
-                {
-                    return pat;
-                }
-            }
-
-            // do we try to get google translation ???
-            // if NOT only phonetic translations will be used !!
-            if (_config.MustGetTranslation)
-            {
-                try
-                {
-                    googleEnglishFirstName = googleTranslator.GetEnglishFirstNameFromGoogle(pat.HebrewFirstName);
-                    googleEnglishLastName = googleTranslator.GetEnglishLAsttNameFromGoogle(pat.HebrewLastName);
-                }
-                catch (Exception ex)
-                {
-                    logger.Debug("Problem getting google translation - using phonetic translation see MUSEADT log for more details");
-                    logger.Error(ex.Message);
-                }
-
-            }
-
-            string phoneticEnglishFirstName = PhoneticTranslator.GetPhoneticTranslation(pat.HebrewFirstName);
-            string phoneticEnglishLastName = PhoneticTranslator.GetPhoneticTranslation(pat.HebrewLastName);
-
-            googleFirstNameTranslationQuality = GetGoogleTranslationQuality(googleEnglishFirstName, phoneticEnglishFirstName);
-            googleLastNameTranslationQuality = GetGoogleTranslationQuality(googleEnglishLastName, phoneticEnglishLastName);
-            var q1 = LevenshteinDistance.Compute(googleEnglishFirstName, phoneticEnglishFirstName);
-            var q2 = LevenshteinDistance.Compute(googleEnglishLastName, phoneticEnglishLastName);
-
-          
-
-            if (googleFirstNameTranslationQuality < 50 || (googleEnglishFirstName.Length > 8 ? q1 >= 6 : q1 > 4))
-            {
-                finalEnglishFirstName = phoneticEnglishFirstName;
-            }
-            else
-            {
-                finalEnglishFirstName = googleEnglishFirstName;
-                pat.IsEnglishFirstNameByGoogle = true;
-                UpdateNamesData(pat.HebrewFirstName, finalEnglishFirstName);
-                //todo: find and update the entry in the local database
-            }
-            if (googleLastNameTranslationQuality < 50 || (googleEnglishLastName.Length > 8 ? q2 >= 6 : q2 > 4))
-            {
-                finalEnglishLastName = phoneticEnglishLastName;
-            
-            }
-            else
-            {
-                finalEnglishLastName = googleEnglishLastName;
-                pat.IsEnglishLastNameByGoogle = true;
-                UpdateNamesData(pat.HebrewLastName, finalEnglishLastName);
-                //todo: find and update the entry in the local database
-            }
-
-            res = new TranslationResult(textToTranslate, finalEnglishFirstName + " " + finalEnglishLastName, "iw", "hebrew", "en", TranslationModel.ServiceDefault);
-            pat.EnglishFirstName = finalEnglishFirstName;
-            pat.EnglishLastName = finalEnglishLastName;
-
-            string translatedText = res.TranslatedText;
-            //man.SaveData(data);
-            AddTranslationsToDictionay(pat, translatedText);
-            SaveData(data);
-
-
-
-            logger.Debug($"Hebrew First Name : {pat.HebrewFirstName} , Google : {googleEnglishFirstName} Phonetic : {phoneticEnglishFirstName}");
-            logger.Debug($"Hebrew First Name : {pat.HebrewLastName} , Google : {googleEnglishLastName} Phonetic : {phoneticEnglishLastName}");
-
-            return pat;
-
         }
 
         private void UpdateNamesData(string HebrewName, string finalEnglishName)
@@ -179,7 +79,7 @@ namespace TranslationManager
             string value;
             if (data.ContainsKey(HebrewName))
             {
-               var result =  data.TryGetValue(HebrewName, out value);
+                var result = data.TryGetValue(HebrewName, out value);
                 if (result && value != finalEnglishName)
                 {
                     data[HebrewName] = finalEnglishName;
@@ -191,9 +91,6 @@ namespace TranslationManager
             }
 
         }
-
-
-        #region Private Methods
 
         private void SaveData(Dictionary<string, string> data)
         {
@@ -211,34 +108,13 @@ namespace TranslationManager
         {
             if (pat.IsEnglishFirstNameByGoogle)
             {
-                AddToDictionery(pat.HebrewFirstName, pat.EnglishFirstName,pat.IsEnglishFirstNameByGoogle);
+                AddToDictionery(pat.HebrewFirstName, pat.EnglishFirstName, pat.IsEnglishFirstNameByGoogle);
             }
             if (pat.IsEnglishLastNameByGoogle)
             {
-                AddToDictionery(pat.HebrewLastName, pat.EnglishLastName,pat.IsEnglishLastNameByGoogle);
+                AddToDictionery(pat.HebrewLastName, pat.EnglishLastName, pat.IsEnglishLastNameByGoogle);
             }
-           
 
-            //var resultArray = text.Split(' ');
-            //if (resultArray[0].ToUpper() == "null".ToUpper())
-            //{
-            //    pat.EnglishFirstName = "";
-            //}
-            //else
-            //{
-            //    pat.EnglishFirstName = resultArray[0];
-            //    AddToDictionery(pat.HebrewFirstName, pat.EnglishFirstName);
-            //}
-
-            //if (resultArray[1].ToUpper() == "null".ToUpper())
-            //{
-            //    pat.EnglishLastName = "";
-            //}
-            //else
-            //{
-            //    pat.EnglishLastName = resultArray[1];
-            //    AddToDictionery(pat.HebrewLastName, pat.EnglishLastName);
-            //}
         }
 
         private PatientTranslationObject GetNamesFromLocalDb(string textToTranslate)
@@ -267,14 +143,14 @@ namespace TranslationManager
 
         }
 
-        private void AddToDictionery(string hebrewFirstName, string englishFirstName,bool isGoogle)
+        private void AddToDictionery(string hebrewFirstName, string englishFirstName, bool isGoogle)
         {
 
-            string name="";
+            string name = "";
             if (data.TryGetValue(hebrewFirstName, out name))
             {
                 //db name and translation name are the same
-                if (name==englishFirstName)
+                if (name == englishFirstName)
                 {
                     return;
                 }
@@ -288,10 +164,10 @@ namespace TranslationManager
             }
             else
             {
-             //   just add a new entry
+                //   just add a new entry
                 data.Add(hebrewFirstName, englishFirstName);
             }
-           
+
         }
 
         private string GetEnglishNameFromDb(string hebrewFirstName)
@@ -365,5 +241,113 @@ namespace TranslationManager
         }
 
         #endregion
+
+        public PatientTranslationObject GetEnglishName(string firstName, string lastName)
+        {
+            firstName = normalizer.Normalize(firstName);
+            lastName = normalizer.Normalize(lastName);
+            string  finalEnglishFirstName, finalEnglishLastName = string .Empty;
+            string googleEnglishFirstName = string.Empty;
+            string googleEnglishLastName = string.Empty;
+            double googleFirstNameTranslationQuality, googleLastNameTranslationQuality = 0;
+
+            string textToTranslate = firstName + " " + lastName;
+
+            PatientTranslationObject pat = new PatientTranslationObject()
+            {
+                HebrewFirstName = firstName,
+                HebrewLastName = lastName
+            };
+
+
+            // Do we go to local Db for the names ??
+            if (_config.UseLocalDb)
+            {
+                pat = GetNamesFromLocalDb(textToTranslate);
+                if (pat.EnglishFirstName != string.Empty && pat.EnglishLastName != string.Empty &&
+                    pat.EnglishFirstName != null && pat.EnglishLastName != null)
+                {
+                    return pat;
+                }
+            }
+
+            // do we try to get google translation ???
+            // if NOT only phonetic translations will be used !!
+            if (_config.MustGetTranslation)
+            {
+                try
+                {
+                    googleEnglishFirstName = googleTranslator.GetEnglishFirstNameFromGoogle(pat.HebrewFirstName);
+                    googleEnglishLastName = googleTranslator.GetEnglishLAsttNameFromGoogle(pat.HebrewLastName);
+                }
+                catch (Exception ex)
+                {
+                    logger.Debug("Problem getting google translation - using phonetic translation see MUSEADT log for more details");
+                    logger.Error(ex.Message);
+                }
+
+            }
+
+            string phoneticEnglishFirstName = PhoneticTranslator.GetPhoneticTranslation(pat.HebrewFirstName);
+            string phoneticEnglishLastName = PhoneticTranslator.GetPhoneticTranslation(pat.HebrewLastName);
+
+            // 
+            if (phoneticEnglishFirstName == "")
+            {
+                phoneticEnglishFirstName = googleEnglishFirstName;
+            }
+            if (phoneticEnglishLastName == "")
+            {
+                phoneticEnglishLastName = googleEnglishLastName;
+            }
+
+
+            googleFirstNameTranslationQuality = GetGoogleTranslationQuality(googleEnglishFirstName, phoneticEnglishFirstName);
+            googleLastNameTranslationQuality = GetGoogleTranslationQuality(googleEnglishLastName, phoneticEnglishLastName);
+            var q1 = LevenshteinDistance.Compute(googleEnglishFirstName, phoneticEnglishFirstName);
+            var q2 = LevenshteinDistance.Compute(googleEnglishLastName, phoneticEnglishLastName);
+
+
+
+            if (googleFirstNameTranslationQuality < 50 || (googleEnglishFirstName.Length > 8 ? q1 >= 6 : q1 > 4))
+            {
+                finalEnglishFirstName = phoneticEnglishFirstName;
+            }
+            else
+            {
+                finalEnglishFirstName = googleEnglishFirstName;
+                pat.IsEnglishFirstNameByGoogle = true;
+                UpdateNamesData(pat.HebrewFirstName, finalEnglishFirstName);
+                //todo: find and update the entry in the local database
+            }
+            if (googleLastNameTranslationQuality < 50 || (googleEnglishLastName.Length > 8 ? q2 >= 6 : q2 > 4))
+            {
+                finalEnglishLastName = phoneticEnglishLastName;
+            }
+            else
+            {
+                finalEnglishLastName = googleEnglishLastName;
+                pat.IsEnglishLastNameByGoogle = true;
+                UpdateNamesData(pat.HebrewLastName, finalEnglishLastName);
+                //todo: find and update the entry in the local database
+            }
+
+            res = new TranslationResult(textToTranslate, finalEnglishFirstName + " " + finalEnglishLastName, "iw", "hebrew", "en", TranslationModel.ServiceDefault);
+            pat.EnglishFirstName = finalEnglishFirstName;
+            pat.EnglishLastName = finalEnglishLastName;
+
+            string translatedText = res.TranslatedText;
+            //man.SaveData(data);
+            AddTranslationsToDictionay(pat, translatedText);
+            SaveData(data);
+
+
+
+            logger.Debug($"Hebrew First Name : {pat.HebrewFirstName} , Google : {googleEnglishFirstName} Phonetic : {phoneticEnglishFirstName}");
+            logger.Debug($"Hebrew First Name : {pat.HebrewLastName} , Google : {googleEnglishLastName} Phonetic : {phoneticEnglishLastName}");
+
+            return pat;
+
+        }
     }
 }

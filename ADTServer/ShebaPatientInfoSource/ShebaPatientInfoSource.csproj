@@ -78,6 +78,14 @@
       <Project>{96aeaf90-dc8b-4f0c-ad48-b49b3db90d33}</Project>
       <Name>AdtSvrCmn</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DbLayer\DbLayer.csproj">
+      <Project>{FF117739-1F10-4407-8CEE-6F0A77A47F7A}</Project>
+      <Name>DbLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlConnector\SqlConnector.csproj">
+      <Project>{62A33EBB-8EF8-44BD-815E-82AA1F8ABD06}</Project>
+      <Name>SqlConnector</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

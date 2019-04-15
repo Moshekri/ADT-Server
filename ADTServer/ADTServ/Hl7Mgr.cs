@@ -206,22 +206,8 @@ namespace ADTServ
         }
         #endregion
 
-        private TcpState GetConnectionState(TcpClient client)
-        {
-            TcpState stateOfConnection = new TcpState();
-            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
-            TcpConnectionInformation[] tcpConnections = ipProperties.GetActiveTcpConnections().Where(x => x.LocalEndPoint.Equals(client.Client.LocalEndPoint) && x.RemoteEndPoint.Equals(client.Client.RemoteEndPoint)).ToArray();
+       
 
-            if (tcpConnections != null && tcpConnections.Length > 0)
-            {
-                return stateOfConnection = tcpConnections.First().State;
-            }
-            else
-            {
-                TcpState noState = TcpState.Closed;
-                return noState;
-            }
-        }
         /// <summary>
         /// this is the Main event - when the muse sends a QRY^Q01 message the message will get here
         /// then the patient details are fetched from meuhedet web service
@@ -250,9 +236,6 @@ namespace ADTServ
 
                 //TODO : add support to handle other messages ?
 
-
-
-
                 // we can only handle  QRY^Q01 messages 
                 if (messageType.ToUpper() != "QRY^Q01")
                 {
@@ -265,7 +248,7 @@ namespace ADTServ
                 string PID = hl7MessageParser.GetPatientId(e.Message);
                 string originalPID = PID;
 
-
+                //generate the id for israeli patient and also for foreign patients
                 var parsedIds = _data.PidHandler.ParseID(PID);
 
                 e.PID = PID;
@@ -340,7 +323,22 @@ namespace ADTServ
 
 
         }
+        private TcpState GetConnectionState(TcpClient client)
+        {
+            TcpState stateOfConnection = new TcpState();
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            TcpConnectionInformation[] tcpConnections = ipProperties.GetActiveTcpConnections().Where(x => x.LocalEndPoint.Equals(client.Client.LocalEndPoint) && x.RemoteEndPoint.Equals(client.Client.RemoteEndPoint)).ToArray();
 
+            if (tcpConnections != null && tcpConnections.Length > 0)
+            {
+                return stateOfConnection = tcpConnections.First().State;
+            }
+            else
+            {
+                TcpState noState = TcpState.Closed;
+                return noState;
+            }
+        }
         private bool IsEnglishName(string data)
         {
             int counter = 0;
@@ -359,7 +357,6 @@ namespace ADTServ
             return false;
 
         }
-
         private CompletePatientInformation GetPatientDemographicInformation(PatientId[] parsedIds)
         {
             CompletePatientInformation IsraeliCustomer;

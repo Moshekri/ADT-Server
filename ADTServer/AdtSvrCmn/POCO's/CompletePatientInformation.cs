@@ -21,6 +21,9 @@ namespace AdtSvrCmn.Objects
         public string ResponseStatusMessage { get; set; }
         public string Severity { get; set; }
         public string CompleteResponseStatusMessage { get; set; }
+        public string HebrewFirstName { get; set; }
+        public string  HebrewLastName { get; set; }
+
 
 
         public CompletePatientInformation()
