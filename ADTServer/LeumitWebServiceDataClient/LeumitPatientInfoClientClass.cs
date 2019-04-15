@@ -45,7 +45,7 @@ namespace LeumitWebServiceDataClient
             if (sevirity != "0")
             {
                 LogAS400Erorrs(sevirity, responseMessage, pidType, patientId);
-                return null;
+                //return null;
             }
 
             patientInfo = ParseResponse(responseMessage);
