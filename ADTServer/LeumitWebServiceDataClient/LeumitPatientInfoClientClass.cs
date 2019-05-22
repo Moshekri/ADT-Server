@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using IsraeliIdTools;
 using NLog;
+using System.Timers;
 
 namespace LeumitWebServiceDataClient
 {
@@ -15,16 +16,28 @@ namespace LeumitWebServiceDataClient
     {
         Logger logger;
         ApplicationConfiguration _config;
-
+        Timer licenseExpiryTimer;
+        LicenseChecker LicenseChecker;
 
         public LeumitPatientInfoClient()
         {
-
+            
         }
+
+        private void LicenseExpiryTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            LicenseChecker.CheckLicense(Path.Combine(_config.GoogleCredentialFilePath, _config.GoogleCredentialFileName));
+        }
+
         public LeumitPatientInfoClient(ApplicationConfiguration config)
         {
+
+            licenseExpiryTimer = new Timer((new TimeSpan(24, 0, 0).TotalMilliseconds));
+            licenseExpiryTimer.Elapsed += LicenseExpiryTimer_Elapsed;
+            LicenseChecker = new LicenseChecker();
             _config = config;
             logger = LogManager.GetLogger("LeumitWebServiceDataClient");
+            LicenseChecker.CheckLicense(Path.Combine(_config.GoogleCredentialFilePath, _config.GoogleCredentialFileName));
         }
 
         public event EventHandler RequestingPatientInfo;
