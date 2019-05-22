@@ -11,8 +11,36 @@ namespace LeumitWebServiceDataClient
     internal class LicenseChecker
     {
         Logger logger;
+        int daysThreshhold = 14;
         public LicenseChecker()
         {
+            if (!File.Exists("licenseCheckSetting.ini"))
+            {
+                try
+                {
+                    using (var fs = File.Create("licenseCheckSetting.ini"))
+                    {
+
+                    }
+                    
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+                string setting = "Number of days until license expires alarm =  14";
+                File.WriteAllText("licenseCheckSetting.ini", setting);
+                daysThreshhold = 14;
+            }
+            else
+            {
+               var data =  File.ReadAllText("licenseCheckSetting.ini");
+                var dataArray = data.Split('=');
+                daysThreshhold = int.Parse(dataArray[1].Trim());
+
+            }
             logger = LogManager.GetCurrentClassLogger();
         }
         public void CheckLicense(string path = @"C:\ProgramData\KriSoftware\ADTServer\cred\cred.json")
