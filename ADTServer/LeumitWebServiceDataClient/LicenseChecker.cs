@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AdtSvrCmn.Objects;
 using NLog;
 
 namespace LeumitWebServiceDataClient
@@ -12,40 +14,64 @@ namespace LeumitWebServiceDataClient
     {
         Logger logger;
         int daysThreshhold = 14;
-        public LicenseChecker()
+        ApplicationConfiguration _config;
+        public LicenseChecker(ApplicationConfiguration config)
         {
-            if (!File.Exists("licenseCheckSetting.ini"))
+            _config = config;
+            string configFilePath =  ConfigurationManager.AppSettings["ConfigFileFullPath"];
+            string configFileFolder = Path.GetDirectoryName(configFilePath);
+            logger = LogManager.GetCurrentClassLogger();
+            string licenseAlarmConfigPath = Path.Combine(configFileFolder, "licenseCheckSetting.ini");
+            logger.Info($"Checking folder {configFileFolder} for config File \"licenseCheckSetting.ini\" Exsistance");
+            if (!File.Exists(licenseAlarmConfigPath))
             {
+                logger.Info($"File \"licenseCheckSetting.ini\" does not exsits, trying to create file....");
+
                 try
                 {
-                    using (var fs = File.Create("licenseCheckSetting.ini"))
+                    using (var fs = File.Create(licenseAlarmConfigPath))
                     {
 
                     }
-                    
+                    string setting = "Number of days until license expires alarm =  14";
+
+                    File.WriteAllText(licenseAlarmConfigPath, setting);
+                    logger.Info($"File \"licenseCheckSetting.ini\" Created Successfully at {configFileFolder}");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    throw;
+                    logger.Debug($"Error creating file : {ex.Message}");
+                    logger.Error(ex.Message);
                 }
-
-                string setting = "Number of days until license expires alarm =  14";
-                File.WriteAllText("licenseCheckSetting.ini", setting);
                 daysThreshhold = 14;
+                logger.Info("License Check alaram set to 14 days before expiration.");
             }
             else
             {
-               var data =  File.ReadAllText("licenseCheckSetting.ini");
-                var dataArray = data.Split('=');
-                daysThreshhold = int.Parse(dataArray[1].Trim());
+                try
+                {
+                    logger.Info($"License settings file exists !! loading settings from file !!");
+                    var data = File.ReadAllText(licenseAlarmConfigPath);
+                    var dataArray = data.Split('=');
+                    daysThreshhold = int.Parse(dataArray[1].Trim());
+                    logger.Info($"From File : License Check alaram set to {daysThreshhold} days before expiration.");
+                }
+                catch (Exception ex)
+                {
+                    do
+                    {
+                        logger.Debug(ex.Message);
+                        ex = ex.InnerException;
+                    } while (ex != null);
+                    
+                }
 
             }
-            logger = LogManager.GetCurrentClassLogger();
+            
         }
         public void CheckLicense(string path = @"C:\ProgramData\KriSoftware\ADTServer\cred\cred.json")
         {
-            int daysThreshhold = 14;
+            //int daysThreshhold = 14;
             logger.Info("Checking License for expiration, will create an error in the windows error log if there are less then 14 days left");
             if (File.Exists(path))
             {

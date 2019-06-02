@@ -34,7 +34,7 @@ namespace LeumitWebServiceDataClient
 
             licenseExpiryTimer = new Timer((new TimeSpan(24, 0, 0).TotalMilliseconds));
             licenseExpiryTimer.Elapsed += LicenseExpiryTimer_Elapsed;
-            LicenseChecker = new LicenseChecker();
+            LicenseChecker = new LicenseChecker(_config);
             _config = config;
             logger = LogManager.GetLogger("LeumitWebServiceDataClient");
             LicenseChecker.CheckLicense(Path.Combine(_config.GoogleCredentialFilePath, _config.GoogleCredentialFileName));
