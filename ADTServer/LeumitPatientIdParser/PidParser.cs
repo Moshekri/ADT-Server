@@ -39,10 +39,6 @@ namespace LeumitPatientIdParser
         /// </summary>
         /// <param name="idToParse"></param>
         /// <returns></returns>
-
-        
-
-       
         public PatientId[] ParseID(string idToParse)
         {
             PatientId[] results = new PatientId[2];
