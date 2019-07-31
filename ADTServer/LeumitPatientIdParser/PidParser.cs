@@ -40,17 +40,10 @@ namespace LeumitPatientIdParser
         /// <param name="idToParse"></param>
         /// <returns></returns>
 
-        public PatientId[] ParseID(string idToParse)
-        {
-            return new PatientId[2]
-            {
-                new PatientId(){ID = idToParse.Substring(1,idToParse.Length -2) , SugId = idToParse[0].ToString(),SifratBikuret = idToParse[idToParse.Length-1].ToString(),IsValidIsraeliId=true},
-                null
-            };
-        }
+        
 
-        [Obsolete("Do not use for leumit ,this will try to fix user errors when manually entering patient id")]
-        public PatientId[] ParseID(string idToParse, string deprecated)
+       
+        public PatientId[] ParseID(string idToParse)
         {
             PatientId[] results = new PatientId[2];
             double res;
