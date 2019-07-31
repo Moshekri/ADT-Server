@@ -30,7 +30,7 @@ namespace LeumitPatientIdParser
             logger = LogManager.GetCurrentClassLogger();
         }
 
-       
+
 
         /// <summary>
         /// Will Parse the input string and returns an array of PatientId
@@ -39,7 +39,18 @@ namespace LeumitPatientIdParser
         /// </summary>
         /// <param name="idToParse"></param>
         /// <returns></returns>
+        /// 
         public PatientId[] ParseID(string idToParse)
+        {
+            return new PatientId[2]
+            {
+                new PatientId(){ID = idToParse.Substring(1,idToParse.Length -2) , SugId = idToParse[0].ToString(),SifratBikuret = idToParse[idToParse.Length-1].ToString(),IsValidIsraeliId=true},
+                null
+            };
+        }
+
+        [Obsolete("this will try to fix user error when manually entering")]
+        public PatientId[] ParseID(string idToParse,string DONOTUSE)
         {
             PatientId[] results = new PatientId[2];
             double res;
