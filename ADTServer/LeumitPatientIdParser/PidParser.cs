@@ -30,7 +30,7 @@ namespace LeumitPatientIdParser
             logger = LogManager.GetCurrentClassLogger();
         }
 
-       
+
 
         /// <summary>
         /// Will Parse the input string and returns an array of PatientId
@@ -39,16 +39,27 @@ namespace LeumitPatientIdParser
         /// </summary>
         /// <param name="idToParse"></param>
         /// <returns></returns>
+
         public PatientId[] ParseID(string idToParse)
+        {
+            return new PatientId[2]
+            {
+                new PatientId(){ID = idToParse.Substring(1,idToParse.Length -2) , SugId = idToParse[0].ToString(),SifratBikuret = idToParse[idToParse.Length-1].ToString(),IsValidIsraeliId=true},
+                null
+            };
+        }
+
+        [Obsolete("Do not use for leumit ,this will try to fix user errors when manually entering patient id")]
+        public PatientId[] ParseID(string idToParse, string deprecated)
         {
             PatientId[] results = new PatientId[2];
             double res;
-            if (!double.TryParse(idToParse,out res))
+            if (!double.TryParse(idToParse, out res))
             {
                 results[0] = results[1] = null;
                 return results;
             }
-            
+
             if (idToParse.Length > 10)
             {
                 return results;
@@ -89,7 +100,7 @@ namespace LeumitPatientIdParser
                         results[1].ID = results[1].ID.Substring(0, 8);
                         break;
                 }
-                                
+
                 results[1].SugId = "9";
             }
             return results;
@@ -121,7 +132,7 @@ namespace LeumitPatientIdParser
                     logger.Trace($"setting sugId to \"1\" for patient ID : {idToParse}");
                     patientId.SugId = "1";
 
-                    if ((idToParse.StartsWith("1") || idToParse.StartsWith("9")) && idToParse.Length >1)
+                    if ((idToParse.StartsWith("1") || idToParse.StartsWith("9")) && idToParse.Length > 1)
                     {
                         idToParse = idToParse.Substring(1).TrimStart('0').PadLeft(9, '0');
                     }
@@ -130,7 +141,7 @@ namespace LeumitPatientIdParser
                         idToParse = idToParse.TrimStart('0').PadLeft(9, '0');
                     }
 
-                    if (idToParse.TrimStart('0').Length !=1)
+                    if (idToParse.TrimStart('0').Length != 1)
                     {
                         patientId.ID = idToParse.Substring(0, idToParse.Length - 1);
                         patientId.SifratBikuret = idToParse.Substring(idToParse.Length - 1);
@@ -146,7 +157,7 @@ namespace LeumitPatientIdParser
                         patientId.IsValidIsraeliId = true;
                         return patientId;
                     }
-                    
+
                 }
                 // patient id was enterd manually without sifrat bikoret
                 // we assume the id is correct and add 1 as sugId and calculate sifrat bikoret from the given ID

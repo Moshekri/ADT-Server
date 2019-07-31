@@ -16,7 +16,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Linq;
 using HebrewNameNormalizer;
-
+using System.Configuration;
 
 namespace ADTServ
 {
@@ -270,6 +270,7 @@ namespace ADTServ
                 e.PID = PID;
                 MessageRecived?.Invoke(this, e);
 
+                
                 var patientInformation = GetPatientDemographicInformation(parsedIds);
 
 
