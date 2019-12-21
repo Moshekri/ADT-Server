@@ -4,20 +4,18 @@ using System;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using ADTServ;
-using ApplicationLogger;
 using System.Threading;
 using AdtSvrCmn;
-using System.IO;
 using AdtSvrCmn.Interfaces;
 using GlobalApplicationConfigurationManager;
-using LeumitWebServiceDataClient;
+//using LeumitWebServiceDataClient;
 using System.Configuration;
 using MuseHl7Parser;
 using AdtSvrCmn.Objects;
-using LeumitPatientIdParser;
-using NLog;
+//using LeumitPatientIdParser;
 using HadassahWebServiceDataClient;
 using HadassahPatientIdParser;
+using NLog;
 
 namespace MuseADTService
 {
@@ -65,7 +63,6 @@ namespace MuseADTService
             {
                 logger = LogManager.GetCurrentClassLogger();
                 logger.Debug("Loading Configuration files...");
-                IPatientIdHandler pidHandler = new PidParser();
                 try
                 {
                     var configFilePath = ConfigurationManager.AppSettings["ConfigFileFullPath"];
