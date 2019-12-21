@@ -4,7 +4,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using ADTServ;
-using ApplicationLogger;
 using System.Threading;
 using AdtSvrCmn;
 using System.IO;

@@ -35,38 +35,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.Api.Gax, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Api.Gax.2.5.0\lib\net45\Google.Api.Gax.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Api.Gax.Rest, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Api.Gax.Rest.2.5.0\lib\net45\Google.Api.Gax.Rest.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis, Version=1.36.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.1.36.1\lib\net45\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Auth, Version=1.36.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Auth.1.36.1\lib\net45\Google.Apis.Auth.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.36.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Auth.1.36.1\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Core, Version=1.36.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Core.1.36.1\lib\net45\Google.Apis.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.PlatformServices, Version=1.36.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.1.36.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Translate.v2, Version=1.36.1.875, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Translate.v2.1.36.1.875\lib\net45\Google.Apis.Translate.v2.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Cloud.Translation.V2, Version=1.1.0.0, Culture=neutral, PublicKeyToken=185c282632e132a0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Cloud.Translation.V2.1.1.0\lib\net45\Google.Cloud.Translation.V2.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.6.8\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -121,6 +91,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MuseADTService.resx">
+      <DependentUpon>MuseADTService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ADTServ\ADTServ.csproj">
       <Project>{92c000e1-3b63-4a7c-88e9-4a5d59526a55}</Project>
       <Name>ADTServ</Name>
@@ -133,25 +111,9 @@
       <Project>{7f6b87d3-f1ed-4920-8caa-dae7b6a81f6e}</Project>
       <Name>GlobalApplicationConfigurationManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClalitPatientIdParser\ClalitPatientIdParser.csproj">
-      <Project>{e5c8e650-6b82-48ff-8ed5-a92259bb7995}</Project>
-      <Name>ClalitPatientIdParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClalitWebServiceDataClient\ClalitWebServiceDataClient.csproj">
-      <Project>{39d3c183-d94a-4de2-a42e-2d12975689ad}</Project>
-      <Name>ClalitWebServiceDataClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DbLayer\DbLayer.csproj">
-      <Project>{ff117739-1f10-4407-8cee-6f0a77a47f7a}</Project>
-      <Name>DbLayer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Hl7Parser\Hl7Parser.csproj">
-      <Project>{8299CF6B-8F66-4D79-91AF-343327444489}</Project>
+      <Project>{8299cf6b-8f66-4d79-91af-343327444489}</Project>
       <Name>Hl7Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IsraeliIdTools\IsraeliIdTools.csproj">
-      <Project>{0c1b73e5-6fbd-40ad-9d37-b25f75e5cb0c}</Project>
-      <Name>IsraeliIdTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\LeumitPatientIdParser\LeumitPatientIdParser.csproj">
       <Project>{032cec57-4df9-4d14-b272-7ed231f5d5f5}</Project>
@@ -161,38 +123,6 @@
       <Project>{b7695972-7b68-418a-89bd-72a80a1c4def}</Project>
       <Name>LeumitWebServiceDataClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logger\ApplicationLogger.csproj">
-      <Project>{99e54282-3e18-41d0-b816-3cee13972497}</Project>
-      <Name>ApplicationLogger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MeuhedetPatientIdParser\MeuhedetPatientIdParser.csproj">
-      <Project>{c7511ee8-c6be-4ccc-afe9-0960766d0701}</Project>
-      <Name>MeuhedetPatientIdParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MeuhedetWebServiceDataClient\MeuhedetWebServiceDataClient.csproj">
-      <Project>{c4b881bf-8fcf-4055-8ac3-1210f76b5304}</Project>
-      <Name>MeuhedetWebServiceDataClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PlugInManager\PlugInManager.csproj">
-      <Project>{33cdf9b1-e067-470d-a363-e4e1f722d791}</Project>
-      <Name>PlugInManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShebaPatientInfoSource\ShebaPatientInfoSource.csproj">
-      <Project>{1eb12c6d-4fc3-4c90-a319-6e7f81364539}</Project>
-      <Name>ShebaPatientInfoSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShebaPidParser\ShebaPidParser.csproj">
-      <Project>{df97d36e-99a6-4985-9ef1-4dbb3b47ebfa}</Project>
-      <Name>ShebaPidParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MuseADTService.resx">
-      <DependentUpon>MuseADTService.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
