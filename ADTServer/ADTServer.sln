@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbLayer", "DbLayer\DbLayer.csproj", "{FF117739-1F10-4407-8CEE-6F0A77A47F7A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -64,7 +64,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ADT Server Setup", "ADT Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc Files", "Misc Files", "{FDFEDA01-ADB5-4C10-A47A-630AD36C8B51}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Users\moshek\Downloads\Muse Leumit-efb8043803db.json = ..\..\..\..\Users\moshek\Downloads\Muse Leumit-efb8043803db.json
+		..\..\..\Users\moshek\Downloads\Muse Leumit-efb8043803db.json = ..\..\..\Users\moshek\Downloads\Muse Leumit-efb8043803db.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NlogTests", "LoggingTests\NlogTests.csproj", "{7CD224D0-F9A1-468F-B3DB-A62A3A6E274C}"
@@ -80,6 +80,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HebrewNameNormalizer", "NameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer\HebrewNameNormalizer.csproj", "{06CCD9BE-5A2F-47B9-89F6-22F6FC33EC94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeumitADTTests", "LeumitADTTests\LeumitADTTests.csproj", "{3426B32E-B9CD-419D-9D9B-8955163D5DA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HadassahWebServiceDataClient", "HadassahWebServiceDataClient\HadassahWebServiceDataClient.csproj", "{4DE98F18-9561-4EB3-B875-134DA48E170B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HadassahPatientIdParser", "HadassahPatientIdParser\HadassahPatientIdParser.csproj", "{99903F68-101E-431C-9001-83BF619FEBF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -213,6 +217,14 @@ Global
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3426B32E-B9CD-419D-9D9B-8955163D5DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE98F18-9561-4EB3-B875-134DA48E170B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE98F18-9561-4EB3-B875-134DA48E170B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE98F18-9561-4EB3-B875-134DA48E170B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE98F18-9561-4EB3-B875-134DA48E170B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99903F68-101E-431C-9001-83BF619FEBF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99903F68-101E-431C-9001-83BF619FEBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99903F68-101E-431C-9001-83BF619FEBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99903F68-101E-431C-9001-83BF619FEBF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

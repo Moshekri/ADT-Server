@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://www.hadassah.org.il/BaseTypesSchema.xsd" xmlns:tns="http://xmlns.example.com/1495642090280" xmlns:ns0="http://www.hadassah.org.il/DemographySchema.xsd" xmlns:soap1="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://www.hadassah.org.il/BaseSchema.xsd" name="Untitled" targetNamespace="http://xmlns.example.com/1495642090280" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:bts="http://www.hadassah.org.il/BaseTypesSchema.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.hadassah.org.il/BaseTypesSchema.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="NullableSexType">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(MALE|FEMALE|ז|נ|ב)?" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="apgar5Type">
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="10" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="birthType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EMPRESS" />
+          <xs:enumeration value="OTHER" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="charFlag">
+        <xs:restriction base="xs:string">
+          <xs:maxLength value="1" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="colourType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">1=Tumor - Red , 2=Joint - Yellow, 3=Children - Green, 4=Back  - White, 5=Hand - Blue, 6= Foot - Blue, 7=Shoulder - Blue, 8=KNEES - Green  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0" />
+          <xs:maxLength value="1" />
+          <xs:pattern value="([1-8])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="date">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})))*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="dateTime">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})) (([01][0-9])|(2[0-3]))(:[0-5][0-9]){2}(\.[0-9]{2}[037])?)*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="dateTimeTimeNotMust">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[1-9])|(1[012]))/((000[0-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})) (([01][0-9])|(2[0-3]))(:[0-5][0-9]){2}(\.[0-9]{2}[037])?)|(((0[1-9])|([12][0-9])|(3[01]))/((0[1-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})))*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="emptyableDate">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="^$|(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})))*" />
+          <xs:minLength value="0" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="emptyableDateTime">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="^$|(((0[1-9])|([12][0-9])|(3[01]))/((0[1-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})) (([01][0-9])|(2[0-3]))(:[0-5][0-9]){2}(\.[0-9]{2}[037])?)*" />
+          <xs:minLength value="0" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="firstNameType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">base definition for first name field </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="1" />
+          <xs:maxLength value="30" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="iCD9Type">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">base defintion for ICD9 code </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="2" />
+          <xs:maxLength value="10" />
+          <xs:pattern value="^(V\d{2}(\.\d{1,2})?(\.\d{1,2})?|\d{1,3}(\.\d{1,2})?(\.\d{1,2})?|E\d{3}(\.\d)?(\.\d{1,2})?|T\d{3}(\.\d)?)?" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="lastNameType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">base definition for last name field  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="1" />
+          <xs:maxLength value="30" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="longDateTime">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((000[0-9])|(00[1-9][0-9])|(0[0-9][0-9]{2})|([1-9][0-9]{3}))-((0[1-9])|(1[012]))-((0[1-9])|([12][0-9])|(3[01]))T(([01][0-9])|(2[0-3]))(:[0-5][0-9]){2}(\.[0-9]{0,3})?)*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="longDateTimeNoMili">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})) (([01][0-9])|(2[0-3]))(:[0-5][0-9]){2})*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="longDateTimeNoMiliPermitNoTime">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3}))( (([01][0-9])|(2[0-3]))(:[0-5][0-9]){2})?)*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="maritalStatusType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">1=merrid, 2=divorced, 3=single, 4=Widow, 5=Not Known  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0" />
+          <xs:maxLength value="1" />
+          <xs:pattern value="([0-5])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="movementTypeType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">
+        		1=Release from hospitalization, 
+		2=Release from emergancy, 
+		3= emergancy to hosptalization, 
+		6=From unit to unit,
+		4=Vacation,
+		5=From vacation
+      </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:length value="1" />
+          <xs:pattern value="([0-6])" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="nationalityType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">1=Israel, 2=Turist, 3=Palestine,9=Not Known </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0" />
+          <xs:maxLength value="1" />
+          <xs:pattern value="([1-3,9])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="number1">
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="9" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="number10">
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="999999999" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="number1AndNeg">
+        <xs:restriction base="xs:integer">
+          <xs:maxInclusive value="9" />
+          <xs:minInclusive value="-9" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="number5">
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="99999" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="orderIDType">
+        <xs:annotation>
+          <xs:documentation xml:lang="he">
+			מספר הפניה	
+			  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:minLength value="1" />
+          <xs:maxLength value="9" />
+          <xs:pattern value="([0-9])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="recTypeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="א" />
+          <xs:enumeration value="ז" />
+          <xs:enumeration value="ר" />
+          <xs:enumeration value="" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="referenceIDType">
+        <xs:restriction base="xs:integer" />
+      </xs:simpleType>
+      <xs:simpleType name="religionType">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">1=Jewish, 2=Muslim, 3=Christian, 4=other, 5=Not Known, 6=Druse  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:length value="1" />
+          <xs:pattern value="([0-6])" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="sexType">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="MALE|FEMALE|ז|נ|ב" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="smallDateTime">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="(((0[0-9])|([12][0-9])|(3[01]))/((0[0-9])|(1[012]))/((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3})) (([01][0-9])|(2[0-3]))(:[0-5][0-9]))*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="surgeryStatusCodeType">
+        <xs:annotation>
+          <xs:documentation xml:lang="he">
+				1	=	 נמצא בבירור	
+				3	=	 מבוטל
+				4	=	 מוזמן לניתוח
+				8	=	 אישור מחלקה	
+				9	=	 אישור מנהל חדר ניתוח
+				10	=	 בוצע
+				12	=	 בחדר ניתוח
+				13	=	 בוצע דיווח סיעודי נפרד
+				14	=	 נדחה בחדר ניתוח	
+			  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:length value="1" />
+          <xs:pattern value="([1,3,4,8,9,10,12,13,14])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="surgeryTypeType">
+        <xs:annotation>
+          <xs:documentation xml:lang="he">
+				1	=	אשפוז מיידי
+				2	=	אלקטיבי 
+			  </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:length value="1" />
+          <xs:pattern value="([1,2])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="unitType">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0" />
+          <xs:maxLength value="6" />
+          <xs:pattern value="([0-9])*" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="yNHebType">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="([ כל10])*" />
+          <xs:minLength value="0" />
+          <xs:maxLength value="1" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:hs="http://www.hadassah.org.il/BaseSchema.xsd" xmlns:ds="http://www.hadassah.org.il/DemographySchema.xsd" xmlns:bts="http://www.hadassah.org.il/BaseTypesSchema.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.hadassah.org.il/DemographySchema.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.hadassah.org.il/BaseSchema.xsd" />
+      <xs:import namespace="http://www.hadassah.org.il/BaseTypesSchema.xsd" />
+      <xs:complexType name="PatientIDsExistsInDemogRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="PatientID" type="ds:patientIDType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="PatientIDsExistsInDemogResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Patient">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PatientID" type="ds:patientIDType" />
+                    <xs:element name="Exists" type="xs:boolean" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="addressPatientType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AddressType" type="xs:string" />
+          <xs:element minOccurs="0" name="Street" type="xs:string" />
+          <xs:element minOccurs="0" name="HouseNum" type="xs:string" />
+          <xs:element minOccurs="0" name="Entrance" type="xs:string" />
+          <xs:element minOccurs="0" name="ApartmentNo" type="xs:string" />
+          <xs:element minOccurs="0" name="CityCode" type="xs:string" />
+          <xs:element minOccurs="0" name="CityName" type="xs:string" />
+          <xs:element minOccurs="0" name="ZipCode" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryCode" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryName" type="xs:string" />
+          <xs:element minOccurs="0" name="POB" type="xs:string" />
+          <xs:element minOccurs="0" name="POBCityCode" type="xs:string" />
+          <xs:element minOccurs="0" name="POBCountryCode" type="xs:string" />
+          <xs:element minOccurs="0" name="POBZipCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="communicationPatientType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CommunicationData" type="xs:string" />
+          <xs:element minOccurs="0" name="CommunicationType" type="xs:string" />
+          <xs:element minOccurs="0" name="CommunicationSubType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="demogByPatientIDNameRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element name="PatientID" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogByPatientIDRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element name="PatientID" type="ds:patientIDType" />
+              <xs:element minOccurs="0" name="IsContainsVerificationNum" type="xs:boolean" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogByPatientIDResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demogResponseBaseType">
+            <xs:sequence>
+              <xs:element name="PatientDemography" type="ds:demographyType" />
+              <xs:element minOccurs="0" name="ReferenceID" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogByReferenceIDRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element name="ReferenceID" type="bts:referenceIDType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogByReferenceIDResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demogResponseBaseType">
+            <xs:sequence>
+              <xs:element name="PatientDemography" type="ds:dwhDemographyType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogNameByPatientIDResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demogResponseBaseType">
+            <xs:sequence>
+              <xs:element name="PatientDemography" type="ds:demographyNameType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="demogResponseBaseType">
+        <xs:sequence>
+          <xs:element name="Result" type="xs:string" />
+          <xs:element minOccurs="0" name="ReturnedException" type="hs:faultType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="demographyBaseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="LastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="FatherName" type="xs:string" />
+          <xs:element minOccurs="0" name="MomName" type="xs:string" />
+          <xs:element minOccurs="0" name="PrevName" type="xs:string" />
+          <xs:element minOccurs="0" name="GrandFatherName" type="xs:string" />
+          <xs:element minOccurs="0" name="Sex" type="bts:sexType" />
+          <xs:element minOccurs="0" name="BirthDate" type="bts:date" />
+          <xs:element minOccurs="0" name="CountryBirth" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryFather" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryMother" type="xs:string" />
+          <xs:element minOccurs="0" name="MaritalStatus" type="bts:maritalStatusType" />
+          <xs:element minOccurs="0" name="Religion" type="bts:religionType" />
+          <xs:element minOccurs="0" name="Occupation" type="xs:string" />
+          <xs:element minOccurs="0" name="SpouseName" type="xs:string" />
+          <xs:element minOccurs="0" name="AliyahYear" type="xs:int" />
+          <xs:element minOccurs="0" name="PhoneArea" type="xs:string" />
+          <xs:element minOccurs="0" name="TelephoneNum" type="xs:string" />
+          <xs:element minOccurs="0" name="Street" type="xs:string" />
+          <xs:element minOccurs="0" name="HouseNum" type="xs:string" />
+          <xs:element minOccurs="0" name="City" type="xs:string" />
+          <xs:element minOccurs="0" name="Neighbourhood" type="xs:string" />
+          <xs:element minOccurs="0" name="ZipCode" type="xs:string" />
+          <xs:element minOccurs="0" name="Dead" type="xs:string" />
+          <xs:element minOccurs="0" name="DeathDate" type="bts:longDateTimeNoMiliPermitNoTime" />
+          <xs:element minOccurs="0" name="CreateDate" type="bts:dateTime" />
+          <xs:element minOccurs="0" name="WhenReported" type="xs:string" />
+          <xs:element minOccurs="0" name="Nationality" type="bts:nationalityType" />
+          <xs:element minOccurs="0" name="PrivilegeCode" type="xs:string" />
+          <xs:element minOccurs="0" name="InsuredBy" type="xs:string" />
+          <xs:element minOccurs="0" name="Email" type="xs:string" />
+          <xs:element minOccurs="0" name="FLastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FFirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="MiddleName" type="xs:string" />
+          <xs:element minOccurs="0" name="ForeignAddress" type="xs:string" />
+          <xs:element minOccurs="0" name="CityName" type="xs:string" />
+          <xs:element minOccurs="0" name="Country" type="xs:string" />
+          <xs:element minOccurs="0" name="PassportCountry" type="xs:string" />
+          <xs:element minOccurs="0" name="PassportNum" type="xs:string" />
+          <xs:element minOccurs="0" name="WorkPhoneArea" type="xs:string" />
+          <xs:element minOccurs="0" name="WorkPhoneNum" type="xs:string" />
+          <xs:element minOccurs="0" name="CellularFirmCode" type="xs:string" />
+          <xs:element minOccurs="0" name="CellularPhoneNum" type="xs:string" />
+          <xs:element minOccurs="0" name="FaxArea" type="xs:string" />
+          <xs:element minOccurs="0" name="Fax" type="xs:string" />
+          <xs:element minOccurs="0" name="BornHds" type="xs:string" />
+          <xs:element minOccurs="0" name="ArmyNum" type="xs:string" />
+          <xs:element minOccurs="0" name="NumChildren" type="xs:string" />
+          <xs:element minOccurs="0" name="FFatherName" type="xs:string" />
+          <xs:element minOccurs="0" name="MomNum" type="xs:string" />
+          <xs:element minOccurs="0" name="MomType" type="xs:string" />
+          <xs:element minOccurs="0" name="Pob" type="xs:string" />
+          <xs:element minOccurs="0" name="MyHadassahFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MyHadassahDate" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsKPhone" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CellPhone" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EMail" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="HadassahSheliCreatedBy" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryBirthNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryFatherNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CountryMotherNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PassportCountryNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="InsuredByNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MaritalStatusNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReligionNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OccupationNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NeighbourhoodNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DeadNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="GenderNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NationalityNameDesc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RelationType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RecordNumParent" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastNameParent" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstNameParent" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SendMailFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SendEMailFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PatientIdentity" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="CommunicationPatient" nillable="true" type="ds:communicationPatientType" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="AddressPatient" nillable="true" type="ds:addressPatientType" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="PatientType" nillable="true" type="ds:patientTypeType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="demographyNameType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="LastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="FLastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FFirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="BirthDate" type="bts:emptyableDate" />
+          <xs:element minOccurs="0" name="Sex" type="bts:sexType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="demographyType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demographyBaseType">
+            <xs:sequence>
+              <xs:element name="RecordNum" type="xs:string" />
+              <xs:element minOccurs="0" name="RecordType" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="dwhDemographyType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demographyType">
+            <xs:sequence>
+              <xs:element name="ReferenceID" type="bts:referenceIDType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="multipleDemogByPatientIDsRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="DemogByPatientIDRequestNoRequestorID">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PatientID" type="ds:patientIDType" />
+                    <xs:element minOccurs="0" name="IsContainsVerificationNum" type="xs:boolean" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="multipleDemogByReferenceIDsRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="DemogByReferenceIDRequestNoRequestorID">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ReferenceID" type="bts:referenceIDType" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="newDemogResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demogResponseBaseType">
+            <xs:sequence>
+              <xs:element name="PatientDemography" type="ds:demographyType" />
+              <xs:element minOccurs="0" name="ReferenceID" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="newDemographyRequestType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:requestorIDType">
+            <xs:sequence>
+              <xs:element name="NewDemog" type="ds:newDemographyType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="newDemographyType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="RecordNum" type="xs:string" />
+          <xs:element minOccurs="0" name="RecordType" type="xs:string" />
+          <xs:element minOccurs="0" name="OtherRecordNum" type="xs:string" />
+          <xs:element minOccurs="0" name="LastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="BirthDate" type="bts:emptyableDate" />
+          <xs:element minOccurs="0" name="Sex" type="bts:sexType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="patientIDType">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="1" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="patientTypeType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PatientPropertyTypeCode" type="xs:string" />
+          <xs:element minOccurs="0" name="PatientPropertyCode" type="xs:string" />
+          <xs:element minOccurs="0" name="FromDate" type="xs:string" />
+          <xs:element minOccurs="0" name="ToDate" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="requestorIDType">
+        <xs:sequence>
+          <xs:element name="RequestorID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="smallDemographyResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ds:demogResponseBaseType">
+            <xs:sequence>
+              <xs:element name="SmallPatientDemography" type="ds:smallDemographyType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="smallDemographyType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="LastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="FLastName" type="xs:string" />
+          <xs:element minOccurs="0" name="FFirstName" type="xs:string" />
+          <xs:element minOccurs="0" name="BirthDate" type="bts:emptyableDate" />
+          <xs:element minOccurs="0" name="Sex" type="bts:sexType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DemogByPatientIDNameRequest" type="ds:demogByPatientIDNameRequestType" />
+      <xs:element name="DemogByPatientIDNameResponse" type="ds:demogNameByPatientIDResponseType" />
+      <xs:element name="DemogByPatientIDRequest" type="ds:demogByPatientIDRequestType" />
+      <xs:element name="DemogByPatientIDResponse" type="ds:demogByPatientIDResponseType" />
+      <xs:element name="DemogByReferenceIDRequest" type="ds:demogByReferenceIDRequestType" />
+      <xs:element name="DemogByReferenceIDResponse" type="ds:demogByReferenceIDResponseType" />
+      <xs:element name="DemogNameByPatientIDResponse" type="ds:demogNameByPatientIDResponseType" />
+      <xs:element name="DemogNameResponse" type="ds:demographyNameType" />
+      <xs:element name="DemogResponse" type="ds:demographyType" />
+      <xs:element name="GetDemogDataInput">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="PatientID" type="ds:patientIDType" />
+            <xs:element minOccurs="0" name="PatientIDNoVerificationNum" type="ds:patientIDType" />
+            <xs:element minOccurs="0" name="ReferenceID" type="bts:referenceIDType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetDemogDataRestRequest">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ds:requestorIDType">
+              <xs:sequence>
+                <xs:element name="MethodURI" type="xs:string" />
+                <xs:element name="RequestBy">
+                  <xs:complexType>
+                    <xs:choice>
+                      <xs:element minOccurs="0" maxOccurs="unbounded" name="PatientID" type="ds:patientIDType" />
+                      <xs:element minOccurs="0" maxOccurs="unbounded" name="PatientIDNoVerificationNum" type="ds:patientIDType" />
+                      <xs:element minOccurs="0" maxOccurs="unbounded" name="ReferenceID" type="bts:referenceIDType" />
+                    </xs:choice>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetDemogDataRestResponse">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Demography" type="ds:dwhDemographyType" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="FullDemography" type="ds:dwhDemographyType" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="SmallDemography" type="ds:smallDemographyType" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="MultipleDemogByPatientIDsRequest" type="ds:multipleDemogByPatientIDsRequestType" />
+      <xs:element name="MultipleDemogByPatientIDsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="ds:DemogByPatientIDResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="MultipleDemogByReferenceIDsRequest" type="ds:multipleDemogByReferenceIDsRequestType" />
+      <xs:element name="MultipleDemogByReferenceIDsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="ds:DemogByReferenceIDResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="MultipleSmallDemogByPatientIDsRequest" type="ds:multipleDemogByPatientIDsRequestType" />
+      <xs:element name="MultipleSmallDemogByPatientIDsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="ds:SmallDemogByPatientIDResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="MultipleSmallDemogByReferenceIDsRequest" type="ds:multipleDemogByReferenceIDsRequestType" />
+      <xs:element name="MultipleSmallDemogByReferenceIDsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="ds:SmallDemogByReferenceIDResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="NewDemog" type="ds:newDemographyType" />
+      <xs:element name="NewDemogRequest" type="ds:newDemographyRequestType" />
+      <xs:element name="NewDemogResponse" type="ds:newDemogResponseType" />
+      <xs:element name="PatientIDsExistsInDemogRequest" type="ds:PatientIDsExistsInDemogRequestType" />
+      <xs:element name="PatientIDsExistsInDemogResponse" type="ds:PatientIDsExistsInDemogResponseType" />
+      <xs:element name="SmallDemogByPatientIDRequest" type="ds:demogByPatientIDRequestType" />
+      <xs:element name="SmallDemogByPatientIDResponse" type="ds:smallDemographyResponseType" />
+      <xs:element name="SmallDemogByReferenceIDRequest" type="ds:demogByReferenceIDRequestType" />
+      <xs:element name="SmallDemogByReferenceIDResponse" type="ds:smallDemographyResponseType" />
+      <xs:element name="SmallDemogResponse" type="ds:smallDemographyType" />
+    </xs:schema>
+    <xs:schema xmlns:hs="http://www.hadassah.org.il/BaseSchema.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.hadassah.org.il/BaseSchema.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="MailSendType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="Mail" type="hs:mailSendType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anyDataType">
+        <xs:sequence>
+          <xs:any namespace="##any" processContents="lax" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="bodyResponseType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:bodyType">
+            <xs:sequence>
+              <xs:element name="Result" type="hs:resultType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="bodyType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Data" nillable="true" type="hs:anyDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="exceptionType">
+        <xs:sequence>
+          <xs:element name="SevirityLevel" type="hs:sevirityLevelType" />
+          <xs:element minOccurs="0" name="ExecptionText" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ExecptionCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="faultType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Exception" type="hs:exceptionType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="hadassahMessage" />
+      <xs:complexType name="headerBaseType">
+        <xs:sequence>
+          <xs:element name="MessageID" type="xs:string" />
+          <xs:element name="InitiatorID" type="xs:string" />
+          <xs:element name="BusinessObjectTypeID" type="xs:string" />
+          <xs:element name="BusinessObjectID" type="xs:string" />
+          <xs:element minOccurs="0" name="MessageInstanceID" type="xs:string" />
+          <xs:element minOccurs="0" name="CorrelationID" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="headerType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:headerBaseType">
+            <xs:sequence>
+              <xs:element name="Timestamp" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="mailSendType">
+        <xs:sequence>
+          <xs:element name="From" type="xs:string" />
+          <xs:element name="To" type="xs:string" />
+          <xs:element name="Subject" type="xs:string" />
+          <xs:element minOccurs="0" name="Cc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Bcc" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReplyTo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Body" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="messageType">
+        <xs:sequence>
+          <xs:element name="MessageHeader" type="hs:headerType" />
+          <xs:element name="MessageBody" type="hs:bodyType" />
+          <xs:element minOccurs="0" name="MessageFault" type="hs:faultType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="reqMessageType">
+        <xs:sequence>
+          <xs:element name="ReqMessageHeader" type="hs:headerBaseType" />
+          <xs:element name="ReqMessageBody" type="hs:bodyType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="requestMessageBody">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:hadassahMessage">
+            <xs:sequence>
+              <xs:element name="MessageBody" type="hs:bodyType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="requestMessageHeader">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:hadassahMessage">
+            <xs:sequence>
+              <xs:element name="MessageHeader" type="hs:headerBaseType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="requestMessageType">
+        <xs:sequence>
+          <xs:element name="MessageHeader" type="hs:headerBaseType" />
+          <xs:element name="MessageBody" type="hs:bodyType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="requestorIDType">
+        <xs:sequence>
+          <xs:element name="RequestorID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="respMessageType">
+        <xs:sequence>
+          <xs:element name="RespMessageHeader" type="hs:responseMessageHeader" />
+          <xs:element name="RespMessageBody" type="hs:responseMessageBody" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="responseMessageBody">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:hadassahMessage">
+            <xs:sequence>
+              <xs:element name="MessageBody" type="hs:bodyResponseType" />
+              <xs:element minOccurs="0" name="MessageFault" type="hs:faultType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="responseMessageHeader">
+        <xs:complexContent mixed="false">
+          <xs:extension base="hs:hadassahMessage">
+            <xs:sequence>
+              <xs:element name="MessageHeader" type="hs:headerType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="responseMessageType">
+        <xs:sequence>
+          <xs:element name="MessageHeader" type="hs:headerType" />
+          <xs:element name="MessageBody" type="hs:bodyResponseType" />
+          <xs:element minOccurs="0" name="MessageFault" type="hs:faultType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="resultType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SUCCESS" />
+          <xs:enumeration value="ERROR" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="sevirityLevelType">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[0-5]" />
+          <xs:maxLength value="1" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="GeneralMessageFault" type="hs:faultType" />
+      <xs:element name="HadassahMessage" type="hs:messageType" />
+      <xs:element name="ReqMessageBody" type="hs:requestMessageBody" />
+      <xs:element name="ReqMessageHeader" type="hs:requestMessageHeader" />
+      <xs:element name="RequestMessage" type="hs:reqMessageType" />
+      <xs:element name="RespMessage" type="hs:respMessageType" />
+      <xs:element name="RespMessageBody" type="hs:responseMessageBody" />
+      <xs:element name="RespMessageHeader" type="hs:responseMessageHeader" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="MultipleDemogByReferenceIDsRequestMessage">
+    <wsdl:part name="part1" element="ns0:MultipleDemogByReferenceIDsRequest" />
+  </wsdl:message>
+  <wsdl:message name="MultipleDemogByReferenceIDsResponseMessage">
+    <wsdl:part name="part1" element="ns0:MultipleDemogByReferenceIDsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GeneralFault">
+    <wsdl:part name="part1" element="ns1:GeneralMessageFault" />
+  </wsdl:message>
+  <wsdl:message name="PatientIDsExistsInDemogRequestMessage">
+    <wsdl:part name="part1" element="ns0:PatientIDsExistsInDemogRequest" />
+  </wsdl:message>
+  <wsdl:message name="PatientIDsExistsInDemogResponseMessage">
+    <wsdl:part name="part1" element="ns0:PatientIDsExistsInDemogResponse" />
+  </wsdl:message>
+  <wsdl:message name="MultipleSmallDemogByReferenceIDsRequestMessage">
+    <wsdl:part name="part1" element="ns0:MultipleSmallDemogByReferenceIDsRequest" />
+  </wsdl:message>
+  <wsdl:message name="MultipleSmallDemogByReferenceIDsResponseMessage">
+    <wsdl:part name="part1" element="ns0:MultipleSmallDemogByReferenceIDsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SmallDemogByReferenceIDRequestMessage">
+    <wsdl:part name="part1" element="ns0:SmallDemogByReferenceIDRequest" />
+  </wsdl:message>
+  <wsdl:message name="SmallDemogByReferenceIDResponseMessage">
+    <wsdl:part name="part1" element="ns0:SmallDemogByReferenceIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="DemogByPatientIDRequestMessage">
+    <wsdl:part name="part1" element="ns0:DemogByPatientIDRequest" />
+  </wsdl:message>
+  <wsdl:message name="DemogByPatientIDResponsetMessage">
+    <wsdl:part name="part1" element="ns0:DemogByPatientIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="MultipleSmallDemogByPatientIDsRequestMessage">
+    <wsdl:part name="part1" element="ns0:MultipleSmallDemogByPatientIDsRequest" />
+  </wsdl:message>
+  <wsdl:message name="MultipleSmallDemogByPatientIDsResponseMessage">
+    <wsdl:part name="part1" element="ns0:MultipleSmallDemogByPatientIDsResponse" />
+  </wsdl:message>
+  <wsdl:message name="DemogByReferenceIDRequestMessage">
+    <wsdl:part name="part1" element="ns0:DemogByReferenceIDRequest" />
+  </wsdl:message>
+  <wsdl:message name="DemogByReferenceIDResponseMessage">
+    <wsdl:part name="part1" element="ns0:DemogByReferenceIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="NewDemogRequestMessage">
+    <wsdl:part name="part1" element="ns0:NewDemogRequest" />
+  </wsdl:message>
+  <wsdl:message name="NewDemogResponseMessage">
+    <wsdl:part name="part1" element="ns0:NewDemogResponse" />
+  </wsdl:message>
+  <wsdl:message name="MultipleDemogByPatientIDsRequestMessage">
+    <wsdl:part name="part1" element="ns0:MultipleDemogByPatientIDsRequest" />
+  </wsdl:message>
+  <wsdl:message name="MultipleDemogByPatientIDsResponsetMessage">
+    <wsdl:part name="part1" element="ns0:MultipleDemogByPatientIDsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SmallDemogByPatientIDRequestMessage">
+    <wsdl:part name="part1" element="ns0:SmallDemogByPatientIDRequest" />
+  </wsdl:message>
+  <wsdl:message name="SmallDemogByPatientIDResponseMessage">
+    <wsdl:part name="part1" element="ns0:SmallDemogByPatientIDResponse" />
+  </wsdl:message>
+  <wsdl:portType name="DWHDemogPortType">
+    <wsdl:operation name="GetMultipleDemogByReferenceIDs">
+      <wsdl:input message="tns:MultipleDemogByReferenceIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleDemogByReferenceIDsResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="PatientIDsExistsInDemog">
+      <wsdl:input message="tns:PatientIDsExistsInDemogRequestMessage" />
+      <wsdl:output message="tns:PatientIDsExistsInDemogResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleSmallDemogByReferenceIDs">
+      <wsdl:input message="tns:MultipleSmallDemogByReferenceIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleSmallDemogByReferenceIDsResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmallDemogByReferenceID">
+      <wsdl:input message="tns:SmallDemogByReferenceIDRequestMessage" />
+      <wsdl:output message="tns:SmallDemogByReferenceIDResponseMessage" />
+      <wsdl:fault name="fault" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDemogByPatientID">
+      <wsdl:input message="tns:DemogByPatientIDRequestMessage" />
+      <wsdl:output message="tns:DemogByPatientIDResponsetMessage" />
+      <wsdl:fault name="fault" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleSmallDemogByPatientIDs">
+      <wsdl:input message="tns:MultipleSmallDemogByPatientIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleSmallDemogByPatientIDsResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDemogByReferenceID">
+      <wsdl:input message="tns:DemogByReferenceIDRequestMessage" />
+      <wsdl:output message="tns:DemogByReferenceIDResponseMessage" />
+      <wsdl:fault name="fault" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="NewDemog">
+      <wsdl:input message="tns:NewDemogRequestMessage" />
+      <wsdl:output message="tns:NewDemogResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleFullDemogByPatientIDs">
+      <wsdl:input message="tns:MultipleDemogByPatientIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleDemogByPatientIDsResponsetMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleDemogByPatientIDs">
+      <wsdl:input message="tns:MultipleDemogByPatientIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleDemogByPatientIDsResponsetMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFullDemogByPatientID">
+      <wsdl:input message="tns:DemogByPatientIDRequestMessage" />
+      <wsdl:output message="tns:DemogByPatientIDResponsetMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleFullDemogByReferenceIDs">
+      <wsdl:input message="tns:MultipleDemogByReferenceIDsRequestMessage" />
+      <wsdl:output message="tns:MultipleDemogByReferenceIDsResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFullDemogByReferenceID">
+      <wsdl:input message="tns:DemogByReferenceIDRequestMessage" />
+      <wsdl:output message="tns:DemogByReferenceIDResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmallDemogByPatientID">
+      <wsdl:input message="tns:SmallDemogByPatientIDRequestMessage" />
+      <wsdl:output message="tns:SmallDemogByPatientIDResponseMessage" />
+      <wsdl:fault name="fault1" message="tns:GeneralFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DWHDemogPortTypeEndpoint0SSLBinding" type="tns:DWHDemogPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMultipleDemogByReferenceIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleDemogByReferenceIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PatientIDsExistsInDemog">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/PatientIDsExistsInDemog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleSmallDemogByReferenceIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleSmallDemogByReferenceIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmallDemogByReferenceID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetSmallDemogByReferenceID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault use="literal" name="fault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetDemogByPatientID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetDemogByPatientID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault use="literal" name="fault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleSmallDemogByPatientIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleSmallDemogByPatientIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetDemogByReferenceID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetDemogByReferenceID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault use="literal" name="fault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="NewDemog">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/NewDemog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleFullDemogByPatientIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleFullDemogByPatientIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleDemogByPatientIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleDemogByPatientIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetFullDemogByPatientID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetFullDemogByPatientID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleFullDemogByReferenceIDs">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetMultipleFullDemogByReferenceIDs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetFullDemogByReferenceID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetFullDemogByReferenceID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmallDemogByPatientID">
+      <soap:operation soapAction="/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL/GetSmallDemogByPatientID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="part1" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DWHDemographyWSDL-service0.serviceagent">
+    <wsdl:port name="DWHDemogPortTypeEndpoint0SSL" binding="tns:DWHDemogPortTypeEndpoint0SSLBinding">
+      <soap:address location="https://tibcoesbdev.dom.hadassah.org.il:1089/5AppLayer/DWHDemographyWSDL-service0.serviceagent/DWHDemogPortTypeEndpoint0SSL" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
