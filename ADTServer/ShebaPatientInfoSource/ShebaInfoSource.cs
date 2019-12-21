@@ -3,7 +3,6 @@ using AdtSvrCmn;
 using AdtSvrCmn.EventArguments;
 using AdtSvrCmn.Interfaces;
 using AdtSvrCmn.Objects;
-using DbLayer;
 using NLog;
 using SqlConnector;
 using System;

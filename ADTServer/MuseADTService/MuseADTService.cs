@@ -4,21 +4,16 @@ using System;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using ADTServ;
-using ApplicationLogger;
 using System.Threading;
 using AdtSvrCmn;
-using System.IO;
 using AdtSvrCmn.Interfaces;
-using GlobalApplicationConfigurationManager;
-using LeumitWebServiceDataClient;
-
 using System.Configuration;
 using MuseHl7Parser;
 using AdtSvrCmn.Objects;
-using LeumitPatientIdParser;
+using GlobalApplicationConfigurationManager;
 using NLog;
-
-
+using ShebaPatientInfoSource;
+using ShebaPidParser;
 
 
 namespace MuseADTService
@@ -67,7 +62,7 @@ namespace MuseADTService
             {
                 logger = LogManager.GetCurrentClassLogger();
                 logger.Debug("Loading Configuration files...");
-                IPatientIdHandler pidHandler = new PidParser();
+               // IPatientIdHandler pidHandler = new PidParser();
                 try
                 {
                     var configFilePath = ConfigurationManager.AppSettings["ConfigFileFullPath"];
@@ -150,11 +145,11 @@ namespace MuseADTService
                 logger.Debug("Loading Sheba Web service client...");
                 if (useType =="1")
                 {
-                    pInfoSource = new ShebaPatientInfoSource.ShebaInfoSource();
+                    pInfoSource = new ShebaInfoSource(configuration);
                 }
                 if (useType =="2")
                 {
-                    pInfoSource = new ShebaPatientInfoSource.ShebaInfoSource(configuration);
+                    pInfoSource = new ShebaInfoSource(configuration);
                 }
                 logger.Debug("Web service client loaded");
 
