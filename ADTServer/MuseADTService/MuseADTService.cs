@@ -11,15 +11,13 @@ using System.IO;
 using AdtSvrCmn.Interfaces;
 using GlobalApplicationConfigurationManager;
 using LeumitWebServiceDataClient;
-
 using System.Configuration;
 using MuseHl7Parser;
 using AdtSvrCmn.Objects;
 using LeumitPatientIdParser;
 using NLog;
-
-
-
+using HadassahWebServiceDataClient;
+using HadassahPatientIdParser;
 
 namespace MuseADTService
 {
@@ -157,6 +155,15 @@ namespace MuseADTService
                     pInfoSource = new ShebaPatientInfoSource.ShebaInfoSource(configuration);
                 }
                 logger.Debug("Web service client loaded");
+#elif HADASSAH || DEBUG && HADASSAH
+                
+                logger.Debug("Loading Hadassah Patient Id Parser...");
+                pidParser = new HadassahPatienIdParser(configuration);
+                logger.Debug("Hadassah Patient Id Parser loaded");
+
+                logger.Debug("Loading Hadassah Web service client...");
+                pInfoSource = new HadassahPatientDataSource(configuration);
+                logger.Debug("Hadassah Web service client loaded");
 
 #endif
 

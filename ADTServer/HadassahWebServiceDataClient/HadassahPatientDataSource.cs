@@ -7,15 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 using HadassahWebServiceDataClient.HadassahWebClient;
 using System.Configuration;
+using NLog;
 
 namespace HadassahWebServiceDataClient
 {
-    class HadassahPatientDataSource : IPatientInfoSoapSource
+    public class HadassahPatientDataSource : IPatientInfoSoapSource
     {
         public event EventHandler ErrorGettingPatientInfo;
         public event EventHandler RecevingPatientInfo;
         public event EventHandler RequestingPatientInfo;
-
+        ApplicationConfiguration _config;
+        Logger logger;
+        public HadassahPatientDataSource(ApplicationConfiguration config)
+        {
+            logger = LogManager.GetCurrentClassLogger();
+            _config = config;
+        }
         public CompletePatientInformation GetPatientInfo(string CustumerId)
         {
             demogByPatientIDResponseType response;

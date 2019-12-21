@@ -5,11 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using AdtSvrCmn.Interfaces;
 using AdtSvrCmn.Objects;
+using NLog;
+
 
 namespace HadassahPatientIdParser
 {
-    class HadassahPatienIdParser : IPatientIdHandler
+    public class HadassahPatienIdParser : IPatientIdHandler
     {
+        ApplicationConfiguration _config;
+        Logger logger;
+        public HadassahPatienIdParser(ApplicationConfiguration config)
+        {
+            _config = config;
+            logger = LogManager.GetCurrentClassLogger();
+        }
         public PatientId[] ParseID(string idToParse)
         {
 

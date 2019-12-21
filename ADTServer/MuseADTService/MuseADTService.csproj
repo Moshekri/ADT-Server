@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;LEUMIT</DefineConstants>
+    <DefineConstants>DEBUG;HADASSAH</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -144,6 +144,14 @@
     <ProjectReference Include="..\DbLayer\DbLayer.csproj">
       <Project>{ff117739-1f10-4407-8cee-6f0a77a47f7a}</Project>
       <Name>DbLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HadassahPatientIdParser\HadassahPatientIdParser.csproj">
+      <Project>{99903f68-101e-431c-9001-83bf619febf0}</Project>
+      <Name>HadassahPatientIdParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HadassahWebServiceDataClient\HadassahWebServiceDataClient.csproj">
+      <Project>{4de98f18-9561-4eb3-b875-134da48e170b}</Project>
+      <Name>HadassahWebServiceDataClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Hl7Parser\Hl7Parser.csproj">
       <Project>{8299CF6B-8F66-4D79-91AF-343327444489}</Project>
