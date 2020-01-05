@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Connected Services\HadassahWebClient\configuration91.svcinfo" />
+    <None Include="Connected Services\HadassahWebClient\configuration.svcinfo" />
     <None Include="Connected Services\HadassahWebClient\HadassahWebServiceDataClient.HadassahWebClient.demogByPatientIDResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -114,10 +116,14 @@
     <None Include="Connected Services\HadassahWebClient\HadassahWebServiceDataClient.HadassahWebClient.smallDemographyResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\HadassahWebClient\Untitled.wsdl" />
+    <None Include="Connected Services\HadassahWebClient\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Connected Services\HadassahWebClient\Untitled.wsdl" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -125,18 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\HadassahWebClient\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\HadassahWebClient\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\HadassahWebClient\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\HadassahWebClient\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

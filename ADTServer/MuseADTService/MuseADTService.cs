@@ -8,11 +8,9 @@ using System.Threading;
 using AdtSvrCmn;
 using AdtSvrCmn.Interfaces;
 using GlobalApplicationConfigurationManager;
-//using LeumitWebServiceDataClient;
 using System.Configuration;
 using MuseHl7Parser;
 using AdtSvrCmn.Objects;
-//using LeumitPatientIdParser;
 using HadassahWebServiceDataClient;
 using HadassahPatientIdParser;
 using NLog;
@@ -47,7 +45,6 @@ namespace MuseADTService
         #region fields
         ServiceStatus serviceStatus = new ServiceStatus();
 
-
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
@@ -80,24 +77,6 @@ namespace MuseADTService
                 InitializeComponent();
                 IPatientInfoSoapSource pInfoSource = null;
                 IPatientIdHandler pidParser = null;
-//#if DEBUG
-//                // using refelction for loading the files
-//                //pInfoSource = plugInManager.GetWebServiceClientApp();
-//                //pidParser = plugInManager.GetIdPatientHandlers();
-
-//                //leumit
-//                //pidParser = new LeumitPatientIdParser.PidParser() ;
-//                //pInfoSource = new LeumitWebServiceDataClient.LeumitPatientInfoClient(configuration);
-
-
-//                //meuhedet
-//                logger.Debug("Loading Patient Id Parser...");
-//                pidParser = new MeuhedetPatientIdParser.MeuhedetIdParser();
-//                logger.Debug("Patient Id Parser loaded");
-//                logger.Debug("Loading Web service client...");
-//                pInfoSource = new MeuhedetWebServiceDataClient.MeuhedetPatientDataRequester(configuration);
-//                logger.Debug("Web service client loaded");
-//#else
 
 #if REFLECTION || DEBUG && REFLECTION       
                 PlugInManager.PlugInManager plugInManager = new PlugInManager.PlugInManager(configuration.PlugInFolderPath, configuration);
@@ -176,7 +155,7 @@ namespace MuseADTService
                     throw new Exception("Missing PlugIn");
                 }
 
-//#endif
+
 
                 hl7manager = new Hl7Mgr(new Hl7ManagerData()
                 {

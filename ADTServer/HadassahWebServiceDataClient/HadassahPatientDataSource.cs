@@ -25,28 +25,50 @@ namespace HadassahWebServiceDataClient
         }
         public CompletePatientInformation GetPatientInfo(string CustumerId)
         {
-            demogByPatientIDResponseType response;
-            using (var client = new HadassahWebClient.DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSL"))
-            {
+            logger.Trace("Inside GetPatientInfo - start ");
+            demogByPatientIDResponseType response = new demogByPatientIDResponseType();
+            logger.Debug("Trying to create web client for hadassah web service");
+            var SEC = ConfigurationManager.GetSection("startup");
 
+            using (var client = new DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSLBinding"))
+            {
+                logger.Debug($"client to hadassaah web service  created successfuly  target address : {client.Endpoint.Address}");
+                logger.Debug("Creating request ...");
                 demogByPatientIDRequestType req = new demogByPatientIDRequestType();
+                logger.Debug($"Setting requester ID to {ConfigurationManager.AppSettings["ReqSysID"]}");
                 req.RequestorID = ConfigurationManager.AppSettings["ReqSysID"];
+                logger.Debug($"Setting patient id to : {CustumerId} ");
                 req.PatientID = CustumerId;
-                response = client.GetDemogByPatientID(req);
+                logger.Debug($"Attempting to retrieve patient Demographics...");
+                try
+                {
+                    response = client.GetDemogByPatientID(req);
+                }
+                catch (Exception ex)
+                {
+
+                    logger.Error(ex, "Error while trying to get patient demograpgics");
+                    return null;
+                }
+                logger.Debug("Successefully got response from web service");
+                logger.Debug($"Status returned from web service : {response.Result}");
+                logger.Debug($"Execption returned from web service : {response.ReturnedException.Exception.ExecptionText}");
+                logger.Debug($"Execption severity level returned from web service : { response.ReturnedException.Exception.SevirityLevel}");
             }
             var dateOfBirth = response.PatientDemography.BirthDate.Split('/');
-            
+
             string age = CalculateAge(response.PatientDemography.BirthDate);
             string gender = GetGender(response.PatientDemography.Sex);
             string dob = dateOfBirth[2] + dateOfBirth[1] + dateOfBirth[0];
-
+            logger.Debug($"age : {age} , gender : {gender} , date of birth : {dob}");
+            logger.Info("Returning patient information object");
             return new CompletePatientInformation()
             {
                 Age = age,
                 Gender = gender,
                 DOB = dob,
                 FirstName = response.PatientDemography.FirstName,
-                LastName = response.PatientDemography.LastName ,
+                LastName = response.PatientDemography.LastName,
                 Height = "",
                 PatientId = CustumerId,
                 GenderDesc = response.PatientDemography.Sex,
@@ -54,7 +76,7 @@ namespace HadassahWebServiceDataClient
                 CompleteResponseStatusMessage = response.ReturnedException.Exception.ExecptionText,
                 Severity = response.ReturnedException.Exception.SevirityLevel,
                 ResponseStatus = response.Result
-               
+
             };
         }
 
@@ -76,6 +98,7 @@ namespace HadassahWebServiceDataClient
 
         private string CalculateAge(string birthDate)
         {
+            logger.Debug("Calculate patient age from date of birth");
             var dateElements = birthDate.Split('/');
             DateTime bDate = new DateTime(int.Parse(dateElements[2]), int.Parse(dateElements[1]), int.Parse(dateElements[0]));
             int years = (int)((DateTime.Now - bDate).TotalDays / 365);

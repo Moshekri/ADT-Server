@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="50e818d8-d48d-41b8-b324-164ef2ea71c4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="2802e313-49f7-4de5-89af-afd7a7cf6fe6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="c:\had1" Protocol="file" SourceId="1" />
+    <MetadataSource Address="c:\had1.wsdl" Protocol="file" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Untitled.wsdl" MetadataType="Wsdl" ID="9366ec3e-2ba5-43a9-97fe-5b8051722fa1" SourceId="1" SourceUrl="file:///c:/had1" />
+    <MetadataFile FileName="Untitled.wsdl" MetadataType="Wsdl" ID="80f09cea-b933-4597-b133-eff1864caf9e" SourceId="1" SourceUrl="file:///c:/had1.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
