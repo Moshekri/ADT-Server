@@ -35,10 +35,10 @@ namespace LeumitWebServiceDataClient
         public CompletePatientInformation GetPatientInfo(string patientId, string pidType)
         {
             logger.Trace("Inside GetPatientInfo");
-         
+
             CompletePatientInformation patientInfo = new CompletePatientInformation();
             string responseMessage = string.Empty;
-          
+
             responseMessage = GetDataFromWebService(patientId, pidType);
 
             var sevirity = GetDataFromMW300D(responseMessage, "PGL_SEVERITY");
@@ -77,7 +77,7 @@ namespace LeumitWebServiceDataClient
             }
         }
 
-        private string GetDataFromWebService(string patientId,string pidType)
+        private string GetDataFromWebService(string patientId, string pidType)
         {
             string responseMessage;
             string requestMessage = BuildRequestMessage(patientId, pidType);
@@ -155,12 +155,13 @@ namespace LeumitWebServiceDataClient
             patientInfo.Severity = severity.Trim();
             patientInfo.FirstName = firstName;
             patientInfo.LastName = lastName;
-            patientInfo.Gender = gender;
+            patientInfo.Gender = SetGender(gender);
+            //patientInfo.Gender = gender == "ז" ? "M" : "F" ;
             patientInfo.GenderDesc = gender == "M" ? "Male" : "Female";
             patientInfo.PatientId = patientId;
             patientInfo.ResponseStatus = status;
 
-           
+
             // web service returned an error
             if (patientInfo.Severity != "0" || patientInfo.ResponseStatus != _config.GoodSoapResponseErrorCode)
             {
@@ -174,6 +175,22 @@ namespace LeumitWebServiceDataClient
 
 
             return patientInfo;
+        }
+
+        private string SetGender(string gender)
+        {
+            switch (gender)
+            {
+                case "M":
+                case "F":
+                    return gender;
+                case "ז":
+                    return "M";
+                case "נ":
+                    return "F";
+                default:
+                    return "U";
+            }
         }
 
         private void SetWeight(string weight, CompletePatientInformation patientInfo)

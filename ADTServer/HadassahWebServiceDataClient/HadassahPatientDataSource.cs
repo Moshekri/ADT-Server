@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using HadassahWebServiceDataClient.HadassahWebClient;
 using System.Configuration;
 using NLog;
+using System.Xml;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace HadassahWebServiceDataClient
 {
@@ -30,7 +33,7 @@ namespace HadassahWebServiceDataClient
             logger.Debug("Trying to create web client for hadassah web service");
             var SEC = ConfigurationManager.GetSection("startup");
 
-            using (var client = new DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSLBinding"))
+            using (var client = new DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSL"))
             {
                 logger.Debug($"client to hadassaah web service  created successfuly  target address : {client.Endpoint.Address}");
                 logger.Debug("Creating request ...");
@@ -42,7 +45,15 @@ namespace HadassahWebServiceDataClient
                 logger.Debug($"Attempting to retrieve patient Demographics...");
                 try
                 {
+                    logger.Trace("Request message : ");
+                    string msg = GetXml(typeof(demogByPatientIDRequestType),req);
+                    logger.Trace(msg);
+
+
                     response = client.GetDemogByPatientID(req);
+                    string responeMsg = GetXml(typeof(demogByPatientIDResponseType), response);
+                    logger.Trace(responeMsg);
+                   
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +124,16 @@ namespace HadassahWebServiceDataClient
         public CompletePatientInformation GetPatientInfo(PatientId patientId)
         {
             return GetPatientInfo(patientId.ID);
+        }
 
+        private string GetXml(Type T,object obj)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                XmlSerializer ser = new XmlSerializer(T);
+                ser.Serialize(sw, obj);
+                return sw.ToString();
+            }
         }
     }
 }
