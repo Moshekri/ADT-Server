@@ -46,14 +46,14 @@ namespace HadassahWebServiceDataClient
                 try
                 {
                     logger.Trace("Request message : ");
-                    string msg = GetXml(typeof(demogByPatientIDRequestType),req);
+                    string msg = GetXml(typeof(demogByPatientIDRequestType), req);
                     logger.Trace(msg);
 
 
                     response = client.GetDemogByPatientID(req);
                     string responeMsg = GetXml(typeof(demogByPatientIDResponseType), response);
                     logger.Trace(responeMsg);
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -112,8 +112,9 @@ namespace HadassahWebServiceDataClient
             logger.Debug("Calculate patient age from date of birth");
             var dateElements = birthDate.Split('/');
             DateTime bDate = new DateTime(int.Parse(dateElements[2]), int.Parse(dateElements[1]), int.Parse(dateElements[0]));
-            int years = (int)((DateTime.Now - bDate).TotalDays / 365);
-            return years.ToString();
+            double years = (double)((DateTime.Now - bDate).TotalDays / 365);
+            int intyears = (int)years;
+            return intyears.ToString();
         }
 
         public CompletePatientInformation GetPatientInfo(string CustumerId, string pidType)
@@ -126,7 +127,7 @@ namespace HadassahWebServiceDataClient
             return GetPatientInfo(patientId.ID);
         }
 
-        private string GetXml(Type T,object obj)
+        private string GetXml(Type T, object obj)
         {
             using (StringWriter sw = new StringWriter())
             {
