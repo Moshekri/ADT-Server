@@ -15,11 +15,7 @@ namespace SoapClientMessageInspector
 {
     public class SoapClientMessageInspector : IClientMessageInspector
     {
-        string logDir;
-        public SoapClientMessageInspector(ApplicationConfiguration configuration)
-        {
-            logDir = configuration.LogFilePath;
-        }
+        
         public void AfterReceiveReply(ref Message reply, object correlationState)
         {
             File.WriteAllText("c:\\logs\\reply.txt", reply.ToString());

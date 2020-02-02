@@ -72,13 +72,31 @@ namespace HadassahWebServiceDataClient
             }
             try
             {
-                var dateOfBirth = response.PatientDemography.BirthDate.Split('/');
-                logger.Debug("Calculating age...");
-                string age = CalculateAge(response.PatientDemography.BirthDate);
+                string[] dateOfBirth = null;
+                string age =string.Empty;
+                string dob = string.Empty;
+                if (response.PatientDemography.BirthDate != string.Empty)
+                {
+                     dateOfBirth = response.PatientDemography.BirthDate.Split('/');
+                }
+                else
+                {
+                    logger.Error("Error getting date of birth , response from web service was :" + response.PatientDemography.BirthDate);
+                }
                 string gender = GetGender(response.PatientDemography.Sex);
-                string dob = dateOfBirth[2] + dateOfBirth[1] + dateOfBirth[0];
-                logger.Debug($"age : {age} , gender : {gender} , date of birth : {dob}");
-                logger.Info("Returning patient information object");
+                logger.Debug("Calculating age...");
+                if (dateOfBirth != null)
+                {
+                    age = CalculateAge(response.PatientDemography.BirthDate);
+                    dob = dateOfBirth[2] + dateOfBirth[1] + dateOfBirth[0];
+                    logger.Debug($"age : {age} , gender : {gender} , date of birth : {dob}");
+                    logger.Info("Returning patient information object");
+                }
+                else
+                {
+                    logger.Error("Date of birth format not correct : " + response.PatientDemography.BirthDate);
+                }
+
                 return new CompletePatientInformation()
                 {
                     Age = age,
@@ -118,6 +136,7 @@ namespace HadassahWebServiceDataClient
 
         private string GetGender(string sex)
         {
+            logger.Debug($"Getting Gender from  : " + sex);
             sex = sex.ToLower();
             switch (sex)
             {
@@ -134,7 +153,7 @@ namespace HadassahWebServiceDataClient
 
         private string CalculateAge(string birthDate)
         {
-            logger.Debug("Calculate patient age from date of birth");
+            logger.Debug("Calculate patient age from date of birth : " + birthDate);
             var dateElements = birthDate.Split('/');
             try
             {
