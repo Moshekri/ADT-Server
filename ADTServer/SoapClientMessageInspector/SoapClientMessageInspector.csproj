@@ -47,5 +47,11 @@
     <Compile Include="SoapClientMessageInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdtSvrCmn\AdtSvrCmn.csproj">
+      <Project>{96aeaf90-dc8b-4f0c-ad48-b49b3db90d33}</Project>
+      <Name>AdtSvrCmn</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
