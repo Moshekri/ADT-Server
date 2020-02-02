@@ -127,6 +127,10 @@
       <Project>{8299cf6b-8f66-4d79-91af-343327444489}</Project>
       <Name>Hl7Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SoapClientMessageInspector\SoapClientMessageInspector.csproj">
+      <Project>{12e204b9-23f6-4aa9-bb86-5a805477623a}</Project>
+      <Name>SoapClientMessageInspector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

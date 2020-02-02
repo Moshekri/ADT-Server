@@ -42,6 +42,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\AdtSvrCmn\AdtSvrCmn.csproj">
       <Project>{96aeaf90-dc8b-4f0c-ad48-b49b3db90d33}</Project>
       <Name>AdtSvrCmn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoapClientMessageInspector\SoapClientMessageInspector.csproj">
+      <Project>{12e204b9-23f6-4aa9-bb86-5a805477623a}</Project>
+      <Name>SoapClientMessageInspector</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

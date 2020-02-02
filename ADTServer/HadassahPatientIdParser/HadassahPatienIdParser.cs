@@ -26,7 +26,7 @@ namespace HadassahPatientIdParser
             int.TryParse(idToParse[idToParse.Length - 1].ToString(), out sifratBikret);
 
             PatientId id1 = new PatientId() { ID = idToParse, IsValidIsraeliId = true, SifratBikuret = sifratBikret.ToString(), SugId = idToParse[0].ToString() };
-            return new PatientId[] { id1, id1 };
+            return new PatientId[] { id1, null };
         }
     }
 }

@@ -11,7 +11,8 @@ using NLog;
 using System.Xml;
 using System.IO;
 using System.Xml.Serialization;
-
+using System.Web;
+using SoapClientMessageInspector;
 namespace HadassahWebServiceDataClient
 {
     public class HadassahPatientDataSource : IPatientInfoSoapSource
@@ -28,6 +29,7 @@ namespace HadassahWebServiceDataClient
         }
         public CompletePatientInformation GetPatientInfo(string CustumerId)
         {
+            
             logger.Trace("Inside GetPatientInfo - start ");
             demogByPatientIDResponseType response = new demogByPatientIDResponseType();
             logger.Debug("Trying to create web client for hadassah web service");
@@ -35,6 +37,10 @@ namespace HadassahWebServiceDataClient
 
             using (var client = new DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSL"))
             {
+                client.Endpoint.EndpointBehaviors.Add(new SoapClientMessageInspector.MessageEndPointBehavior());
+                logger.Info(client.InnerChannel.Via);
+
+
                 logger.Debug($"client to hadassaah web service  created successfuly  target address : {client.Endpoint.Address}");
                 logger.Debug("Creating request ...");
                 demogByPatientIDRequestType req = new demogByPatientIDRequestType();
@@ -42,14 +48,12 @@ namespace HadassahWebServiceDataClient
                 req.RequestorID = ConfigurationManager.AppSettings["ReqSysID"];
                 logger.Debug($"Setting patient id to : {CustumerId} ");
                 req.PatientID = CustumerId;
-                logger.Debug($"Attempting to retrieve patient Demographics...");
+                logger.Debug($"Attempting to retrieve patient Demographics for PID : {CustumerId} ...");
                 try
                 {
-                    logger.Trace("Request message : ");
+                                        logger.Trace("Request message : ");
                     string msg = GetXml(typeof(demogByPatientIDRequestType), req);
                     logger.Trace(msg);
-
-
                     response = client.GetDemogByPatientID(req);
                     string responeMsg = GetXml(typeof(demogByPatientIDResponseType), response);
                     logger.Trace(responeMsg);
@@ -57,8 +61,8 @@ namespace HadassahWebServiceDataClient
                 }
                 catch (Exception ex)
                 {
-
                     logger.Error(ex, "Error while trying to get patient demograpgics");
+                    LogException(ex);
                     return null;
                 }
                 logger.Debug("Successefully got response from web service");
@@ -66,29 +70,50 @@ namespace HadassahWebServiceDataClient
                 logger.Debug($"Execption returned from web service : {response.ReturnedException.Exception.ExecptionText}");
                 logger.Debug($"Execption severity level returned from web service : { response.ReturnedException.Exception.SevirityLevel}");
             }
-            var dateOfBirth = response.PatientDemography.BirthDate.Split('/');
-
-            string age = CalculateAge(response.PatientDemography.BirthDate);
-            string gender = GetGender(response.PatientDemography.Sex);
-            string dob = dateOfBirth[2] + dateOfBirth[1] + dateOfBirth[0];
-            logger.Debug($"age : {age} , gender : {gender} , date of birth : {dob}");
-            logger.Info("Returning patient information object");
-            return new CompletePatientInformation()
+            try
             {
-                Age = age,
-                Gender = gender,
-                DOB = dob,
-                FirstName = response.PatientDemography.FirstName,
-                LastName = response.PatientDemography.LastName,
-                Height = "",
-                PatientId = CustumerId,
-                GenderDesc = response.PatientDemography.Sex,
-                ResponseStatusMessage = response.Result,
-                CompleteResponseStatusMessage = response.ReturnedException.Exception.ExecptionText,
-                Severity = response.ReturnedException.Exception.SevirityLevel,
-                ResponseStatus = response.Result
+                var dateOfBirth = response.PatientDemography.BirthDate.Split('/');
+                logger.Debug("Calculating age...");
+                string age = CalculateAge(response.PatientDemography.BirthDate);
+                string gender = GetGender(response.PatientDemography.Sex);
+                string dob = dateOfBirth[2] + dateOfBirth[1] + dateOfBirth[0];
+                logger.Debug($"age : {age} , gender : {gender} , date of birth : {dob}");
+                logger.Info("Returning patient information object");
+                return new CompletePatientInformation()
+                {
+                    Age = age,
+                    Gender = gender,
+                    DOB = dob,
+                    FirstName = response.PatientDemography.FFirstName,
+                    LastName = response.PatientDemography.FLastName,
+                    Height = "",
+                    PatientId = CustumerId,
+                    GenderDesc = response.PatientDemography.Sex,
+                    ResponseStatusMessage = response.Result,
+                    CompleteResponseStatusMessage = response.ReturnedException.Exception.ExecptionText,
+                    Severity = response.ReturnedException.Exception.SevirityLevel,
+                    ResponseStatus = response.Result
 
-            };
+                };
+            }
+            catch (Exception ex)
+            {
+
+                LogException(ex);
+                return null;
+            }
+
+        }
+
+        private void LogException(Exception ex)
+        {
+            logger.Error("Exception Message : "  + ex.Message);
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                logger.Error("Inner Exception : " + ex.Message);
+
+            }
         }
 
         private string GetGender(string sex)
@@ -111,10 +136,20 @@ namespace HadassahWebServiceDataClient
         {
             logger.Debug("Calculate patient age from date of birth");
             var dateElements = birthDate.Split('/');
-            DateTime bDate = new DateTime(int.Parse(dateElements[2]), int.Parse(dateElements[1]), int.Parse(dateElements[0]));
-            double years = (double)((DateTime.Now - bDate).TotalDays / 365);
-            int intyears = (int)years;
-            return intyears.ToString();
+            try
+            {
+                DateTime bDate = new DateTime(int.Parse(dateElements[2]), int.Parse(dateElements[1]), int.Parse(dateElements[0]));
+                double years = (double)((DateTime.Now - bDate).TotalDays / 365);
+                int intyears = (int)years;
+                return intyears.ToString();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error calculating age from d.o.b {birthDate}");
+                LogException(ex);
+                return string.Empty;
+            }
+
         }
 
         public CompletePatientInformation GetPatientInfo(string CustumerId, string pidType)
