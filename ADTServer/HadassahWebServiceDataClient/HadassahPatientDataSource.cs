@@ -37,7 +37,7 @@ namespace HadassahWebServiceDataClient
 
             using (var client = new DWHDemogPortTypeClient("DWHDemogPortTypeEndpoint0SSL"))
             {
-                client.Endpoint.EndpointBehaviors.Add(new SoapClientMessageInspector.MessageEndPointBehavior());
+                client.Endpoint.EndpointBehaviors.Add(new SoapClientMessageInspector.MessageEndPointBehavior(_config));
                 logger.Info(client.InnerChannel.Via);
 
 
