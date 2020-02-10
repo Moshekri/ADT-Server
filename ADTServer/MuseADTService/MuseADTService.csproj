@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;HADASSAH</DefineConstants>
+    <DefineConstants>DEBUG;MEUHEDET</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -125,6 +125,14 @@
     <ProjectReference Include="..\Hl7Parser\Hl7Parser.csproj">
       <Project>{8299cf6b-8f66-4d79-91af-343327444489}</Project>
       <Name>Hl7Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeuhedetPatientIdParser\MeuhedetPatientIdParser.csproj">
+      <Project>{c7511ee8-c6be-4ccc-afe9-0960766d0701}</Project>
+      <Name>MeuhedetPatientIdParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeuhedetWebServiceDataClient\MeuhedetWebServiceDataClient.csproj">
+      <Project>{c4b881bf-8fcf-4055-8ac3-1210f76b5304}</Project>
+      <Name>MeuhedetWebServiceDataClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
