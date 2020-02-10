@@ -29,7 +29,7 @@ namespace HadassahWebServiceDataClient
         }
         public CompletePatientInformation GetPatientInfo(string CustumerId)
         {
-            
+
             logger.Trace("Inside GetPatientInfo - start ");
             demogByPatientIDResponseType response = new demogByPatientIDResponseType();
             logger.Debug("Trying to create web client for hadassah web service");
@@ -51,10 +51,14 @@ namespace HadassahWebServiceDataClient
                 logger.Debug($"Attempting to retrieve patient Demographics for PID : {CustumerId} ...");
                 try
                 {
-                                        logger.Trace("Request message : ");
-                    string msg = GetXml(typeof(demogByPatientIDRequestType), req);
-                    logger.Trace(msg);
+                    logger.Trace("Request message : ");
                     response = client.GetDemogByPatientID(req);
+                    logger.Info("FirstName,LastName,English FirstName,English LastName");
+                    logger.Info($"{response.PatientDemography.FirstName}," +
+                                $"{response.PatientDemography.LastName}," +
+                                $"{response.PatientDemography.FFirstName}," +
+                                $"{response.PatientDemography.FLastName}");
+
                     string responeMsg = GetXml(typeof(demogByPatientIDResponseType), response);
                     logger.Trace(responeMsg);
 
@@ -65,19 +69,27 @@ namespace HadassahWebServiceDataClient
                     LogException(ex);
                     return null;
                 }
-                logger.Debug("Successefully got response from web service");
-                logger.Debug($"Status returned from web service : {response.Result}");
-                logger.Debug($"Execption returned from web service : {response.ReturnedException.Exception.ExecptionText}");
-                logger.Debug($"Execption severity level returned from web service : { response.ReturnedException.Exception.SevirityLevel}");
+                logger.Debug("Successefully got response a from web service");
+                if (response.Result != null || response.Result != string.Empty)
+                {
+                    logger.Debug($"Status returned from web service : {response.Result}");
+
+                }
+                if (response.Result.ToUpper() == "ERROR")
+                {
+                    logger.Debug($"Execption returned from web service : {response.ReturnedException.Exception.ExecptionText}");
+                    logger.Debug($"Execption severity level returned from web service : { response.ReturnedException.Exception.SevirityLevel}");
+                }
+
             }
             try
             {
                 string[] dateOfBirth = null;
-                string age =string.Empty;
+                string age = string.Empty;
                 string dob = string.Empty;
                 if (response.PatientDemography.BirthDate != string.Empty)
                 {
-                     dateOfBirth = response.PatientDemography.BirthDate.Split('/');
+                    dateOfBirth = response.PatientDemography.BirthDate.Split('/');
                 }
                 else
                 {
@@ -106,10 +118,10 @@ namespace HadassahWebServiceDataClient
                     LastName = response.PatientDemography.FLastName,
                     Height = "",
                     PatientId = CustumerId,
-                    GenderDesc = response.PatientDemography.Sex,
+                    GenderDesc = gender,
                     ResponseStatusMessage = response.Result,
-                    CompleteResponseStatusMessage = response.ReturnedException.Exception.ExecptionText,
-                    Severity = response.ReturnedException.Exception.SevirityLevel,
+                    CompleteResponseStatusMessage = response.Result,
+                    Severity = "0",
                     ResponseStatus = response.Result
 
                 };
@@ -125,7 +137,7 @@ namespace HadassahWebServiceDataClient
 
         private void LogException(Exception ex)
         {
-            logger.Error("Exception Message : "  + ex.Message);
+            logger.Error("Exception Message : " + ex.Message);
             while (ex.InnerException != null)
             {
                 ex = ex.InnerException;
