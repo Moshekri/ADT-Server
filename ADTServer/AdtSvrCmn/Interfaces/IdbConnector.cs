@@ -11,5 +11,7 @@ namespace AdtSvrCmn.Interfaces
         Dictionary<string, string> GetData();
         bool SaveData(Dictionary<string, string> data);
         bool SaveData(Dictionary<string, string> data, string path);
+        string GetValue(string key);
+        void SaveSingleEntry(string key, string value);
     }
 }

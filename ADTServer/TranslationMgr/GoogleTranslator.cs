@@ -29,7 +29,7 @@ namespace TranslationManager
             googleTranslationClient = TranslationClient.Create(credential, TranslationModel.NeuralMachineTranslation);
         }
 
-        public string GetEnglishLAsttNameFromGoogle(string hebrewLastName)
+        public string GetEnglishLasttNameFromGoogle(string hebrewLastName)
         {
             logger.Trace("inside GetEnglishLAsttNameFromGoogle");
             TranslationResult res = null;
@@ -64,13 +64,7 @@ namespace TranslationManager
                 logger.Debug($"Translation Completed {hebrewLastName} to {lastName}");
                 logger.Trace("exiting GetEnglishLAsttNameFromGoogle");
                 return lastName;
-            //}
-            //else
-            //{
-            //    nLogger.Debug($"Could not get translation for {hebrewLastName} No Access to google translate ");
-            //    nLogger.Trace("exiting GetEnglishLAsttNameFromGoogle");
-            //    return string.Empty;
-            //}
+            
 
 
         }

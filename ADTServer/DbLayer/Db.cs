@@ -206,5 +206,36 @@ namespace DbLayer
             dInfo.SetAccessControl(dSecurity);
 
         }
+
+        public void SaveSingleEntry(string key, string value)
+        {
+            Dictionary<string, string> data = GetData();
+            if (!data.ContainsKey(key))
+            {
+                data.Add(key, value);
+            }
+            try
+            {
+                SaveData(data);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        public string GetValue(string key)
+        {
+            string temp = "";
+            var data = GetData();
+            if (data.ContainsKey(key))
+            {
+                
+                 data.TryGetValue(key ,out temp);
+            }
+            return temp;
+        }
     }
 }

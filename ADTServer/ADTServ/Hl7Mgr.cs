@@ -99,14 +99,13 @@ namespace ADTServ
 
         #region Public Methods
         /// <summary>
-        /// Starts the server - listening for incoming messages from muse
+        /// Starts the server - listening for incoming messages from MUSE
         /// </summary>
         public void Start()
         {
             RegisterServerEvents();
             logger.Debug("Starting Server");
             Server.StartServerThread();
-            //logger.Debug("Server Started");
         }
 
         /// <summary>
@@ -205,6 +204,25 @@ namespace ADTServ
         }
         #endregion
 
+        #region Private Methods
+        private bool IsEnglishName(string data)
+        {
+            int counter = 0;
+            string englishLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            foreach (var letter in data)
+            {
+                if (englishLetters.Contains(letter))
+                {
+                    counter++;
+                    if (counter > 2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+        }
         private TcpState GetConnectionState(TcpClient client)
         {
             TcpState stateOfConnection = new TcpState();
@@ -221,9 +239,66 @@ namespace ADTServ
                 return noState;
             }
         }
+
+        private CompletePatientInformation GetPatientDemographicInformation(PatientId[] parsedIds)
+        {
+            CompletePatientInformation IsraeliCustomer;
+            CompletePatientInformation forigenCustomer;
+            try
+            {
+                if (parsedIds[0] != null)
+                {
+                    logger.Info(
+                    $"Getting patient information for  patient id {parsedIds[0].ID} type {parsedIds[0].SugId} and checksum digit {parsedIds[0].SifratBikuret} ");
+                }
+
+                // get patient information from web service
+                //todo: entry point to get patient informatoion from webservice
+                IsraeliCustomer = WebServiceClient.GetPatientInfo(parsedIds[0]);
+
+                if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
+                {
+                    IsraeliCustomer = null;
+                    if (parsedIds[1] != null)
+                    {
+                        logger.Info(
+                    $"Getting patient information for  patient id {parsedIds[1].ID} type {parsedIds[1].SugId} and checksum digit {parsedIds[1].SifratBikuret} ");
+                        // get patient information from web service
+                        forigenCustomer = WebServiceClient.GetPatientInfo(parsedIds[1]);
+                        if (null == forigenCustomer || forigenCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            return forigenCustomer;
+                        }
+                    }
+
+                }
+                else
+                {
+                    return IsraeliCustomer;
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                exceptionFromWebService = ex;
+                logger.Debug("Error Getting data from web service :", source);
+                logger.Debug($"{ex.Message} :");
+                logger.Debug(ex.Message, ex, null);
+                return null;
+            }
+        }
+        #endregion
+
+
         /// <summary>
         /// this is the Main event - when the muse sends a QRY^Q01 message the message will get here
-        /// then the patient details are fetched from meuhedet web service
+        /// then the patient details are fetched from  web service
         /// and the system will compose an ADT^A19 response message and will send it back to the MUSE.
         /// </summary>
         /// <param name="sender"></param>
@@ -249,9 +324,6 @@ namespace ADTServ
 
                 //TODO : add support to handle other messages ?
 
-
-
-
                 // we can only handle  QRY^Q01 messages 
                 if (messageType.ToUpper() != "QRY^Q01")
                 {
@@ -263,14 +335,12 @@ namespace ADTServ
                 //keep the original pid from the ecg machine for the response message
                 string PID = hl7MessageParser.GetPatientId(e.Message);
                 string originalPID = PID;
-
-
+                
                 var parsedIds = _data.PidHandler.ParseID(PID);
 
                 e.PID = PID;
                 MessageRecived?.Invoke(this, e);
 
-                
                 var patientInformation = GetPatientDemographicInformation(parsedIds);
 
 
@@ -341,79 +411,9 @@ namespace ADTServ
 
         }
 
-        private bool IsEnglishName(string data)
-        {
-            int counter = 0;
-            string englishLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            foreach (var letter in data)
-            {
-                if (englishLetters.Contains(letter))
-                {
-                    counter++;
-                    if (counter > 2)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+        
 
-        }
-
-        private CompletePatientInformation GetPatientDemographicInformation(PatientId[] parsedIds)
-        {
-            CompletePatientInformation IsraeliCustomer;
-            CompletePatientInformation forigenCustomer;
-            try
-            {
-                if (parsedIds[0] != null)
-                {
-                    logger.Info(
-                    $"Getting patient information for  patient id {parsedIds[0].ID} type {parsedIds[0].SugId} and checksum digit {parsedIds[0].SifratBikuret} ");
-                }
-                // get patient information from web service
-
-                //todo: entry point to get patient informatoion from webservice
-                IsraeliCustomer = WebServiceClient.GetPatientInfo(parsedIds[0]);
-
-                if (null == IsraeliCustomer || (IsraeliCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode && parsedIds[1] != null))
-                {
-                    IsraeliCustomer = null;
-                    if (parsedIds[1] != null)
-                    {
-                        logger.Info(
-                    $"Getting patient information for  patient id {parsedIds[1].ID} type {parsedIds[1].SugId} and checksum digit {parsedIds[1].SifratBikuret} ");
-                        // get patient information from web service
-                        forigenCustomer = WebServiceClient.GetPatientInfo(parsedIds[1]);
-                        if (null == forigenCustomer || forigenCustomer.ResponseStatus != _config.GoodSoapResponseErrorCode)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-
-                            return forigenCustomer;
-                        }
-                    }
-
-                }
-                else
-                {
-                    return IsraeliCustomer;
-                }
-
-                return null;
-
-            }
-            catch (Exception ex)
-            {
-                exceptionFromWebService = ex;
-                logger.Debug("Error Getting data from web service :", source);
-                logger.Debug($"{ex.Message} :");
-                logger.Debug(ex.Message, ex, null);
-                return null;
-            }
-        }
+       
     }
 
 }
