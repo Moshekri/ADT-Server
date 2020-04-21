@@ -174,7 +174,7 @@ namespace TranslationManager
         }
         public void Dispose()
         {
-            loadDataTimer.Dispose();
+            
         }
 
         #endregion
