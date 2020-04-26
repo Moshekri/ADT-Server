@@ -343,7 +343,7 @@ namespace ADTServ
 
                 var patientInformation = GetPatientDemographicInformation(parsedIds);
 
-
+                patientInformation = new CompletePatientInformation() { FirstName = "משה", LastName = "קריכלי" };
                 if (null != patientInformation)
                 {
                     logger.Info(

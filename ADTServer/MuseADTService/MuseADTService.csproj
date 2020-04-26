@@ -166,6 +166,14 @@
       <Project>{8299cf6b-8f66-4d79-91af-343327444489}</Project>
       <Name>Hl7Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LeumitPatientIdParser\LeumitPatientIdParser.csproj">
+      <Project>{032cec57-4df9-4d14-b272-7ed231f5d5f5}</Project>
+      <Name>LeumitPatientIdParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeumitWebServiceDataClient\LeumitWebServiceDataClient.csproj">
+      <Project>{b7695972-7b68-418a-89bd-72a80a1c4def}</Project>
+      <Name>LeumitWebServiceDataClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

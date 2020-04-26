@@ -29,7 +29,7 @@ namespace TranslationManager
             googleTranslationClient = TranslationClient.Create(credential, TranslationModel.NeuralMachineTranslation);
         }
 
-        public string GetEnglishLasttNameFromGoogle(string hebrewLastName)
+        public string GetEnglishLastNameFromGoogle(string hebrewLastName)
         {
             logger.Trace("inside GetEnglishLAsttNameFromGoogle");
             TranslationResult res = null;

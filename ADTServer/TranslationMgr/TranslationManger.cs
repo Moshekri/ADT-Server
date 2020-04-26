@@ -44,6 +44,7 @@ namespace TranslationManager
 
 
         }
+
         public PatientTranslationObject GetEnglishName(string firstName, string lastName)
         {
             //initialize local variables
@@ -76,7 +77,7 @@ namespace TranslationManager
                 try
                 {
                     googleEnglishFirstName = googleTranslator.GetEnglishFirstNameFromGoogle(pat.HebrewFirstName);
-                    googleEnglishLastName = googleTranslator.GetEnglishLasttNameFromGoogle(pat.HebrewLastName);
+                    googleEnglishLastName = googleTranslator.GetEnglishLastNameFromGoogle(pat.HebrewLastName);
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +88,7 @@ namespace TranslationManager
             }
 
             phoneticEnglishFirstName = pat.EnglishFirstName == string.Empty ? PhoneticTranslator.GetPhoneticTranslation(pat.HebrewFirstName) : pat.EnglishFirstName;
-            phoneticEnglishLastName = pat.EnglishFirstName == string.Empty ? PhoneticTranslator.GetPhoneticTranslation(pat.HebrewFirstName) : pat.EnglishFirstName;
+            phoneticEnglishLastName = pat.EnglishLastName == string.Empty ? PhoneticTranslator.GetPhoneticTranslation(pat.HebrewLastName) : pat.EnglishFirstName;
 
             pat.EnglishFirstName = GetFinalName(firstName, phoneticEnglishFirstName, googleEnglishFirstName);
             pat.EnglishLastName = GetFinalName(lastName, phoneticEnglishLastName, googleEnglishLastName);
@@ -174,7 +175,7 @@ namespace TranslationManager
         }
         public void Dispose()
         {
-            
+
         }
 
         #endregion
